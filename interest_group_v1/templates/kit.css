@@ -1,0 +1,287 @@
+/* ============================================================================
+   federation_flexible_v1  —  global CSS for interest_group_v1.
+   Newsletter-grade. Palette swap via [data-palette="usp|sgb|pro_senectute"].
+   Inter heading + Source Serif 4 body, 17px web body floor (older readers).
+   ============================================================================ */
+
+:root {
+  --ptt-navy: #1B2A4A;
+  --ptt-gold: #C9A84C;
+  --ptt-white: #FFFFFF;
+
+  /* Default palette (fed_base) */
+  --fed-ink:           #1F2937;
+  --fed-ink-secondary: #4B5563;
+  --fed-ink-muted:     #6B7280;
+  --fed-paper:         #FAFAF7;
+  --fed-panel:         #F1EFE8;
+  --fed-accent:        #1B2A4A;
+  --fed-accent-soft:   #E5E7EB;
+  --fed-rule-med:      #9CA3AF;
+  --fed-rule-hair:     #D1D5DB;
+  --fed-cta:           #7A6A24;
+
+  --ff-heading: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --ff-body:    "Source Serif 4", Charter, Georgia, serif;
+  --ff-numeric: "Inter", ui-monospace, monospace;
+
+  --fs-h1:        32px;
+  --fs-h2:        22px;
+  --fs-h3:        18px;
+  --fs-body:      17px;
+  --fs-caption:   14px;
+  --fs-footnote:  12px;
+  --fs-hero-stat: 56px;
+
+  --lh-tight:  1.15;
+  --lh-snug:   1.30;
+  --lh-normal: 1.55;
+  --lh-loose:  1.70;
+
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  --sp-1: 2pt; --sp-2: 4pt; --sp-3: 6pt; --sp-4: 8pt;
+  --sp-5: 12pt; --sp-6: 16pt; --sp-7: 24pt; --sp-8: 32pt;
+
+  --w-content: 720px;
+  --r-md: 6px;
+}
+
+/* ----- Palette swaps (data-palette attribute on <html> or <body>) ----- */
+[data-palette="usp"] {
+  --fed-ink:           #2A2418;
+  --fed-paper:         #F4EFE6;
+  --fed-panel:         #F4EFE6;
+  --fed-accent:        #3F6B2A;
+  --fed-accent-soft:   #E1ECDA;
+  --fed-cta:           #7B4A1F;
+  --fed-rule-med:      #A99977;
+}
+[data-palette="sgb"] {
+  --fed-ink:           #0A0A0A;
+  --fed-paper:         #FFFFFF;
+  --fed-panel:         #F4F2EE;
+  --fed-accent:        #B91C1C;
+  --fed-accent-soft:   #FEE2E2;
+  --fed-cta:           #0A0A0A;
+  --fed-rule-med:      #737373;
+}
+[data-palette="pro_senectute"] {
+  --fed-ink:           #111827;
+  --fed-paper:         #FEFAEE;
+  --fed-panel:         #FEFAEE;
+  --fed-accent:        #0E7490;
+  --fed-accent-soft:   #CFFAFE;
+  --fed-cta:           #0E7490;
+  --fed-rule-med:      #94A3B8;
+  --fs-body: 19px;     /* even larger for senior readers */
+  --lh-normal: 1.65;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  color: var(--fed-ink);
+  background: var(--fed-paper);
+  font-feature-settings: "kern" 1, "liga" 1, "lnum" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+main { max-width: var(--w-content); margin: 0 auto; padding: var(--sp-7) var(--sp-6); }
+
+/* ----- Federation masthead ----- */
+.fed-masthead {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--sp-5);
+  border-bottom: 2pt solid var(--fed-accent);
+  padding-bottom: var(--sp-4);
+  margin-bottom: var(--sp-7);
+}
+.fed-masthead__logo {
+  width: 64px; height: 64px;
+  background: var(--fed-accent-soft);
+  border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-bold);
+  color: var(--fed-accent);
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.fed-masthead__title {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-bold);
+  color: var(--fed-accent);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.fed-masthead__subtitle {
+  font-family: var(--ff-body);
+  font-style: italic;
+  color: var(--fed-ink-secondary);
+  font-size: var(--fs-caption);
+  margin: 2pt 0 0 0;
+}
+.fed-masthead__date {
+  font-family: var(--ff-numeric);
+  color: var(--fed-ink-muted);
+  font-size: var(--fs-caption);
+}
+
+/* ----- Headings ----- */
+h1, h2, h3 {
+  font-family: var(--ff-heading);
+  color: var(--fed-ink);
+  margin: var(--sp-6) 0 var(--sp-3) 0;
+  line-height: var(--lh-snug);
+  font-weight: var(--fw-semibold);
+}
+h1 { font-size: var(--fs-h1); color: var(--fed-accent); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+
+p { margin: 0 0 var(--sp-5) 0; }
+
+/* ----- Hero finding (sector cut) ----- */
+.fed-hero {
+  background: var(--fed-accent-soft);
+  border-left: 4pt solid var(--fed-accent);
+  padding: var(--sp-6) var(--sp-7);
+  margin: var(--sp-6) 0 var(--sp-7) 0;
+  border-radius: var(--r-md);
+}
+.fed-hero__label {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-bold);
+  color: var(--fed-accent);
+  font-size: var(--fs-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 var(--sp-3) 0;
+}
+.fed-hero__stat {
+  font-family: var(--ff-numeric);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-hero-stat);
+  color: var(--fed-accent);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--sp-3) 0;
+}
+.fed-hero__claim {
+  font-family: var(--ff-body);
+  font-size: var(--fs-h3);
+  color: var(--fed-ink);
+  line-height: var(--lh-snug);
+  margin: 0;
+}
+
+/* ----- Member impact section ----- */
+.member-impact {
+  background: var(--fed-panel);
+  padding: var(--sp-6) var(--sp-7);
+  margin: var(--sp-6) 0;
+  border-radius: var(--r-md);
+}
+.member-impact__h {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-semibold);
+  color: var(--fed-ink);
+  font-size: var(--fs-h3);
+  margin: 0 0 var(--sp-3) 0;
+}
+.member-impact ul {
+  margin: 0;
+  padding-left: var(--sp-6);
+}
+.member-impact li {
+  margin-bottom: var(--sp-3);
+}
+
+/* ----- Federation quotable ----- */
+.fed-quote {
+  border-left: 3pt solid var(--fed-accent);
+  padding: var(--sp-4) var(--sp-6);
+  margin: var(--sp-6) 0;
+  font-family: var(--ff-body);
+  font-style: italic;
+  font-size: 20px;
+  line-height: var(--lh-snug);
+  color: var(--fed-ink);
+}
+.fed-quote__source {
+  display: block;
+  font-style: normal;
+  font-family: var(--ff-heading);
+  font-size: var(--fs-caption);
+  color: var(--fed-ink-secondary);
+  margin-top: var(--sp-3);
+}
+.fed-quote__source::before { content: "— "; }
+
+/* ----- Call-to-action: 'Was bedeutet das für unsere Mitglieder' ----- */
+.fed-cta {
+  background: var(--fed-cta);
+  color: var(--ptt-white);
+  padding: var(--sp-6) var(--sp-7);
+  margin: var(--sp-7) 0;
+  border-radius: var(--r-md);
+  font-family: var(--ff-heading);
+}
+.fed-cta__label {
+  display: block;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: var(--sp-3);
+  opacity: 0.85;
+}
+.fed-cta__text {
+  font-size: var(--fs-h3);
+  line-height: var(--lh-snug);
+  margin: 0;
+  font-weight: var(--fw-medium);
+}
+
+/* ----- Audit footer ----- */
+.audit-footer {
+  margin-top: var(--sp-7);
+  padding-top: var(--sp-3);
+  border-top: 0.5pt solid var(--fed-rule-med);
+  font-size: var(--fs-footnote);
+  color: var(--fed-ink-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+}
+
+/* ----- Skip link ----- */
+.skip-link {
+  position: absolute; top: -40px; left: 8px;
+  background: var(--fed-accent); color: var(--ptt-white);
+  padding: 6pt 10pt; z-index: 100; min-height: 48px;
+}
+.skip-link:focus { top: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@media (forced-colors: active) {
+  .fed-hero, .member-impact, .fed-cta { border-color: CanvasText; }
+}

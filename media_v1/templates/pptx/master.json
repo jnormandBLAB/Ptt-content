@@ -1,0 +1,51 @@
+{
+  "$description": "PPTX master spec for editorial_press_v1 chart pack. One chart per slide (16:9, 13.333\" x 7.5\") with title + transparent-background figure + source caption. Optional embargo banner overlay. EMU = English Metric Units; 914400 EMU = 1 inch.",
+  "$kit": "editorial_press_v1",
+  "version": "1.0.0",
+  "slide_size": {
+    "width_in":  13.333,
+    "height_in": 7.5,
+    "width_emu":  12192000,
+    "height_emu": 6858000
+  },
+  "theme": {
+    "name": "PTT Editorial Press",
+    "colors": {
+      "bg_paper":         "FFFFFF",
+      "navy":             "1B2A4A",
+      "gold":             "C9A84C",
+      "ink":              "0E1320",
+      "ink_secondary":    "3F4A5C",
+      "ink_muted":        "6B7280",
+      "rule_strong":      "0E1320",
+      "rule_med":         "C2C7D0",
+      "embargo_red":      "B91C1C",
+      "white":            "FFFFFF"
+    },
+    "fonts": {
+      "heading":          "Inter",
+      "body":             "Source Serif 4",
+      "byline":           "Inter",
+      "fallback_heading": "Calibri",
+      "fallback_body":    "Cambria"
+    }
+  },
+  "layouts": {
+    "chart_slide": {
+      "$description": "One chart per slide. Title top-left, brand top-right, chart centre, caption + source bottom.",
+      "background": "FFFFFF",
+      "regions": {
+        "embargo_banner":   { "x_in": 0.0, "y_in": 0.0, "w_in": 13.333, "h_in": 0.4, "fill": "embargo_red", "font": "heading", "size_pt": 12, "weight": "bold", "color": "white", "case": "upper", "tracking": 0.06 },
+        "brand":            { "x_in": 0.5, "y_in": 0.5, "w_in": 6.0, "h_in": 0.4, "font": "heading", "size_pt": 11, "weight": "bold", "color": "navy", "case": "upper", "tracking": 0.08 },
+        "date":             { "x_in": 7.0, "y_in": 0.5, "w_in": 5.8, "h_in": 0.4, "font": "byline", "size_pt": 11, "color": "ink_muted", "align": "right" },
+        "rule_under_header":{ "x_in": 0.5, "y_in": 1.0, "w_in": 12.4, "h_in": 0.02, "fill": "rule_strong" },
+        "title":            { "x_in": 0.5, "y_in": 1.2, "w_in": 12.4, "h_in": 0.8, "font": "heading", "size_pt": 26, "weight": "bold", "color": "ink", "leading": 1.10 },
+        "subtitle":         { "x_in": 0.5, "y_in": 2.05, "w_in": 12.4, "h_in": 0.5, "font": "body", "size_pt": 14, "italic": true, "color": "ink_secondary" },
+        "chart_area":       { "x_in": 0.5, "y_in": 2.7, "w_in": 12.4, "h_in": 4.0, "$description": "Reserved area where the chart PNG/SVG is positioned by the renderer." },
+        "caption":          { "x_in": 0.5, "y_in": 6.75, "w_in": 12.4, "h_in": 0.3, "font": "body", "size_pt": 11, "color": "ink", "weight": "semibold" },
+        "source":           { "x_in": 0.5, "y_in": 7.05, "w_in": 12.4, "h_in": 0.4, "font": "byline", "size_pt": 9, "italic": true, "color": "ink_muted",
+                              "format": "Quelle: {source_label}  |  Audit: {audit_url}" }
+      }
+    }
+  }
+}

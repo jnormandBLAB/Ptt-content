@@ -1,0 +1,100 @@
+{# federation_flexible_v1 — newsletter.html.j2
+   Federation member newsletter. Speaks ABOUT impact ON the federation's
+   members — never speaks FOR the federation.
+   Context: { lang, palette, federation, topic, date,
+              hero_finding, member_impacts[], federation_quote,
+              cta, audit_url, license, attribution }
+   federation shape: { id, name, short_code, sector_label, member_count }
+   hero_finding shape: { stat, claim, label }
+   member_impacts: list of { headline, paragraphs[], source_label }
+   federation_quote shape: { text, attribution }
+   cta shape: { text } #}
+<!DOCTYPE html>
+<html lang="{{ lang|default('de') }}" data-palette="{{ palette|default('base')|e }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex,nofollow">
+  <title>{{ federation.name|e }} — {{ topic|e }} — {{ ui.member_newsletter|default('Mitglieder-Newsletter') }}</title>
+  <link rel="stylesheet" href="kit.css">
+  <style>
+    :root {
+      --audit-url: "{{ audit_url }}";
+      --fed-name: "{{ federation.name|e }}";
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">{{ ui.skip_to_content|default('Zum Inhalt') }}</a>
+
+  <main id="main">
+
+    <header class="fed-masthead">
+      <div class="fed-masthead__logo" aria-label="{{ federation.name|e }} Logo">
+        {{ federation.short_code|default(federation.name[:3]|upper)|e }}
+      </div>
+      <div>
+        <p class="fed-masthead__title">{{ federation.name|e }} &middot; {{ ui.member_newsletter|default('Mitglieder-Newsletter') }}</p>
+        <p class="fed-masthead__subtitle">{{ federation.sector_label|e }} &middot; {{ federation.member_count|e }} {{ ui.members|default('Mitglieder') }}</p>
+      </div>
+      <span class="fed-masthead__date">{{ date|e }}</span>
+    </header>
+
+    <h1>{{ topic|e }}</h1>
+
+    {# --- Hero finding (sector cut) --- #}
+    {% if hero_finding %}
+    <section class="fed-hero" aria-labelledby="hero-h">
+      <p class="fed-hero__label" id="hero-h">{{ hero_finding.label|default(ui.sector_finding|default('Schlüsselbefund — Sektor-Sicht')) }}</p>
+      <p class="fed-hero__stat">{{ hero_finding.stat|e }}</p>
+      <p class="fed-hero__claim">{{ hero_finding.claim|e }}</p>
+    </section>
+    {% endif %}
+
+    {# --- Member impact sections --- #}
+    {% if member_impacts %}
+    {% for impact in member_impacts %}
+    <section class="member-impact" aria-labelledby="impact-{{ loop.index }}-h">
+      <h2 class="member-impact__h" id="impact-{{ loop.index }}-h">{{ impact.headline|e }}</h2>
+      {% for para in impact.paragraphs %}
+      <p>{{ para|e }}</p>
+      {% endfor %}
+      {% if impact.source_label %}
+      <p style="font-size:14px;color:var(--fed-ink-muted);margin-top:var(--sp-3);font-style:italic;">
+        {{ ui.source|default('Quelle') }}&nbsp;: {{ impact.source_label|e }}
+      </p>
+      {% endif %}
+    </section>
+    {% endfor %}
+    {% endif %}
+
+    {# --- Federation quotable line ---
+       NB: this is text the federation MAY use as their public stance.
+       It is framed factually — never attributed to the federation by us. #}
+    {% if federation_quote %}
+    <blockquote class="fed-quote">
+      {{ federation_quote.text|e }}
+      <span class="fed-quote__source">{{ federation_quote.attribution|e }}</span>
+    </blockquote>
+    {% endif %}
+
+    {# --- CTA: 'Was bedeutet das für unsere Mitglieder' --- #}
+    {% if cta %}
+    <section class="fed-cta" aria-labelledby="cta-h">
+      <span class="fed-cta__label" id="cta-h">
+        {{ ui.what_for_members|default('Was bedeutet das für unsere Mitglieder') }}
+      </span>
+      <p class="fed-cta__text">{{ cta.text|e }}</p>
+    </section>
+    {% endif %}
+
+    <footer class="audit-footer">
+      <span>Audit: <a href="{{ audit_url }}">{{ audit_url }}</a></span>
+      <span>{{ ui.license|default('Lizenz') }}: {{ license|default('CC-BY-ND-4.0') }}</span>
+      <span>{{ attribution|e }}</span>
+    </footer>
+
+  </main>
+</body>
+</html>

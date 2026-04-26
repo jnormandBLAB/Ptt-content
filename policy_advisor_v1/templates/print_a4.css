@@ -1,0 +1,81 @@
+/* ============================================================================
+   parliamentary_classic — print_a4.css
+   A4 portrait, 20mm margins, 10pt body, draft watermark.
+   ============================================================================ */
+
+@page {
+  size: A4 portrait;
+  margin: 22mm 20mm 20mm 20mm;
+  @top-left {
+    content: "PTT — Politikberatung";
+    font-family: "Source Serif 4", serif; font-size: 8pt; color: #46505F;
+  }
+  @top-right {
+    content: "DRAFT — Arbeitsdokument — interner Gebrauch";
+    font-family: "Source Serif 4", serif; font-size: 8pt; color: #46505F;
+    font-style: italic;
+  }
+  @bottom-left {
+    content: var(--audit-url, "—");
+    font-family: "Source Serif 4", serif; font-size: 8pt; color: #46505F;
+  }
+  @bottom-right {
+    content: "p. " counter(page) " / " counter(pages);
+    font-family: "Source Serif 4", serif; font-size: 8pt; color: #46505F;
+  }
+}
+
+@media print {
+  html, body {
+    background: #FFFFFF !important;
+    color: #10182B !important;
+    font-size: 10pt;
+    line-height: 1.40;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  main { max-width: none; padding: 0; }
+
+  h1 { font-size: 16pt; }
+  h2 { font-size: 12pt; border-bottom: 0.5pt solid #9CA0AC; padding-bottom: 2pt; }
+  h3 { font-size: 10pt; font-style: italic; }
+
+  p, li { orphans: 3; widows: 3; }
+
+  /* Tables retain hairlines in print */
+  thead th { background: #1B2A4A !important; color: #FFFFFF !important; }
+  tbody tr:nth-child(even) td { background: #F7F4EC !important; }
+
+  /* Side-by-side keeps its grid */
+  .diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  .diff-col { padding: 4mm; }
+
+  /* Q&A — never split a question and its answer across pages */
+  .qa-pair { page-break-inside: avoid; }
+
+  /* Footnotes always go to the bottom of the page */
+  .footnote { page-break-inside: avoid; }
+
+  /* Diagonal DRAFT watermark */
+  body::before {
+    content: "DRAFT";
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-family: "Source Serif 4", serif;
+    font-size: 120pt;
+    color: rgba(27, 42, 74, 0.06);
+    z-index: -1;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    pointer-events: none;
+  }
+
+  .skip-link, .no-print { display: none !important; }
+
+  a[href]::after { content: " [" attr(href) "]"; font-size: 7pt; color: #46505F; }
+  a[href^="#"]::after { content: ""; }
+
+  .page-break { page-break-before: always; }
+}

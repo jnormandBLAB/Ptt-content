@@ -1,0 +1,93 @@
+{
+  "$description": "PPTX master spec for business_sober_v1. Single board slide (16:9, 13.333\" x 7.5\") packing situation + 3 risks + 3 levers + recommendation onto one canvas. McKinsey 1-pager + KKR board-pack hybrid layout.",
+  "$kit": "business_sober_v1",
+  "version": "1.0.0",
+  "slide_size": {
+    "width_in":  13.333,
+    "height_in": 7.5,
+    "width_emu":  12192000,
+    "height_emu": 6858000
+  },
+  "theme": {
+    "name": "PTT Business Sober",
+    "colors": {
+      "bg_paper":         "FFFFFF",
+      "navy":             "1B2A4A",
+      "gold":             "C9A84C",
+      "ink":              "111827",
+      "ink_secondary":    "374151",
+      "ink_muted":        "6B7280",
+      "panel":            "F3F4F6",
+      "panel_alt":        "E5E7EB",
+      "rule_strong":      "111827",
+      "rule_med":         "9CA3AF",
+      "white":            "FFFFFF"
+    },
+    "fonts": {
+      "heading":          "Inter",
+      "body":             "Inter",
+      "numeric":          "Consolas",
+      "fallback_heading": "Calibri",
+      "fallback_body":    "Calibri"
+    }
+  },
+  "layouts": {
+    "board_slide": {
+      "$description": "Single-slide board memo. Header band, situation top, 3 risks + 3 levers in side-by-side bands, recommendation footer.",
+      "background": "FFFFFF",
+      "regions": {
+        "header_brand":      { "x_in": 0.4, "y_in": 0.3, "w_in": 5.0, "h_in": 0.4, "font": "heading", "size_pt": 11, "weight": "bold", "color": "navy", "case": "upper", "tracking": 0.10 },
+        "header_classification": { "x_in": 5.5, "y_in": 0.3, "w_in": 3.0, "h_in": 0.4, "fill": "navy", "font": "heading", "size_pt": 9, "weight": "bold", "color": "white", "case": "upper", "tracking": 0.08 },
+        "header_date":       { "x_in": 9.0, "y_in": 0.3, "w_in": 4.0, "h_in": 0.4, "font": "body", "size_pt": 11, "color": "ink_muted", "align": "right" },
+        "title":             { "x_in": 0.4, "y_in": 0.75, "w_in": 12.6, "h_in": 0.5, "font": "heading", "size_pt": 22, "weight": "semibold", "color": "ink", "leading": 1.10 },
+        "rule_under_header": { "x_in": 0.4, "y_in": 1.30, "w_in": 12.6, "h_in": 0.02, "fill": "rule_strong" },
+
+        "situation_label":   { "x_in": 0.4, "y_in": 1.45, "w_in": 4.0, "h_in": 0.30, "font": "heading", "size_pt": 10, "color": "ink_muted", "case": "upper", "tracking": 0.06 },
+        "situation_panel":   { "x_in": 0.4, "y_in": 1.75, "w_in": 12.6, "h_in": 1.10, "fill": "panel", "border_left": { "color": "navy", "width_pt": 2 } },
+        "situation_text":    { "x_in": 0.6, "y_in": 1.85, "w_in": 12.2, "h_in": 0.95, "font": "body", "size_pt": 12, "color": "ink", "leading": 1.30 },
+
+        "risks_label":       { "x_in": 0.4, "y_in": 3.00, "w_in": 6.0, "h_in": 0.30, "font": "heading", "size_pt": 10, "color": "ink_muted", "case": "upper", "tracking": 0.06 },
+        "levers_label":      { "x_in": 7.0, "y_in": 3.00, "w_in": 6.0, "h_in": 0.30, "font": "heading", "size_pt": 10, "color": "ink_muted", "case": "upper", "tracking": 0.06 },
+
+        "risk_band": {
+          "y_in": 3.30,
+          "h_in": 1.10,
+          "tile_count": 3,
+          "tile_w_in": 1.95,
+          "tile_gap_in": 0.10,
+          "x_first_in": 0.4,
+          "border_top": { "color": "navy", "width_pt": 3 },
+          "id":     { "font": "heading", "size_pt": 8, "color": "ink_muted", "case": "upper" },
+          "title":  { "font": "heading", "size_pt": 11, "weight": "semibold", "color": "ink" },
+          "chf":    { "font": "numeric", "size_pt": 14, "weight": "bold", "color": "navy" }
+        },
+        "lever_band": {
+          "y_in": 3.30,
+          "h_in": 1.10,
+          "tile_count": 3,
+          "tile_w_in": 1.95,
+          "tile_gap_in": 0.10,
+          "x_first_in": 7.0,
+          "border_left": { "color": "navy", "width_pt": 3 },
+          "id":     { "font": "heading", "size_pt": 8, "color": "ink_muted", "case": "upper" },
+          "title":  { "font": "heading", "size_pt": 11, "weight": "semibold", "color": "ink" },
+          "meta":   { "font": "numeric", "size_pt": 9, "color": "ink_secondary" }
+        },
+
+        "recommendation_band": {
+          "x_in": 0.4, "y_in": 5.7, "w_in": 12.6, "h_in": 0.9,
+          "fill": "gold",
+          "border_left": { "color": "navy", "width_pt": 4 },
+          "label_font": "heading", "label_size_pt": 10, "label_color": "navy",
+          "font": "heading", "size_pt": 14, "weight": "semibold", "color": "navy"
+        },
+
+        "audit_footer": {
+          "x_in": 0.4, "y_in": 7.0, "w_in": 12.6, "h_in": 0.4,
+          "font": "body", "size_pt": 8, "color": "ink_muted",
+          "format": "Audit: {audit_url}  |  Lizenz: all_rights_reserved  |  EKB v{ekb_version}"
+        }
+      }
+    }
+  }
+}

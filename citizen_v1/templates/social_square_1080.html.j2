@@ -1,0 +1,73 @@
+{# citizen_civic_warm — social_square_1080.html.j2
+   1080x1080 PNG export target. Designed to stop the scrolling thumb in
+   under one second. The shock-stat dominates; the caption is one line.
+   Context: { lang, hero, vote_date, attribution_short } #}
+<!DOCTYPE html>
+<html lang="{{ lang|default('fr') }}">
+<head>
+  <meta charset="utf-8">
+  <title>{{ hero.title|e }}</title>
+  <link rel="stylesheet" href="kit.css">
+  <style>
+    html, body { margin: 0; padding: 0; }
+    .canvas-1080 {
+      width: 1080px;
+      height: 1080px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 64px;
+      box-sizing: border-box;
+      background: linear-gradient(180deg, #F4ECD8 0%, #FBF7EE 100%);
+      color: var(--ptt-navy);
+    }
+    .canvas-1080 .pill {
+      align-self: flex-start;
+      font-size: 24px;
+      padding: 8px 20px;
+    }
+    .canvas-1080 .stat {
+      font-family: var(--ff-numeric);
+      font-feature-settings: "tnum" 1, "lnum" 1;
+      font-size: 240px;
+      line-height: 0.95;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin: 0;
+      color: var(--ptt-navy);
+    }
+    .canvas-1080 .caption {
+      font-size: 36px;
+      line-height: 1.25;
+      max-width: 920px;
+      color: #3A3528;
+      margin-top: 24px;
+    }
+    .canvas-1080 .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      font-size: 18px;
+      color: #5A5040;
+    }
+    .canvas-1080 .brand {
+      font-weight: 700;
+      color: var(--ptt-navy);
+    }
+  </style>
+</head>
+<body>
+  <div class="canvas-1080" role="img"
+       aria-label="{{ hero.alt_text|default(hero.caption)|e }}">
+    <span class="pill">Vote&nbsp;: {{ vote_date|default('—') }}</span>
+    <div>
+      <p class="stat">{{ hero.stat|e }}</p>
+      <p class="caption">{{ hero.caption|e }}</p>
+    </div>
+    <div class="meta">
+      <span class="brand">PTT&nbsp;Platform</span>
+      <span>{{ attribution_short|default('CC BY 4.0') }}</span>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+{# editorial_press_v1 — press_release.html.j2
+   Embargoed press release. Inverted-pyramid layout per AP/Reuters convention.
+   Single page, max 600 words, max 80-char headline, max 30-word lede.
+   Context: { lang, topic, embargo, dateline, headline, lede,
+              body_paragraphs[], quotables[3], backgrounder_html,
+              contact, audit_url, license, attribution } #}
+<!DOCTYPE html>
+<html lang="{{ lang|default('de') }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  {% if embargo %}<meta name="robots" content="noindex,nofollow">{% endif %}
+  <title>{{ headline|e }}</title>
+  <link rel="stylesheet" href="kit.css">
+  <style>
+    :root {
+      --audit-url: "{{ audit_url }}";
+      --embargo-meta: "{% if embargo %}EMBARGO {{ embargo.release_at|e }}{% endif %}";
+    }
+  </style>
+</head>
+<body class="{{ 'watermarked' if embargo else '' }}">
+  <a href="#main" class="skip-link">{{ ui.skip_to_content|default('Zum Inhalt') }}</a>
+
+  {% if embargo %}
+  <div class="embargo-banner" role="note" aria-label="Embargo">
+    {{ ui.embargo|default('SPERRFRIST BIS') }}
+    <span class="embargo-banner__time">{{ embargo.release_at|e }} ({{ embargo.tz|default('CET') }})</span>
+  </div>
+  {% endif %}
+
+  <main id="main" class="press-release">
+
+    <header class="masthead">
+      <span class="masthead__brand">PTT Platform · {{ ui.press_release|default('Medienmitteilung') }}</span>
+      <span class="masthead__date">{{ dateline.date|e }}</span>
+    </header>
+
+    {# --- Dateline --- #}
+    <p class="dateline">
+      {{ dateline.city|e|upper }}, {{ dateline.date|e }}
+      {% if dateline.wire %} ({{ dateline.wire|e }}){% endif %}
+      —
+    </p>
+
+    {# --- Headline (max 80 chars enforced upstream by renderer) --- #}
+    <h1 class="headline">{{ headline|e }}</h1>
+
+    {# --- Lede (max 30 words enforced upstream) --- #}
+    <p class="lede">{{ lede|e }}</p>
+
+    {# --- Body paragraphs (5 per AP convention) --- #}
+    {% for para in body_paragraphs %}
+      <p>{{ para|e }}</p>
+    {% endfor %}
+
+    {# --- Three quotable lines for direct integration --- #}
+    {% if quotables %}
+    <section aria-labelledby="quotables-h">
+      <h2 id="quotables-h" class="visually-hidden" style="position:absolute;left:-9999px;">{{ ui.quotables|default('Zitierbare Sätze') }}</h2>
+      {% for q in quotables[:3] %}
+      <blockquote class="pull-quote">
+        {{ q.line|e }}
+        <span class="pull-quote__attribution">{{ q.attribution|e }}{% if q.role %}, {{ q.role|e }}{% endif %}</span>
+      </blockquote>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    {# --- Backgrounder pull-out --- #}
+    {% if backgrounder_html %}
+    <aside class="backgrounder">
+      <p class="backgrounder__h">{{ ui.backgrounder|default('Hintergrund') }}</p>
+      {{ backgrounder_html|safe }}
+    </aside>
+    {% endif %}
+
+    {# --- Contact card (footer) --- #}
+    {% if contact %}
+    <section class="contact-card" aria-labelledby="contact-h">
+      <p id="contact-h" class="contact-card__name">{{ contact.name|e }}</p>
+      {% if contact.role %}<p class="contact-card__row">{{ contact.role|e }}</p>{% endif %}
+      {% if contact.phone %}
+      <p class="contact-card__row"><span class="contact-card__label">{{ ui.phone|default('Tel.') }}</span> <a href="tel:{{ contact.phone|e }}">{{ contact.phone|e }}</a></p>
+      {% endif %}
+      {% if contact.email %}
+      <p class="contact-card__row"><span class="contact-card__label">{{ ui.email|default('E-Mail') }}</span> <a href="mailto:{{ contact.email|e }}">{{ contact.email|e }}</a></p>
+      {% endif %}
+      {% if contact.window %}
+      <p class="contact-card__row"><span class="contact-card__label">{{ ui.window|default('Fenster') }}</span> {{ contact.window|e }}</p>
+      {% endif %}
+    </section>
+    {% endif %}
+
+    <footer class="audit-footer">
+      <span>Audit: <a href="{{ audit_url }}">{{ audit_url }}</a></span>
+      <span>{{ ui.license|default('Lizenz') }}: {{ license|default('CC-BY-4.0') }}</span>
+      <span>{{ attribution|e }}</span>
+    </footer>
+
+  </main>
+</body>
+</html>

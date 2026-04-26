@@ -1,0 +1,249 @@
+/* ============================================================================
+   citizen_civic_warm  —  global CSS for the citizen_v1 package.
+   Extends ptt_navy_gold with a warm, postal-brochure tonality.
+   Tokens mirror tokens.json — never edit hex inline; bump the token instead.
+   ============================================================================ */
+
+:root {
+  /* --- Brand (canonical PTT) --- */
+  --ptt-navy:       #1B2A4A;
+  --ptt-gold:       #C9A84C;
+  --ptt-white:      #FFFFFF;
+  --ptt-body:       #2C2C2C;
+  --ptt-light-gray: #F5F5F5;
+
+  /* --- Civic-warm extensions --- */
+  --civic-blue:       #4A6FA5;
+  --civic-blue-soft:  #A8BDD8;
+  --civic-warm-white: #FBF7EE;
+  --civic-cream:      #F4ECD8;
+
+  /* --- Semantic --- */
+  --c-support:  #1B5E20;
+  --c-oppose:   #A32D2D;
+  --c-neutral:  #7B6F58;
+  --c-warning:  #854F0B;
+  --c-divider:  #E1D6BB;
+  --c-link:     var(--ptt-navy);
+
+  /* --- Text --- */
+  --t-default:  var(--ptt-body);
+  --t-muted:    #5A5040;
+  --t-on-navy:  var(--ptt-white);
+  --t-on-gold:  var(--ptt-navy);
+
+  /* --- Typography --- */
+  --ff-heading: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --ff-body:    "Inter", system-ui, sans-serif;
+  --ff-numeric: "Inter", ui-monospace, monospace;
+
+  --fs-hero:       72px;
+  --fs-display:    44px;
+  --fs-h1:         32px;
+  --fs-h2:         24px;
+  --fs-h3:         20px;
+  --fs-body:       18px;
+  --fs-caption:    14px;
+
+  --lh-tight:  1.15;
+  --lh-snug:   1.30;
+  --lh-normal: 1.55;
+  --lh-loose:  1.70;
+
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  /* --- Spacing (8px rhythm) --- */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px; --sp-9: 96px;
+
+  /* --- Radius --- */
+  --r-sm: 4px;  --r-md: 10px; --r-lg: 16px; --r-pill: 999px;
+
+  /* --- Shadow --- */
+  --sh-subtle: 0 1px 2px rgba(27,42,74,0.06);
+  --sh-lifted: 0 4px 12px rgba(27,42,74,0.10);
+  --sh-ring:   0 0 0 3px rgba(201,168,76,0.40);
+
+  /* --- Motion --- */
+  --d-fast:    120ms;
+  --d-default: 200ms;
+  --e-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* --- Layout --- */
+  --w-content: 640px;
+}
+
+/* ----- Reset & base ----- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  color: var(--t-default);
+  background: var(--civic-warm-white);
+  font-feature-settings: "kern" 1, "liga" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  max-width: var(--w-content);
+  margin: 0 auto;
+  padding: var(--sp-5) var(--sp-4);
+}
+
+/* ----- Headings ----- */
+h1, h2, h3, h4 {
+  font-family: var(--ff-heading);
+  color: var(--ptt-navy);
+  margin: 0 0 var(--sp-3) 0;
+  letter-spacing: -0.01em;
+  line-height: var(--lh-snug);
+  font-weight: var(--fw-semibold);
+}
+h1 { font-size: var(--fs-h1); margin-top: var(--sp-6); }
+h2 { font-size: var(--fs-h2); margin-top: var(--sp-5); }
+h3 { font-size: var(--fs-h3); margin-top: var(--sp-4); }
+
+p { margin: 0 0 var(--sp-4) 0; }
+
+/* ----- Links ----- */
+a {
+  color: var(--c-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+}
+a:hover  { text-decoration-thickness: 2.5px; }
+a:focus-visible {
+  outline: none;
+  box-shadow: var(--sh-ring);
+  border-radius: var(--r-sm);
+}
+
+/* ----- Numerics ----- */
+.num, .stat__value {
+  font-family: var(--ff-numeric);
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* ----- Cards ----- */
+.card {
+  background: var(--ptt-white);
+  border: 1px solid var(--c-divider);
+  border-radius: var(--r-md);
+  padding: var(--sp-5);
+  box-shadow: var(--sh-subtle);
+}
+
+.card--cream {
+  background: var(--civic-cream);
+  border-color: transparent;
+}
+
+/* ----- Hero shock-stat ----- */
+.hero {
+  background: var(--civic-cream);
+  border-radius: var(--r-lg);
+  padding: var(--sp-7) var(--sp-5);
+  text-align: center;
+}
+.hero__stat {
+  font-family: var(--ff-numeric);
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  font-size: var(--fs-hero);
+  line-height: var(--lh-tight);
+  color: var(--ptt-navy);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.03em;
+}
+.hero__caption {
+  font-size: var(--fs-h3);
+  color: var(--t-muted);
+  margin-top: var(--sp-3);
+  line-height: var(--lh-snug);
+}
+
+/* ----- Vote-date pill ----- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-1) var(--sp-3);
+  background: var(--ptt-gold);
+  color: var(--t-on-gold);
+  border-radius: var(--r-pill);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-caption);
+  text-decoration: none;
+}
+
+/* ----- FAQ accordions ----- */
+.faq__item {
+  border-bottom: 1px solid var(--c-divider);
+  padding: var(--sp-4) 0;
+}
+.faq__q {
+  font-weight: var(--fw-semibold);
+  color: var(--ptt-navy);
+  margin-bottom: var(--sp-2);
+}
+
+/* ----- Audit footer ----- */
+.audit-footer {
+  margin-top: var(--sp-7);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--c-divider);
+  font-size: var(--fs-caption);
+  color: var(--t-muted);
+}
+.audit-footer code {
+  font-family: var(--ff-numeric);
+}
+
+/* ----- Embargo banner — never shown for citizen but hooks exist ----- */
+.embargo {
+  background: var(--c-warning);
+  color: var(--ptt-white);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  font-weight: var(--fw-semibold);
+}
+
+/* ----- Skip-link for keyboard users ----- */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: var(--sp-2);
+  background: var(--ptt-navy);
+  color: var(--t-on-navy);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-sm);
+  z-index: 100;
+}
+.skip-link:focus { top: var(--sp-2); }
+
+/* ----- Reduced motion ----- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ----- Forced-colors / Windows high-contrast ----- */
+@media (forced-colors: active) {
+  .card { border-color: CanvasText; box-shadow: none; }
+  .hero { background: Canvas; }
+  .pill { background: Highlight; color: HighlightText; }
+}

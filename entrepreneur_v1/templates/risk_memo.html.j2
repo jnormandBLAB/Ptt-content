@@ -1,0 +1,110 @@
+{# business_sober_v1 — risk_memo.html.j2
+   2-page executive risk memo. McKinsey 2-pager + KKR board-pack hybrid.
+   Page 1: situation + 3 strategic risks + recommendation
+   Page 2: 3 mitigation levers + sector exposure annex (page-break-before)
+   Context: { lang, topic, prepared_for, prepared_by, date, classification,
+              situation, risks[3], levers[3], recommendation, sector_table,
+              audit_url, license, attribution }
+   risk shape:  { id, title, sector, chf_value_text, chf_band ('lt_100k'|'100k_1m'|'1m_10m'|'gt_10m') }
+   lever shape: { id, title, timeline, cost_chf_text } #}
+<!DOCTYPE html>
+<html lang="{{ lang|default('de') }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex,nofollow">
+  <title>{{ topic|e }} — {{ ui.risk_memo|default('Risiko-Memo') }}</title>
+  <link rel="stylesheet" href="kit.css">
+  <style>:root { --audit-url: "{{ audit_url }}"; }</style>
+</head>
+<body>
+  <a href="#main" class="skip-link">{{ ui.skip_to_content|default('Zum Inhalt') }}</a>
+
+  <main id="main">
+
+    <header class="memo-header">
+      <div>
+        <span class="memo-header__classification">{{ classification|default('BOARD-RESTRICTED') }}</span>
+        <p class="memo-header__brand">PTT Platform &middot; {{ ui.risk_memo|default('Risiko-Memo') }}</p>
+        <h1 class="memo-header__title">{{ topic|e }}</h1>
+      </div>
+      <div class="memo-header__meta">
+        {{ ui.prepared_for|default('Adressat') }}&nbsp;: {{ prepared_for|e }}<br>
+        {{ ui.prepared_by|default('Autor') }}&nbsp;: {{ prepared_by|e }}<br>
+        {{ ui.date|default('Datum') }}&nbsp;: {{ date|e }}
+      </div>
+    </header>
+
+    {# --- 1. Situation --- #}
+    <section aria-labelledby="situation-h">
+      <h2 id="situation-h">{{ ui.situation|default('Lage') }}</h2>
+      <div class="situation">
+        <p>{{ situation|e }}</p>
+      </div>
+    </section>
+
+    {# --- 2. Three strategic risks --- #}
+    {% if risks %}
+    <section aria-labelledby="risks-h">
+      <h2 id="risks-h">{{ ui.risks|default('Strategische Risiken') }}</h2>
+      <div class="risk-grid">
+        {% for r in risks[:3] %}
+        <article class="risk-card">
+          <p class="risk-card__id">R{{ '%02d' % loop.index }} &middot; {{ r.id|e }}</p>
+          <p class="risk-card__title">{{ r.title|e }}</p>
+          <p class="risk-card__chf">{{ r.chf_value_text|e }}</p>
+          <span class="risk-card__band risk-card__band--{{ r.chf_band|default('100k_1m')|replace('_','-')|e }}">
+            {{ ui.impact|default('Auswirkung') }}: {{ r.chf_band_label|e }}
+          </span>
+          <p class="risk-card__sector">{{ ui.sector|default('Sektor') }}: {{ r.sector|e }}</p>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    {# --- 3. Recommendation --- #}
+    {% if recommendation %}
+    <section class="recommendation" aria-labelledby="rec-h">
+      <span class="recommendation__label" id="rec-h">{{ ui.recommendation|default('Empfehlung an den VR') }}</span>
+      {{ recommendation|e }}
+    </section>
+    {% endif %}
+
+    {# --- Page 2 — Levers --- #}
+    {% if levers %}
+    <section aria-labelledby="levers-h" class="page-break">
+      <h2 id="levers-h">{{ ui.mitigation_levers|default('Mitigationshebel') }}</h2>
+      <div class="lever-grid">
+        {% for l in levers[:3] %}
+        <article class="lever-card">
+          <p class="lever-card__id">L{{ '%02d' % loop.index }} &middot; {{ l.id|e }}</p>
+          <p class="lever-card__title">{{ l.title|e }}</p>
+          <p class="lever-card__meta">
+            {{ ui.timeline|default('Zeitplan') }}&nbsp;: {{ l.timeline|e }}<br>
+            {{ ui.cost|default('Kosten') }}&nbsp;: {{ l.cost_chf_text|e }}
+          </p>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    {# --- Sector exposure annex --- #}
+    {% if sector_table %}
+    <section aria-labelledby="sector-h">
+      <h2 id="sector-h">{{ ui.sector_exposure|default('Sektor-Exposition (NOGA)') }}</h2>
+      {% include 'sector_exposure_table.html.j2' %}
+    </section>
+    {% endif %}
+
+    <footer class="audit-footer">
+      <span>Audit: <a href="{{ audit_url }}">{{ audit_url }}</a></span>
+      <span>{{ ui.license|default('Lizenz') }}: {{ license|default('all_rights_reserved') }}</span>
+      <span>{{ attribution|e }}</span>
+    </footer>
+
+  </main>
+</body>
+</html>

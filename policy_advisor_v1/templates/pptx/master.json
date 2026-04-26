@@ -1,0 +1,111 @@
+{
+  "$description": "PPTX master spec for parliamentary_classic. Multi-slide commission briefing deck (16:9, 13.333\" x 7.5\"). Federal serif throughout (Source Serif 4 heading + body), navy + gold accents, paper-warm background. Layouts: title, one_pager, qa_pair, legal_citation. EMU = English Metric Units; 914400 EMU = 1 inch.",
+  "$kit": "parliamentary_classic",
+  "version": "1.0.0",
+  "slide_size": {
+    "width_in":  13.333,
+    "height_in": 7.5,
+    "width_emu":  12192000,
+    "height_emu": 6858000
+  },
+  "theme": {
+    "name": "PTT Parliamentary Classic",
+    "colors": {
+      "bg_paper":        "FDFCF7",
+      "navy":            "1B2A4A",
+      "navy_deep":       "10182B",
+      "gold":            "C9A84C",
+      "ink":             "10182B",
+      "ink_muted":       "46505F",
+      "white":           "FFFFFF",
+      "rule_strong":     "1B2A4A",
+      "rule_med":        "9CA0AC",
+      "rule_hair":       "D8D5C9",
+      "zebra":           "F7F4EC",
+      "diff_add":        "E2EFE6",
+      "diff_del":        "F8E5E5",
+      "diff_mod":        "FFF6CC",
+      "callout":         "EAEEF7",
+      "annotation":      "7A6A24"
+    },
+    "fonts": {
+      "heading":          "Source Serif 4",
+      "body":             "Source Serif 4",
+      "fallback_heading": "Cambria",
+      "fallback_body":    "Cambria"
+    }
+  },
+  "layouts": {
+    "title_slide": {
+      "$description": "Cover slide. Topic + committee + date + 'DRAFT' badge.",
+      "background": "FDFCF7",
+      "regions": {
+        "draft_badge":   { "x_in": 0.5, "y_in": 0.5, "w_in": 1.6, "h_in": 0.32, "fill": "gold", "font": "heading", "size_pt": 11, "weight": "bold", "color": "navy", "case": "upper", "tracking": 0.08 },
+        "title":         { "x_in": 0.5, "y_in": 1.4, "w_in": 12.4, "h_in": 2.4, "font": "heading", "size_pt": 44, "weight": "semibold", "color": "navy", "leading": 1.10 },
+        "subtitle":      { "x_in": 0.5, "y_in": 4.0, "w_in": 12.4, "h_in": 0.7, "font": "body", "size_pt": 18, "italic": true, "color": "ink_muted" },
+        "rule":          { "x_in": 0.5, "y_in": 5.8, "w_in": 12.4, "h_in": 0.02, "fill": "rule_strong" },
+        "meta":          { "x_in": 0.5, "y_in": 5.95, "w_in": 12.4, "h_in": 1.0, "font": "body", "size_pt": 12, "color": "ink_muted", "leading": 1.45 }
+      }
+    },
+    "one_pager": {
+      "$description": "Single-slide briefing summary. Headline + 3 lever tiles + recommendation band.",
+      "background": "FDFCF7",
+      "regions": {
+        "header_brand":     { "x_in": 0.5, "y_in": 0.4, "w_in": 4.0, "h_in": 0.4, "font": "heading", "size_pt": 12, "weight": "bold", "color": "navy", "case": "upper", "tracking": 0.06 },
+        "header_topic":     { "x_in": 4.6, "y_in": 0.4, "w_in": 6.0, "h_in": 0.4, "font": "body", "size_pt": 13, "italic": true, "color": "ink_muted" },
+        "header_date":      { "x_in": 10.6, "y_in": 0.4, "w_in": 2.3, "h_in": 0.4, "font": "body", "size_pt": 11, "color": "ink_muted", "align": "right" },
+        "rule_under_header":{ "x_in": 0.5, "y_in": 0.92, "w_in": 12.4, "h_in": 0.02, "fill": "rule_strong" },
+        "headline_label":   { "x_in": 0.5, "y_in": 1.15, "w_in": 4.0, "h_in": 0.30, "font": "heading", "size_pt": 10, "color": "ink_muted", "case": "upper", "tracking": 0.06 },
+        "headline":         { "x_in": 0.5, "y_in": 1.50, "w_in": 12.4, "h_in": 1.6, "font": "body", "size_pt": 22, "color": "ink", "leading": 1.30 },
+        "lever_band": {
+          "y_in": 3.5,
+          "h_in": 2.2,
+          "tile_count": 3,
+          "tile_w_in": 4.0,
+          "tile_gap_in": 0.2,
+          "x_first_in": 0.5,
+          "border_left": { "color": "gold", "width_pt": 2 },
+          "label":      { "font": "heading", "size_pt": 10, "color": "annotation", "case": "upper", "tracking": 0.04 },
+          "title":      { "font": "body", "size_pt": 14, "weight": "semibold", "color": "navy", "leading": 1.25 },
+          "legal":      { "font": "body", "size_pt": 10, "italic": true, "color": "ink_muted" },
+          "actor":      { "font": "body", "size_pt": 10, "color": "ink_muted" }
+        },
+        "recommendation_band": {
+          "x_in": 0.5, "y_in": 6.0, "w_in": 12.4, "h_in": 0.7,
+          "fill": "diff_mod",
+          "border_left": { "color": "gold", "width_pt": 3 },
+          "font": "body", "size_pt": 13, "weight": "semibold", "color": "ink"
+        },
+        "audit_footer": {
+          "x_in": 0.5, "y_in": 7.0, "w_in": 12.4, "h_in": 0.4,
+          "font": "body", "size_pt": 8, "color": "ink_muted",
+          "format": "Audit: {audit_url}  |  Lizenz: {license}  |  EKB v{ekb_version}"
+        }
+      }
+    },
+    "qa_pair": {
+      "$description": "Single Q&A pair as podium prep. One question per slide.",
+      "background": "FDFCF7",
+      "regions": {
+        "q_num":   { "x_in": 0.5, "y_in": 0.5, "w_in": 2.0, "h_in": 0.5, "font": "heading", "size_pt": 18, "weight": "semibold", "color": "annotation" },
+        "question":{ "x_in": 0.5, "y_in": 1.10, "w_in": 12.4, "h_in": 1.5, "font": "body", "size_pt": 22, "weight": "semibold", "color": "navy", "leading": 1.30 },
+        "answer":  { "x_in": 0.5, "y_in": 3.0, "w_in": 12.4, "h_in": 3.4, "font": "body", "size_pt": 14, "color": "ink", "leading": 1.45 },
+        "source":  { "x_in": 0.5, "y_in": 6.7, "w_in": 12.4, "h_in": 0.7, "font": "body", "size_pt": 10, "italic": true, "color": "ink_muted" }
+      }
+    },
+    "legal_citation": {
+      "$description": "Cst./LPE/LRTV article citation slide. Three blocks: article number + verbatim text + analytical gloss.",
+      "background": "FDFCF7",
+      "regions": {
+        "label":           { "x_in": 0.5, "y_in": 0.5, "w_in": 12.4, "h_in": 0.4, "font": "heading", "size_pt": 11, "weight": "bold", "color": "annotation", "case": "upper", "tracking": 0.08 },
+        "article_ref":     { "x_in": 0.5, "y_in": 1.0, "w_in": 12.4, "h_in": 0.7, "font": "body", "size_pt": 24, "italic": true, "color": "navy" },
+        "rule_under_ref":  { "x_in": 0.5, "y_in": 1.85, "w_in": 12.4, "h_in": 0.02, "fill": "rule_med" },
+        "verbatim_label":  { "x_in": 0.5, "y_in": 2.0, "w_in": 6.0, "h_in": 0.3, "font": "heading", "size_pt": 10, "color": "ink_muted", "case": "upper", "tracking": 0.06 },
+        "verbatim":        { "x_in": 0.5, "y_in": 2.4, "w_in": 6.2, "h_in": 4.2, "font": "body", "size_pt": 14, "italic": true, "color": "ink", "leading": 1.45, "fill": "callout", "padding_in": 0.2 },
+        "gloss_label":     { "x_in": 7.0, "y_in": 2.0, "w_in": 6.0, "h_in": 0.3, "font": "heading", "size_pt": 10, "color": "ink_muted", "case": "upper", "tracking": 0.06 },
+        "gloss":           { "x_in": 7.0, "y_in": 2.4, "w_in": 6.2, "h_in": 4.2, "font": "body", "size_pt": 13, "color": "ink", "leading": 1.45 },
+        "audit_footer":    { "x_in": 0.5, "y_in": 7.0, "w_in": 12.4, "h_in": 0.4, "font": "body", "size_pt": 8, "color": "ink_muted" }
+      }
+    }
+  }
+}

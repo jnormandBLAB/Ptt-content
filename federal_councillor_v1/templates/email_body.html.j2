@@ -1,0 +1,66 @@
+{# executive_dark_compact — email_body.html.j2
+   Internal distribution email (BK / FK secretariat). Keeps the cream paper feel
+   while staying within Outlook 2007-2019 table-cell rendering limits.
+   Context: { lang, topic, vote_date, composite, kpis, recommendation, audit_url } #}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ lang|default('de') }}">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>{{ topic|e }} — Vorbereitung</title>
+</head>
+<body style="margin:0;padding:0;background:#F2EBDA;font-family:Georgia,'Source Serif 4',serif;color:#0F1A30;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+        <table role="presentation" width="640" cellspacing="0" cellpadding="0" border="0"
+               style="max-width:640px;background:#FFFFFF;border:0.5pt solid #C7C0AC;">
+
+          <tr>
+            <td style="padding:20px 24px;border-bottom:1pt solid #1B2A4A;font-family:Inter,Arial,sans-serif;">
+              <span style="font-weight:700;color:#1B2A4A;letter-spacing:0.04em;text-transform:uppercase;font-size:13px;">PTT · Bundesrat</span>
+              &nbsp;·&nbsp;<span style="font-style:italic;color:#3D4257;">{{ topic|e }}</span>
+              &nbsp;·&nbsp;<span style="color:#3D4257;font-size:12px;">{{ vote_date|e }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:24px;">
+              <p style="margin:0 0 6px 0;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:#3D4257;font-family:Inter,Arial,sans-serif;">Composite</p>
+              <p style="margin:0 0 4px 0;font-size:48px;line-height:1.0;font-weight:700;color:#1B2A4A;">{{ composite.value|e }}</p>
+              <p style="margin:0 0 16px 0;font-size:12px;color:#3D4257;">Intervall: {{ composite.lo }}–{{ composite.hi }}</p>
+              <p style="margin:0;font-size:14px;line-height:1.45;color:#0F1A30;">{{ composite.headline|e }}</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 24px 24px 24px;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tr>
+                  {% for k in kpis|default([]) %}
+                  <td style="border-left:2pt solid #C9A84C;padding:8px 12px;width:33%;vertical-align:top;font-family:Inter,Arial,sans-serif;">
+                    <p style="margin:0;font-size:10px;text-transform:uppercase;letter-spacing:0.04em;color:#3D4257;">{{ k.pillar|e }}</p>
+                    <p style="margin:4px 0 0 0;font-size:22px;font-weight:700;color:#1B2A4A;font-family:Georgia,serif;">{{ k.value|e }}</p>
+                    <p style="margin:2px 0 0 0;font-size:11px;color:#3D4257;">{{ k.delta|e }}</p>
+                  </td>
+                  {% endfor %}
+                </tr>
+              </table>
+            </td>
+          </tr>
+          {% if recommendation %}
+          <tr>
+            <td style="padding:14px 24px;background:#FFF6CC;border-left:3pt solid #C9A84C;font-weight:600;color:#0F1A30;">
+              Empfehlung: {{ recommendation|e }}
+            </td>
+          </tr>
+          {% endif %}
+          <tr>
+            <td style="padding:12px 24px;border-top:0.5pt solid #C7C0AC;font-size:10px;color:#3D4257;font-family:Georgia,serif;">
+              Audit: <a href="{{ audit_url }}" style="color:#1B2A4A;">{{ audit_url }}</a> &middot; Lizenz: all_rights_reserved &middot; Vorbereitungsdokument — ausschliesslich interner Gebrauch.
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

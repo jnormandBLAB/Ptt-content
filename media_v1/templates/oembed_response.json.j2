@@ -1,0 +1,32 @@
+{# editorial_press_v1 — oembed_response.json.j2
+   oEmbed JSON returned by /oembed/media_v1?url=... per oEmbed 1.0 spec.
+   Renders type="rich" with HTML iframe embed for chart pack visuals,
+   or type="link" for press releases (which should not be auto-embedded).
+   Context: { lang, embed_type ('rich'|'link'|'photo'),
+              title, author_name, author_url, html_embed,
+              thumbnail_url, thumbnail_width, thumbnail_height,
+              width, height, cache_age_seconds } #}
+{
+  "version": "1.0",
+  "type": "{{ embed_type|default('rich') }}",
+  "provider_name": "PTT Platform",
+  "provider_url": "https://ptt.blab-switzerland.ch",
+  "title": {{ title|tojson }},
+  "author_name": {{ author_name|default('PTT Platform / blab Switzerland')|tojson }},
+  "author_url": {{ author_url|default('https://ptt.blab-switzerland.ch')|tojson }},
+  "cache_age": {{ cache_age_seconds|default(3600) }}
+  {%- if embed_type == 'photo' or thumbnail_url %},
+  "thumbnail_url": {{ thumbnail_url|tojson }},
+  "thumbnail_width": {{ thumbnail_width|default(720) }},
+  "thumbnail_height": {{ thumbnail_height|default(320) }}
+  {%- endif %}
+  {%- if embed_type == 'rich' %},
+  "html": {{ html_embed|tojson }},
+  "width": {{ width|default(800) }},
+  "height": {{ height|default(480) }}
+  {%- elif embed_type == 'photo' %},
+  "url": {{ photo_url|tojson }},
+  "width": {{ width|default(720) }},
+  "height": {{ height|default(320) }}
+  {%- endif %}
+}

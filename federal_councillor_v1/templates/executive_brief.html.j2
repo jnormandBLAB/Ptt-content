@@ -1,0 +1,81 @@
+{# executive_dark_compact — executive_brief.html.j2
+   Single-A4 hero card + Q&A backgrounder all on one document.
+   Used for pdf_a4 and print_a4 channels via WeasyPrint or wkhtmltopdf.
+   Context: { lang, topic, vote_date, composite, kpis, recommendation,
+              backgrounder.qa[], audit_url, license, attribution, watermark_text } #}
+<!DOCTYPE html>
+<html lang="{{ lang|default('de') }}">
+<head>
+  <meta charset="utf-8">
+  <title>{{ topic|e }} — Bundesrat (Vorbereitung)</title>
+  <link rel="stylesheet" href="kit.css">
+  <link rel="stylesheet" href="print_a4.css" media="print">
+  <style>:root { --audit-url: "{{ audit_url }}"; }</style>
+</head>
+<body>
+  {% if watermark_text %}
+  <div class="watermark" aria-hidden="true"></div>
+  <div class="watermark__text" aria-hidden="true">{{ watermark_text|e }}</div>
+  {% endif %}
+
+  <main id="main">
+
+    {# ===== Page 1 — Hero card ===== #}
+    <section class="page-hero">
+      <header class="exec-header">
+        <span class="exec-header__brand">PTT · Bundesrat</span>
+        <span class="exec-header__topic">{{ topic|e }}</span>
+        <span class="exec-header__date">{{ vote_date|e }}</span>
+      </header>
+
+      <section class="composite" aria-labelledby="composite-h">
+        <div>
+          <p class="composite__label" id="composite-h">Composite</p>
+          <p class="composite__score">{{ composite.value|e }}</p>
+          <p class="composite__interval">Intervall: {{ composite.lo|e }}–{{ composite.hi|e }}</p>
+        </div>
+        <div>
+          <p class="composite__label">Kernbotschaft</p>
+          <p>{{ composite.headline|e }}</p>
+        </div>
+      </section>
+
+      <h2>Drei prioritäre KPI</h2>
+      <div class="kpi-row">
+        {% for k in kpis|default([]) %}
+        <div class="kpi">
+          <p class="kpi__label">{{ k.pillar|e }}</p>
+          <p class="kpi__value">{{ k.value|e }}</p>
+          <p class="kpi__delta">{{ k.delta|e }}</p>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if recommendation %}
+      <p class="recommendation"><strong>Empfehlung:</strong> {{ recommendation|e }}</p>
+      {% endif %}
+    </section>
+
+    {# ===== Page 2+ — Backgrounder Q&A ===== #}
+    {% if backgrounder and backgrounder.qa %}
+    <section class="page-break">
+      <h1>Hintergrund: anzunehmende Fragen</h1>
+      {% for qa in backgrounder.qa %}
+      <article class="qa-pair">
+        <p class="qa-pair__q">F{{ loop.index }}. {{ qa.question|e }}</p>
+        <p class="qa-pair__a">{{ qa.answer|e }}</p>
+        <p class="qa-pair__src">claim: {{ qa.claim_id|e }} · {{ qa.source|e }}</p>
+      </article>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    <footer class="audit-footer">
+      <span>Audit: <code>{{ audit_url }}</code></span>
+      <span>Lizenz: {{ license|default('all_rights_reserved') }}</span>
+      <span>{{ attribution|e }}</span>
+    </footer>
+
+  </main>
+</body>
+</html>

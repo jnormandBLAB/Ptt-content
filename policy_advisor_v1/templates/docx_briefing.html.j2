@@ -1,0 +1,119 @@
+{# parliamentary_classic — docx_briefing.html.j2
+   Pandoc-friendly HTML markup that converts cleanly to .docx.
+   Avoids: CSS grid, custom properties, complex floats, SVG.
+   Uses: Word-friendly styles via inline class attributes mapped through
+         a pandoc reference.docx (theme: ParliamentaryClassic). Tables
+         retain hairline borders via inline border attributes.
+   Context: { lang, topic, prepared_for, prepared_by, date, committee,
+              brief_paragraphs[], levers[], qa[], legal_diff,
+              footnotes[], audit_url, license, attribution } #}
+<!DOCTYPE html>
+<html lang="{{ lang|default('de') }}">
+<head>
+  <meta charset="utf-8">
+  <title>{{ topic|e }} — Politikberatung</title>
+</head>
+<body>
+
+  {# --- Title block (renders as Word "Title" + "Subtitle" via reference.docx) --- #}
+  <h1 class="Title">{{ topic|e }}</h1>
+  <p class="Subtitle">{{ ui.parliamentary_brief|default('Parlamentarische Notiz') }} &mdash; {{ committee|e }}</p>
+
+  <table border="0" cellpadding="4" cellspacing="0" style="margin-bottom:12pt;font-size:9pt;">
+    <tr>
+      <td><b>{{ ui.prepared_for|default('Adressat') }}&nbsp;:</b></td>
+      <td>{{ prepared_for|e }}</td>
+    </tr>
+    <tr>
+      <td><b>{{ ui.prepared_by|default('Autor') }}&nbsp;:</b></td>
+      <td>{{ prepared_by|e }}</td>
+    </tr>
+    <tr>
+      <td><b>{{ ui.date|default('Datum') }}&nbsp;:</b></td>
+      <td>{{ date|e }}</td>
+    </tr>
+  </table>
+
+  <hr/>
+
+  {# --- 1. Brief --- #}
+  <h2>1. {{ ui.brief|default('Analyse') }}</h2>
+  {% for para in brief_paragraphs %}
+  <p>{{ para|e }}</p>
+  {% endfor %}
+
+  {# --- 2. Lever x Actor x Horizon --- #}
+  {% if levers %}
+  <h2>2. {{ ui.lever_actor_horizon|default('Hebel x Akteur x Horizont') }}</h2>
+  <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse;width:100%;font-size:10pt;">
+    <thead>
+      <tr style="background-color:#1B2A4A;color:#FFFFFF;">
+        <th align="left">{{ ui.lever|default('Hebel') }}</th>
+        <th align="left">{{ ui.actor|default('Akteur') }}</th>
+        <th align="left">{{ ui.horizon|default('Horizont') }}</th>
+        <th align="left">{{ ui.legal_basis|default('Rechtsgrundlage') }}</th>
+        <th align="right">{{ ui.cost_chf|default('Kosten (Mio CHF)') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for lever in levers %}
+      <tr {% if loop.index is even %}style="background-color:#F7F4EC;"{% endif %}>
+        <td>{{ lever.title|e }}{% if lever.pillar %} <i>[{{ lever.pillar|e }}]</i>{% endif %}</td>
+        <td>{{ lever.actor|e }}</td>
+        <td>{{ lever.horizon|e }}</td>
+        <td><i>&laquo;&nbsp;{{ lever.legal_ref|e }}&nbsp;&raquo;</i></td>
+        <td align="right">{{ lever.cost_chf|e }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  {# --- 3. Q&A --- #}
+  {% if qa %}
+  <h2>3. {{ ui.qa_pack|default('Q&A — 15 wahrscheinliche Fragen') }}</h2>
+  {% for item in qa %}
+  <h3>F{{ '%02d' % loop.index }} &mdash; {{ item.question|e }}</h3>
+  <p>{{ item.answer|e }}</p>
+  <p style="font-size:9pt;color:#46505F;"><i>claim: {{ item.claim_id|e }} &middot; {{ item.source|e }}</i></p>
+  {% endfor %}
+  {% endif %}
+
+  {# --- 4. Side-by-side legal comparison --- #}
+  {% if legal_diff %}
+  <h2>4. {{ ui.legal_diff|default('Vergleich: aktueller vs. vorgeschlagener Text') }}</h2>
+  <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%;font-size:10pt;">
+    <thead>
+      <tr style="background-color:#1B2A4A;color:#FFFFFF;">
+        <th align="left" width="50%">{{ ui.current_text|default('Aktueller Text') }}</th>
+        <th align="left" width="50%">{{ ui.proposed_text|default('Vorgeschlagener Text') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td valign="top">{{ legal_diff.current_html|safe }}</td>
+        <td valign="top">{{ legal_diff.proposed_html|safe }}</td>
+      </tr>
+    </tbody>
+  </table>
+  {% endif %}
+
+  {# --- 5. Footnotes --- #}
+  {% if footnotes %}
+  <h2>{{ ui.footnotes|default('Fussnoten') }}</h2>
+  <ol style="font-size:9pt;color:#46505F;">
+    {% for fn in footnotes %}
+    <li>{{ fn|e }}</li>
+    {% endfor %}
+  </ol>
+  {% endif %}
+
+  <hr/>
+  <p style="font-size:9pt;color:#46505F;">
+    Audit&nbsp;: <a href="{{ audit_url }}">{{ audit_url }}</a><br>
+    {{ ui.license|default('Lizenz') }}&nbsp;: {{ license|default('all_rights_reserved') }}<br>
+    {{ attribution|e }}
+  </p>
+
+</body>
+</html>

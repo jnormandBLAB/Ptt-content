@@ -1,0 +1,253 @@
+/* ============================================================================
+   parliamentary_classic  —  global CSS for policy_advisor_v1.
+   Serif throughout, dense tables, side-by-side legal diff, Cst./LPE citations.
+   ============================================================================ */
+
+:root {
+  --ptt-navy: #1B2A4A;
+  --ptt-gold: #C9A84C;
+  --ptt-white: #FFFFFF;
+
+  --parl-ink:           #10182B;
+  --parl-ink-secondary: #46505F;
+  --parl-paper:         #FDFCF7;
+  --parl-rule-strong:   #1B2A4A;
+  --parl-rule-med:      #9CA0AC;
+  --parl-rule-hair:     #D8D5C9;
+  --parl-zebra:         #F7F4EC;
+  --parl-diff-add:      #E2EFE6;
+  --parl-diff-del:      #F8E5E5;
+  --parl-diff-mod:      #FFF6CC;
+  --parl-callout:       #EAEEF7;
+  --parl-annotation:    #7A6A24;
+
+  --ff-heading: "Source Serif 4", Charter, Georgia, serif;
+  --ff-body:    "Source Serif 4", Charter, Georgia, serif;
+  --ff-numeric: "Source Serif 4", ui-monospace, monospace;
+  --ff-legal:   "Source Serif 4", Charter, Georgia, serif;
+
+  --fs-h1:         24px;
+  --fs-h2:         18px;
+  --fs-h3:         15px;
+  --fs-body:       15px;
+  --fs-table-body: 13px;
+  --fs-footnote:   12px;
+
+  --lh-tight:  1.10;
+  --lh-snug:   1.30;
+  --lh-normal: 1.45;
+  --lh-loose:  1.60;
+
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  --sp-1: 2pt; --sp-2: 4pt; --sp-3: 6pt; --sp-4: 8pt;
+  --sp-5: 12pt; --sp-6: 16pt; --sp-7: 20pt; --sp-8: 28pt;
+
+  --w-content: 780px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  color: var(--parl-ink);
+  background: var(--parl-paper);
+  font-feature-settings: "kern" 1, "liga" 1, "tnum" 1, "lnum" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+main { max-width: var(--w-content); margin: 0 auto; padding: var(--sp-7) var(--sp-6); }
+
+/* ----- Page header (note d'analyse style) ----- */
+.parl-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--sp-5);
+  border-bottom: 1pt solid var(--parl-rule-strong);
+  padding-bottom: var(--sp-3);
+  margin-bottom: var(--sp-6);
+}
+.parl-header__title { font-family: var(--ff-heading); font-size: 22px; font-weight: var(--fw-semibold); color: var(--ptt-navy); margin: 0; }
+.parl-header__sub   { font-size: 13px; color: var(--parl-ink-secondary); font-style: italic; margin: 4pt 0 0 0; }
+.parl-header__meta  { font-size: 11px; color: var(--parl-ink-secondary); text-align: right; line-height: 1.45; }
+.parl-header__draft {
+  display: inline-block;
+  background: var(--ptt-gold);
+  color: var(--ptt-navy);
+  padding: 1pt 6pt;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: var(--fw-bold);
+  margin-bottom: 4pt;
+}
+
+/* ----- Headings ----- */
+h1, h2, h3 {
+  font-family: var(--ff-heading);
+  color: var(--ptt-navy);
+  margin: 0 0 var(--sp-3) 0;
+  line-height: var(--lh-snug);
+  font-weight: var(--fw-semibold);
+}
+h1 { font-size: var(--fs-h1); margin-top: var(--sp-7); }
+h2 { font-size: var(--fs-h2); margin-top: var(--sp-6); border-bottom: 0.5pt solid var(--parl-rule-med); padding-bottom: 2pt; }
+h3 { font-size: var(--fs-h3); margin-top: var(--sp-5); font-style: italic; font-weight: var(--fw-regular); }
+
+p { margin: 0 0 var(--sp-4) 0; }
+
+/* ----- Legal citations ----- */
+.legal-cite {
+  font-family: var(--ff-legal);
+  font-style: italic;
+  color: var(--parl-ink-secondary);
+  font-size: 0.95em;
+  white-space: nowrap;
+}
+.legal-cite::before { content: "« "; }
+.legal-cite::after  { content: " »"; }
+
+/* ----- Footnotes ----- */
+.footnote-ref {
+  font-size: 0.7em;
+  vertical-align: super;
+  color: var(--ptt-navy);
+  text-decoration: none;
+  font-weight: var(--fw-semibold);
+}
+.footnotes {
+  margin-top: var(--sp-7);
+  border-top: 0.5pt solid var(--parl-rule-med);
+  padding-top: var(--sp-4);
+  font-size: var(--fs-footnote);
+  color: var(--parl-ink-secondary);
+  line-height: 1.40;
+}
+.footnotes ol { padding-left: 16pt; }
+
+/* ----- Tables (dense, hairline) ----- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-table-body);
+  margin: var(--sp-5) 0;
+}
+thead th {
+  background: var(--ptt-navy);
+  color: var(--ptt-white);
+  font-family: var(--ff-heading);
+  text-align: left;
+  font-weight: var(--fw-semibold);
+  padding: 6pt 8pt;
+  border-bottom: 1pt solid var(--ptt-navy);
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+tbody td {
+  padding: 5pt 8pt;
+  border-bottom: 0.25pt solid var(--parl-rule-hair);
+  vertical-align: top;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+tbody tr:nth-child(even) td { background: var(--parl-zebra); }
+tbody tr:hover td { background: var(--parl-callout); }
+
+td.num, th.num { font-family: var(--ff-numeric); text-align: right; }
+
+/* ----- Side-by-side legal diff ----- */
+.diff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-5);
+  margin: var(--sp-5) 0;
+}
+.diff-col {
+  border: 0.5pt solid var(--parl-rule-med);
+  padding: var(--sp-4);
+  background: var(--ptt-white);
+}
+.diff-col__head {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-semibold);
+  color: var(--ptt-navy);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--sp-3);
+  padding-bottom: 2pt;
+  border-bottom: 0.5pt solid var(--parl-rule-med);
+}
+ins { background: var(--parl-diff-add); color: var(--parl-ink); text-decoration: none; padding: 0 1pt; }
+del { background: var(--parl-diff-del); color: var(--parl-ink); text-decoration: line-through; padding: 0 1pt; }
+mark { background: var(--parl-diff-mod); color: var(--parl-ink); padding: 0 1pt; }
+
+/* ----- PROSPER annotation badge ----- */
+.prosper-badge {
+  display: inline-block;
+  font-family: var(--ff-heading);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 1pt 4pt;
+  border: 0.5pt solid var(--parl-annotation);
+  color: var(--parl-annotation);
+  margin: 0 2pt;
+  vertical-align: 1pt;
+}
+
+/* ----- Q&A ----- */
+.qa-pair {
+  border-bottom: 0.25pt solid var(--parl-rule-hair);
+  padding: var(--sp-4) 0;
+  page-break-inside: avoid;
+}
+.qa-pair__num { font-family: var(--ff-heading); font-weight: var(--fw-semibold); color: var(--parl-annotation); font-size: 10px; }
+.qa-pair__q   { font-weight: var(--fw-semibold); color: var(--ptt-navy); margin: 2pt 0; }
+.qa-pair__a   { margin: 4pt 0; }
+.qa-pair__src { font-size: var(--fs-footnote); color: var(--parl-ink-secondary); }
+
+/* ----- Pull-quote / margin note ----- */
+.callout {
+  background: var(--parl-callout);
+  border-left: 2pt solid var(--ptt-navy);
+  padding: var(--sp-4) var(--sp-5);
+  margin: var(--sp-5) 0;
+  font-style: italic;
+  color: var(--parl-ink);
+}
+
+/* ----- Audit footer ----- */
+.audit-footer {
+  margin-top: var(--sp-8);
+  padding-top: var(--sp-3);
+  border-top: 0.5pt solid var(--parl-rule-med);
+  font-size: var(--fs-footnote);
+  color: var(--parl-ink-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+}
+
+/* ----- Skip link ----- */
+.skip-link {
+  position: absolute; top: -40px; left: 8px;
+  background: var(--ptt-navy); color: var(--ptt-white);
+  padding: 4pt 6pt; z-index: 100;
+}
+.skip-link:focus { top: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@media (forced-colors: active) {
+  table, th, td, .diff-col { border-color: CanvasText; }
+  ins, del, mark { background: Canvas; color: CanvasText; }
+}

@@ -1,0 +1,348 @@
+{
+  "$schema": "../_schema/package_spec.schema.json",
+  "schema_version": "1.1.0",
+  "package_id": "interest_group_v1",
+
+  "stakeholder": {
+    "id": "interest_group",
+    "label_i18n": {
+      "fr": "Groupe d'intérêt / Fédération",
+      "de": "Interessengruppe / Verband",
+      "it": "Gruppo d'interesse / Federazione",
+      "en": "Interest group / Federation"
+    },
+    "aim_i18n": {
+      "fr": "Défendre ma circonscription et produire la prochaine newsletter aux membres.",
+      "de": "Meine Konstituenz verteidigen und den nächsten Mitglieder-Newsletter produzieren.",
+      "it": "Difendere la mia circoscrizione e produrre la prossima newsletter ai membri.",
+      "en": "Defend my constituency and produce the next member newsletter."
+    },
+    "reading_grade_target": 11,
+    "demographic_hints": {
+      "expertise_in_topic": "informed",
+      "decision_authority": "constituency",
+      "time_budget_seconds": 1200
+    },
+    "primary_language": "de",
+    "available_languages": ["de", "fr", "it"]
+  },
+
+  "look_and_feel": {
+    "template_ref": "constituency_earth",
+    "color_palette": "ptt_constituency_earth",
+    "typography": {
+      "heading_family": "Inter",
+      "body_family": "Source Serif 4",
+      "scale": "comfortable",
+      "numerals": "lining"
+    },
+    "tone": {
+      "register": "explanatory",
+      "stance": "advocacy",
+      "anti_patterns": [
+        "uncited_figure",
+        "ad_hominem",
+        "false_attribution",
+        "speculative_language"
+      ]
+    }
+  },
+
+  "delivery": {
+    "channels": ["pdf_a4", "docx_briefing", "email_body", "email_header", "web_article"],
+    "embargo_aware": false,
+    "watermark_policy": "draft",
+    "share_policy": {
+      "redistributable": true,
+      "license": "CC-BY-ND-4.0",
+      "attribution_string_i18n": {
+        "fr": "Source : PTT Platform — analyse fournie sans modification autorisée.",
+        "de": "Quelle: PTT Platform — Analyse ohne autorisierte Änderung weitergegeben.",
+        "it": "Fonte: PTT Platform — analisi fornita senza modifica autorizzata.",
+        "en": "Source: PTT Platform — analysis provided without authorised modification."
+      }
+    },
+    "bundle_layout": {
+      "directory_template": "{topic_slug}/{package_id}/{language}/",
+      "filename_template": "{artefact_id}_{language}.{ext}",
+      "include_index_html": true,
+      "include_provenance_json": true
+    }
+  },
+
+  "artefacts": [
+    {
+      "id": "constituency_impact_note",
+      "title_i18n": {
+        "fr": "Note d'impact circonscription",
+        "de": "Konstituenz-Impact-Notiz",
+        "it": "Nota d'impatto circoscrizione",
+        "en": "Constituency impact note"
+      },
+      "purpose_i18n": {
+        "fr": "Quantifier l'effet sur les membres de la fédération avec ventilation par segment.",
+        "de": "Auswirkung auf Verbandsmitglieder mit Segmentierung quantifizieren.",
+        "it": "Quantificare l'effetto sui membri della federazione con ripartizione per segmento.",
+        "en": "Quantify the effect on federation members with per-segment breakdown."
+      },
+      "format": "constituency_impact_note",
+      "renderer": "brief.constituency_v1",
+      "channels": ["pdf_a4", "docx_briefing", "web_article"],
+      "input": {
+        "ir_fields": ["key_claims", "stakeholder_signals", "winners", "losers", "sector_exposure", "trajectory_summary"],
+        "max_tokens_in": 12000
+      },
+      "constraints": { "max_pages": 3, "max_words": 1200 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": true,
+        "min_contrast_ratio": 4.5,
+        "tagged_pdf_ua1": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "explicit",
+        "evidence_ids_from": "explicit",
+        "narrative_ids_from": "explicit",
+        "emit_claim_review_jsonld": true,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "Report", "datePublished_from": "render_time", "claim_reviews_from": "claim_ids" },
+      "every_voices_meta": { "card_priority": 1, "anchor_id": "impact" },
+      "qa_overrides": { "extra_deterministic_gates": ["claim_traceability", "no_inference_beyond_evidence", "contested_evidence_labeled"] }
+    },
+    {
+      "id": "sector_cut",
+      "title_i18n": {
+        "fr": "Coupe sectorielle pour la fédération",
+        "de": "Sektor-Schnitt für den Verband",
+        "it": "Taglio settoriale per la federazione",
+        "en": "Federation sector cut"
+      },
+      "purpose_i18n": {
+        "fr": "Filtrer les piliers PROSPER et trajectoires sur les sous-sections NOGA membres uniquement.",
+        "de": "PROSPER-Pfeiler und Trajektorien auf NOGA-Unterabschnitte der Mitglieder filtern.",
+        "it": "Filtrare pilastri PROSPER e traiettorie sulle sotto-sezioni NOGA dei soli membri.",
+        "en": "Filter PROSPER pillars and trajectories on member NOGA sub-sections only."
+      },
+      "format": "sector_exposure_table",
+      "renderer": "table.sector_cut_v1",
+      "channels": ["pdf_a4", "csv_data", "web_article"],
+      "input": {
+        "ir_fields": ["sector_exposure", "prosper_scores", "trajectory_summary"],
+        "max_tokens_in": 6000
+      },
+      "constraints": { "max_pages": 2 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": true,
+        "min_contrast_ratio": 4.5,
+        "tagged_pdf_ua1": true,
+        "screen_reader_outline_required": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "explicit",
+        "evidence_ids_from": "explicit",
+        "narrative_ids_from": "none",
+        "emit_claim_review_jsonld": false,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "Dataset" },
+      "every_voices_meta": { "card_priority": 2, "anchor_id": "sector-cut" }
+    },
+    {
+      "id": "newsletter_template",
+      "title_i18n": {
+        "fr": "Modèle newsletter membre (HTML + texte)",
+        "de": "Mitglieder-Newsletter-Vorlage (HTML + Text)",
+        "it": "Modello newsletter membro (HTML + testo)",
+        "en": "Member newsletter template (HTML + text)"
+      },
+      "purpose_i18n": {
+        "fr": "Email prêt à envoyer : objet, en-tête, 4 sections, CTA, pied attribution.",
+        "de": "Versandfertige E-Mail: Betreff, Header, 4 Abschnitte, CTA, Attribution-Footer.",
+        "it": "Email pronta per l'invio: oggetto, intestazione, 4 sezioni, CTA, piè di attribuzione.",
+        "en": "Send-ready email: subject, header, 4 sections, CTA, attribution footer."
+      },
+      "format": "newsletter_template",
+      "renderer": "email.newsletter_v1",
+      "channels": ["email_body", "email_header", "web_article"],
+      "input": {
+        "ir_fields": ["key_claims", "headline_statistic", "stakeholder_signals", "key_recommendation"],
+        "max_tokens_in": 6000
+      },
+      "constraints": { "max_words": 600, "reading_time_seconds_target": 240 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": true,
+        "min_contrast_ratio": 4.5,
+        "language_attribute_required": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "explicit",
+        "evidence_ids_from": "explicit",
+        "narrative_ids_from": "explicit",
+        "emit_claim_review_jsonld": false,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "Article", "claim_reviews_from": "claim_ids" },
+      "every_voices_meta": { "card_priority": 3, "anchor_id": "newsletter" }
+    },
+    {
+      "id": "federation_quote",
+      "title_i18n": {
+        "fr": "Phrase de fédération (citable)",
+        "de": "Verbands-Zitat (zitierbar)",
+        "it": "Frase di federazione (citabile)",
+        "en": "Federation quotable line"
+      },
+      "purpose_i18n": {
+        "fr": "Une seule phrase, signable par la présidence, défendable devant la presse.",
+        "de": "Ein einziger Satz, vom Präsidium unterzeichenbar, vor der Presse verteidigbar.",
+        "it": "Una sola frase, firmabile dalla presidenza, difendibile davanti alla stampa.",
+        "en": "Single sentence, signable by leadership, defensible to press."
+      },
+      "format": "federation_quote",
+      "renderer": "press.federation_quote_v1",
+      "channels": ["pdf_a4", "email_body", "web_article"],
+      "input": {
+        "ir_fields": ["key_claims", "stakeholder_signals", "headline_statistic"],
+        "max_tokens_in": 1500
+      },
+      "constraints": { "max_words": 50 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": false,
+        "min_contrast_ratio": 7.0,
+        "tagged_pdf_ua1": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "explicit",
+        "evidence_ids_from": "explicit",
+        "narrative_ids_from": "explicit",
+        "emit_claim_review_jsonld": true,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "ClaimReview", "rating_scale": "claim_score_0_5", "claim_reviews_from": "claim_ids" },
+      "every_voices_meta": { "card_priority": 4, "anchor_id": "quote" }
+    }
+  ],
+
+  "aim_test": {
+    "type": "hybrid",
+    "prompt_i18n": {
+      "fr": "Avec ce package seul, peux-tu (a) défendre la position de la fédération devant un journaliste, (b) envoyer une newsletter membre dans l'heure, (c) chiffrer l'impact circonscription en CHF par segment ?",
+      "de": "Kannst du mit diesem Paket allein (a) die Verbandsposition vor Journalistinnen verteidigen, (b) innerhalb einer Stunde einen Mitglieder-Newsletter versenden, (c) die Konstituenzwirkung in CHF pro Segment beziffern?",
+      "it": "Con questo solo pacchetto, puoi (a) difendere la posizione della federazione davanti a un giornalista, (b) inviare una newsletter membri entro un'ora, (c) quantificare l'impatto circoscrizione in CHF per segmento?",
+      "en": "With only this package, can you (a) defend the federation's position to a journalist, (b) send a member newsletter within the hour, (c) price the constituency impact in CHF per segment?"
+    },
+    "rubric": [
+      {
+        "criterion_id": "press_defensible",
+        "label_i18n": { "fr": "Position défendable devant la presse", "de": "Vor der Presse verteidigbare Position", "it": "Posizione difendibile davanti alla stampa", "en": "Press-defensible position" },
+        "pass_signal_i18n": { "fr": "La phrase de fédération renvoie à un claim_id sourcé.", "de": "Verbands-Zitat verweist auf gesourcte claim_id.", "it": "Frase di federazione rinvia a claim_id sourcata.", "en": "Federation line points to sourced claim_id." },
+        "weight": 1.5
+      },
+      {
+        "criterion_id": "newsletter_sendable",
+        "label_i18n": { "fr": "Newsletter envoyable en l'état", "de": "Newsletter im Ist-Zustand versendbar", "it": "Newsletter inviabile così com'è", "en": "Newsletter send-ready" },
+        "pass_signal_i18n": { "fr": "Objet + en-tête + 4 sections + CTA + footer présents.", "de": "Betreff + Header + 4 Abschnitte + CTA + Footer vorhanden.", "it": "Oggetto + header + 4 sezioni + CTA + footer presenti.", "en": "Subject + header + 4 sections + CTA + footer present." }
+      },
+      {
+        "criterion_id": "constituency_chf_per_segment",
+        "label_i18n": { "fr": "Impact CHF chiffré par segment", "de": "CHF-Wirkung pro Segment beziffert", "it": "Impatto CHF quantificato per segmento", "en": "CHF impact priced per segment" },
+        "pass_signal_i18n": { "fr": "Au moins trois segments avec chiffre central + intervalle.", "de": "Mindestens drei Segmente mit Zentralwert + Intervall.", "it": "Almeno tre segmenti con valore centrale + intervallo.", "en": "At least three segments with central + interval figure." },
+        "weight": 1.5
+      },
+      {
+        "criterion_id": "advocacy_flagged",
+        "label_i18n": { "fr": "Stance d'advocacy explicitement marquée", "de": "Advocacy-Haltung explizit markiert", "it": "Posizione di advocacy esplicitamente marcata", "en": "Advocacy stance explicitly flagged" },
+        "pass_signal_i18n": { "fr": "Les artefacts portent une mention 'analyse au service de la fédération X'.", "de": "Artefakte tragen Hinweis 'Analyse im Dienst des Verbandes X'.", "it": "Gli artefatti portano la menzione 'analisi al servizio della federazione X'.", "en": "Artefacts carry a 'analysis in service of federation X' notice." },
+        "weight": 1.5
+      },
+      {
+        "criterion_id": "no_ad_hominem",
+        "label_i18n": { "fr": "Aucune attaque personnelle", "de": "Keine ad-hominem-Angriffe", "it": "Nessun attacco personale", "en": "No ad hominem" },
+        "pass_signal_i18n": { "fr": "Aucun adversaire nommé négativement.", "de": "Kein Gegner negativ namentlich erwähnt.", "it": "Nessun avversario nominato negativamente.", "en": "No opponent named negatively." }
+      }
+    ],
+    "min_score": 0.8,
+    "judge_model": "claude-opus-4-7@1m"
+  },
+
+  "every_voices_meta": {
+    "url_slug_template": "/{language}/federations/{federation_slug}/{topic_slug}",
+    "og_image_artefact_ref": "sector_cut",
+    "schema_org_type": "Report",
+    "rss_eligible": true,
+    "subscription_topic": "federation_briefings",
+    "tts_eligible": true,
+    "falc_eligible": false,
+    "large_print_eligible": false,
+    "personalisation_keys": ["sector_noga", "canton", "language"],
+    "indexable": true,
+
+    "web": {
+      "alternates": [
+        { "language": "de", "href_template": "/de/verbaende/{federation_slug}/{topic_slug}" },
+        { "language": "fr", "href_template": "/fr/federations/{federation_slug}/{topic_slug}" },
+        { "language": "it", "href_template": "/it/federazioni/{federation_slug}/{topic_slug}" }
+      ],
+      "canonical_language": "de"
+    },
+
+    "tts": {
+      "voice_per_language": {
+        "fr": "fr-CH-FabriceNeural",
+        "de": "de-CH-LeniNeural",
+        "it": "it-IT-IsabellaNeural",
+        "rm": null
+      },
+      "duration_target_sec": 180,
+      "script_artefact_ref": "newsletter_template",
+      "intro_outro_jingle": false,
+      "embed_in_artefacts": ["newsletter_template"],
+      "transcription_required": true
+    },
+
+    "analytics": {
+      "stakeholder_cohort": "interest_group",
+      "topic_cohorts": ["federation_briefings", "constituency_impact"],
+      "language_cohort_field": "language",
+      "events_to_track": [
+        "package_view",
+        "artefact_open",
+        "share_clicked",
+        "subscription_signup",
+        "audio_played",
+        "download_clicked",
+        "push_opened",
+        "audit_link_clicked"
+      ]
+    },
+
+    "push": {
+      "eligible_channels": ["email_alert", "web_push"],
+      "channel": "federation_briefings",
+      "priority": "normal",
+      "rate_limit_per_subscriber_per_week": 4,
+      "headline_artefact_ref": "federation_quote",
+      "embargo_aware": false
+    },
+
+    "provenance": {
+      "report_id_field": "report_id",
+      "audit_url_template": "/{language}/federations/{federation_slug}/{topic_slug}/audit/{report_id}",
+      "claim_review_jsonld_endpoint": "/api/v1/claim-review/{claim_id}",
+      "license_id": "CC-BY-ND-4.0",
+      "embedded_in_pdfs": true,
+      "embedded_in_html": true
+    },
+
+    "extensions": {
+      "advocacy_disclosure": {
+        "required": true,
+        "field_path": "stakeholder.federation_id"
+      }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{# executive_dark_compact — web_inline.html.j2
+   Web echo of the A4 hero card. Cream surface, serif body, AAA contrast.
+   Context: { lang, topic, vote_date, composite, kpis, recommendation,
+              audit_url, license, attribution, watermark_text } #}
+<!DOCTYPE html>
+<html lang="{{ lang|default('de') }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex,nofollow">
+  <title>{{ topic|e }} — Bundesrat (intern)</title>
+  <link rel="stylesheet" href="kit.css">
+  <style>:root { --audit-url: "{{ audit_url }}"; }</style>
+</head>
+<body>
+  {% if watermark_text %}
+  <div class="watermark" aria-hidden="true"></div>
+  <div class="watermark__text" aria-hidden="true">{{ watermark_text|e }}</div>
+  {% endif %}
+
+  <main id="main">
+
+    <header class="exec-header">
+      <span class="exec-header__brand">PTT — Bundesrat</span>
+      <span class="exec-header__topic">{{ topic|e }}</span>
+      <span class="exec-header__date">{{ vote_date|e }}</span>
+    </header>
+
+    <section class="composite" aria-labelledby="composite-h">
+      <div>
+        <p class="composite__label" id="composite-h">{{ ui.composite|default('Composite') }}</p>
+        <p class="composite__score">{{ composite.value|e }}</p>
+        <p class="composite__interval">{{ ui.interval|default('Intervall') }}: {{ composite.lo|e }}–{{ composite.hi|e }}</p>
+      </div>
+      <div>
+        <p class="composite__label">{{ ui.headline|default('Kernbotschaft') }}</p>
+        <p>{{ composite.headline|e }}</p>
+      </div>
+    </section>
+
+    <h2>{{ ui.three_kpis|default('Drei prioritäre KPI') }}</h2>
+    <div class="kpi-row">
+      {% for k in kpis|default([]) %}
+      <div class="kpi">
+        <p class="kpi__label">{{ k.pillar|e }}</p>
+        <p class="kpi__value">{{ k.value|e }}</p>
+        <p class="kpi__delta">{{ k.delta|e }}</p>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if recommendation %}
+    <p class="recommendation" role="note">{{ recommendation|e }}</p>
+    {% endif %}
+
+    <footer class="audit-footer">
+      <span>Audit: <code>{{ audit_url }}</code></span>
+      <span>Lizenz: {{ license|default('all_rights_reserved') }}</span>
+      <span>{{ attribution|e }}</span>
+    </footer>
+
+  </main>
+</body>
+</html>

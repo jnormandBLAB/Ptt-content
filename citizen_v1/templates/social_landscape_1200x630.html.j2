@@ -1,0 +1,49 @@
+{# citizen_civic_warm — social_landscape_1200x630.html.j2
+   OpenGraph / Twitter share image. 1200x630, safe area 1100x550 centred.
+   Context: { lang, hero, vote_date, attribution_short } #}
+<!DOCTYPE html>
+<html lang="{{ lang|default('fr') }}">
+<head>
+  <meta charset="utf-8">
+  <title>{{ hero.title|e }}</title>
+  <link rel="stylesheet" href="kit.css">
+  <style>
+    html, body { margin: 0; padding: 0; }
+    .og {
+      width: 1200px;
+      height: 630px;
+      padding: 56px 72px;
+      box-sizing: border-box;
+      background: var(--civic-cream);
+      color: var(--ptt-navy);
+      display: grid;
+      grid-template-columns: 5fr 4fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .og__stat {
+      font-family: var(--ff-numeric);
+      font-feature-settings: "tnum" 1, "lnum" 1;
+      font-size: 180px;
+      line-height: 0.95;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin: 0;
+    }
+    .og__copy { display: flex; flex-direction: column; gap: 16px; }
+    .og__title { font-size: 36px; line-height: 1.20; font-weight: 700; margin: 0; }
+    .og__caption { font-size: 22px; line-height: 1.40; color: #3A3528; margin: 0; }
+    .og__meta { font-size: 16px; color: #5A5040; }
+  </style>
+</head>
+<body>
+  <div class="og" role="img" aria-label="{{ hero.alt_text|default(hero.caption)|e }}">
+    <p class="og__stat">{{ hero.stat|e }}</p>
+    <div class="og__copy">
+      <p class="og__title">{{ hero.title|e }}</p>
+      <p class="og__caption">{{ hero.caption|e }}</p>
+      <p class="og__meta">PTT Platform&nbsp;· Vote&nbsp;: {{ vote_date }}&nbsp;· {{ attribution_short|default('CC BY 4.0') }}</p>
+    </div>
+  </div>
+</body>
+</html>

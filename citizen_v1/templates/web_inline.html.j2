@@ -1,0 +1,102 @@
+{# citizen_civic_warm — web_inline.html.j2
+   Web-first stakeholder card. Renders the hero shock-stat, the 2-minute brief,
+   FAQ accordion, and audit footer. Phone-first, max 640px column.
+   Context: { lang, package, artefacts, vote_date, audit_url, license,
+              attribution, hero, brief, faq, audio, share } #}
+<!DOCTYPE html>
+<html lang="{{ lang|default('fr') }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>{{ hero.title|e }} — PTT</title>
+  <link rel="stylesheet" href="kit.css">
+  <link rel="canonical" href="{{ canonical_url|default('') }}">
+  {% for alt in hreflang_alternates|default([]) %}
+  <link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.href }}">
+  {% endfor %}
+  {% if jsonld %}
+  <script type="application/ld+json">{{ jsonld|tojson }}</script>
+  {% endif %}
+</head>
+<body>
+  <a href="#main" class="skip-link">{{ ui.skip_to_content|default('Aller au contenu') }}</a>
+
+  <main id="main">
+
+    <header>
+      <span class="pill" aria-label="{{ ui.vote_date_label|default('Date du vote') }}">
+        {{ ui.vote_date_label|default('Vote') }}&nbsp;: {{ vote_date|default('—') }}
+      </span>
+    </header>
+
+    {# --- Hero shock-stat --- #}
+    <section class="hero" aria-labelledby="hero-h">
+      <h1 id="hero-h" class="hero__stat">{{ hero.stat|default('—') }}</h1>
+      <p class="hero__caption">{{ hero.caption|e }}</p>
+    </section>
+
+    {# --- Two-minute brief --- #}
+    <article class="card" aria-labelledby="brief-h">
+      <h2 id="brief-h">{{ brief.title|e }}</h2>
+      {% for para in brief.paragraphs|default([]) %}
+      <p>{{ para|e }}</p>
+      {% endfor %}
+      {% if brief.reading_time_seconds %}
+      <p class="caption">
+        <small>{{ ui.read_time|default('Lecture') }}&nbsp;: {{ brief.reading_time_seconds }}&nbsp;s</small>
+      </p>
+      {% endif %}
+    </article>
+
+    {# --- FAQ --- #}
+    {% if faq and faq.items %}
+    <section aria-labelledby="faq-h">
+      <h2 id="faq-h">{{ faq.title|default('Et concrètement&nbsp;?') }}</h2>
+      {% for item in faq.items %}
+      <details class="faq__item">
+        <summary class="faq__q">{{ item.q|e }}</summary>
+        <p>{{ item.a|e }}</p>
+      </details>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    {# --- Audio summary --- #}
+    {% if audio and audio.src %}
+    <section aria-labelledby="audio-h">
+      <h2 id="audio-h">{{ audio.title|default('Le résumé audio') }}</h2>
+      <audio controls preload="metadata" src="{{ audio.src }}">
+        {{ ui.audio_fallback|default('Votre navigateur ne lit pas l’audio.') }}
+      </audio>
+      {% if audio.transcript_url %}
+      <p><a href="{{ audio.transcript_url }}">{{ ui.transcript|default('Lire la transcription') }}</a></p>
+      {% endif %}
+    </section>
+    {% endif %}
+
+    {# --- Share pack --- #}
+    {% if share and share.assets %}
+    <section aria-labelledby="share-h">
+      <h2 id="share-h">{{ share.title|default('À partager') }}</h2>
+      <ul>
+        {% for asset in share.assets %}
+        <li><a href="{{ asset.url }}" download>{{ asset.label|e }}</a></li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+
+    {# --- Audit footer --- #}
+    <footer class="audit-footer">
+      <p>
+        {{ ui.audit_label|default('Audit') }}&nbsp;:
+        <a href="{{ audit_url }}"><code>{{ audit_url }}</code></a>
+      </p>
+      <p>{{ ui.license_label|default('Licence') }}&nbsp;: {{ license|default('CC BY 4.0') }}</p>
+      <p>{{ attribution|e }}</p>
+    </footer>
+
+  </main>
+</body>
+</html>

@@ -1,0 +1,67 @@
+{# citizen_civic_warm — whatsapp_card.html.j2
+   800px-wide card optimised for WhatsApp link-preview rendering. Single
+   visual block, no FAQ — the share-friend handoff happens via the share_pack.
+   Context: { lang, hero, vote_date, attribution_short, audit_url } #}
+<!DOCTYPE html>
+<html lang="{{ lang|default('fr') }}">
+<head>
+  <meta charset="utf-8">
+  <title>{{ hero.title|e }}</title>
+  <link rel="stylesheet" href="kit.css">
+  <style>
+    html, body { margin: 0; padding: 0; background: #ECE5D5; }
+    .wa {
+      width: 800px;
+      max-width: 100%;
+      margin: 24px auto;
+      background: var(--civic-warm-white);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 2px 6px rgba(27,42,74,0.10);
+      box-sizing: border-box;
+    }
+    .wa__pill {
+      display: inline-block;
+      background: var(--ptt-gold);
+      color: var(--ptt-navy);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .wa__stat {
+      font-family: var(--ff-numeric);
+      font-feature-settings: "tnum" 1, "lnum" 1;
+      font-size: 88px;
+      line-height: 1.0;
+      font-weight: 800;
+      color: var(--ptt-navy);
+      letter-spacing: -0.03em;
+      margin: 0 0 12px 0;
+    }
+    .wa__caption {
+      font-size: 20px;
+      line-height: 1.40;
+      color: #3A3528;
+      margin: 0 0 16px 0;
+    }
+    .wa__footer {
+      font-size: 12px;
+      color: #5A5040;
+      border-top: 1px solid var(--c-divider);
+      padding-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wa" role="img" aria-label="{{ hero.alt_text|default(hero.caption)|e }}">
+    <span class="wa__pill">Vote&nbsp;: {{ vote_date }}</span>
+    <p class="wa__stat">{{ hero.stat|e }}</p>
+    <p class="wa__caption">{{ hero.caption|e }}</p>
+    <p class="wa__footer">
+      PTT&nbsp;Platform · <a href="{{ audit_url }}" style="color:var(--ptt-navy);">audit</a> · {{ attribution_short|default('CC BY 4.0') }}
+    </p>
+  </div>
+</body>
+</html>

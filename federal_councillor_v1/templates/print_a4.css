@@ -1,0 +1,75 @@
+/* ============================================================================
+   executive_dark_compact  —  print_a4.css
+   A4 portrait, 16mm side margins, 18mm top, 11pt body. Cream paper.
+   Hero is a SINGLE A4 — every styling decision protects that.
+   ============================================================================ */
+
+@page {
+  size: A4 portrait;
+  margin: 18mm 16mm 16mm 16mm;
+  @top-right {
+    content: "PTT — Préparation conférence — Confidentiel";
+    font-family: "Inter", sans-serif;
+    font-size: 7pt;
+    color: #3D4257;
+  }
+  @bottom-right {
+    content: "p. " counter(page) " / " counter(pages);
+    font-family: "Source Serif 4", serif;
+    font-size: 8pt;
+    color: #3D4257;
+  }
+  @bottom-left {
+    content: "Audit: " var(--audit-url, "—");
+    font-family: "Source Serif 4", serif;
+    font-size: 8pt;
+    color: #3D4257;
+  }
+}
+
+@page hero { margin: 14mm 14mm 14mm 14mm; }
+
+@media print {
+  :root { --exec-cream: #F2EBDA; }
+
+  html, body {
+    background: var(--exec-cream) !important;
+    color: #0F1A30 !important;
+    font-size: 11pt;
+    line-height: 1.40;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  main { max-width: none; padding: 0; }
+
+  h1 { font-size: 18pt; line-height: 1.10; border-bottom: 0.75pt solid #1B2A4A; padding-bottom: 4pt; }
+  h2 { font-size: 13pt; line-height: 1.20; }
+  h3 { font-size: 10pt; line-height: 1.25; }
+
+  p, li { orphans: 3; widows: 3; }
+
+  /* Hero MUST stay on page 1 */
+  .composite, .kpi-row, .recommendation { page-break-inside: avoid; break-inside: avoid; }
+
+  .composite { padding: 12pt; background: #FFFFFF !important; }
+  .composite__score { font-size: 56pt; }
+
+  .kpi { background: #FFFFFF !important; padding: 6pt 8pt; }
+
+  .qa-pair { page-break-inside: avoid; break-inside: avoid; }
+
+  /* Watermark — personalised printout */
+  .watermark, .watermark__text { position: fixed !important; }
+
+  /* Hide screen-only chrome */
+  .skip-link, .no-print { display: none !important; }
+
+  /* Print URLs after links (federal preference: foot-of-page would over-cite) */
+  a[href]::after { content: " [" attr(href) "]"; font-size: 8pt; color: #3D4257; }
+  a[href^="#"]::after { content: ""; }
+
+  /* Page breaks */
+  .page-break { page-break-before: always; }
+  .page-hero  { page: hero; }
+}

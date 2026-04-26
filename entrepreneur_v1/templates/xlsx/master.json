@@ -1,0 +1,76 @@
+{
+  "$description": "XLSX master spec for business_sober_v1 cost calculator. Three sheets: Inputs (company size band, sector NOGA, employees), Calculations (formulas), Output (CHF impact ranges). All cells use named-range references so analysts can swap inputs without touching formulas. Number format: Swiss-French CHF, non-breaking space thousands separator.",
+  "$kit": "business_sober_v1",
+  "version": "1.0.0",
+  "theme": {
+    "colors": {
+      "header_fill":     "1B2A4A",
+      "header_font":     "FFFFFF",
+      "input_fill":      "FEF9C3",
+      "calc_fill":       "F3F4F6",
+      "output_fill":     "C9A84C",
+      "output_font":     "1B2A4A",
+      "rule":            "111827",
+      "noga_band_a":     "E8F0E5",
+      "noga_band_default": "F3F4F6"
+    },
+    "fonts": {
+      "heading":   "Inter",
+      "body":      "Inter",
+      "numeric":   "Consolas",
+      "size_h1":   14,
+      "size_body": 11,
+      "size_label": 10
+    }
+  },
+  "sheets": [
+    {
+      "name": "Inputs",
+      "$description": "All user-editable cells. Yellow fill (input_fill) marks editable.",
+      "columns": ["Field", "Value", "Unit", "Notes"],
+      "rows": [
+        { "field": "company_name",        "value": "",      "unit": "",       "notes": "Free text." },
+        { "field": "noga_division",       "value": "C",     "unit": "",       "notes": "A..U per NOGA 2008." },
+        { "field": "size_band",           "value": "M",     "unit": "",       "notes": "S=micro<10, M=small<50, L=medium<250, XL=large>=250." },
+        { "field": "employees",           "value": 87,      "unit": "FTE",    "notes": "Headcount." },
+        { "field": "annual_revenue_chf",  "value": 12500000,"unit": "CHF",    "notes": "Last fiscal year." },
+        { "field": "exposure_pct",        "value": 0.08,    "unit": "ratio",  "notes": "Share of revenue exposed to the regulatory shock (0.0–1.0)." },
+        { "field": "horizon_years",       "value": 3,       "unit": "years",  "notes": "Analysis horizon." }
+      ],
+      "named_ranges": {
+        "in_employees":  "Inputs!$B$5",
+        "in_revenue":    "Inputs!$B$6",
+        "in_exposure":   "Inputs!$B$7",
+        "in_horizon":    "Inputs!$B$8"
+      }
+    },
+    {
+      "name": "Calculations",
+      "$description": "Read-only formulas. Grey fill (calc_fill).",
+      "columns": ["Step", "Formula", "Result", "Unit"],
+      "rows": [
+        { "step": "1. Annual exposure CHF",          "formula": "=in_revenue*in_exposure",       "unit": "CHF/yr" },
+        { "step": "2. Cumulative horizon CHF",       "formula": "=B2*in_horizon",                "unit": "CHF"    },
+        { "step": "3. Per-employee CHF impact",      "formula": "=B2/in_employees",              "unit": "CHF/FTE/yr" },
+        { "step": "4. Conservative band (low)",      "formula": "=B3*0.7",                       "unit": "CHF"    },
+        { "step": "5. Central estimate",             "formula": "=B3",                           "unit": "CHF"    },
+        { "step": "6. Aggressive band (high)",       "formula": "=B3*1.3",                       "unit": "CHF"    }
+      ]
+    },
+    {
+      "name": "Output",
+      "$description": "Board-ready summary. Gold fill (output_fill).",
+      "columns": ["Metric", "CHF", "Band"],
+      "rows": [
+        { "metric": "Conservative (P30)",  "ref": "Calculations!B5",   "band_formula": "=IF(B2<100000,\"<100k\",IF(B2<1000000,\"100k-1M\",IF(B2<10000000,\"1M-10M\",\">10M\")))" },
+        { "metric": "Central (P50)",       "ref": "Calculations!B6" },
+        { "metric": "Aggressive (P70)",    "ref": "Calculations!B7" }
+      ]
+    }
+  ],
+  "number_formats": {
+    "chf":     "[$CHF-100C] #,##0;[Red]-[$CHF-100C] #,##0",
+    "ratio":   "0.0%",
+    "integer": "#,##0"
+  }
+}

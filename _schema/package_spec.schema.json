@@ -1,0 +1,818 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ptt.blab-switzerland.ch/schemas/package_spec/v1.1.0",
+  "title": "PTT Stakeholder Package Specification",
+  "description": "Aim-driven content contract that drives both today's directory-bundle adapter and the forthcoming Every Voices multi-stakeholder web platform. One package_spec.json describes everything a stakeholder needs to fulfil ONE aim across ONE or MORE channels (PDF bundle today, web/RSS/social/email tomorrow). Adding a new stakeholder = adding a new package_spec.json. No code changes. v1.1.0 adds six optional sub-objects under every_voices_meta (web, tts, plain_language, analytics, push, provenance) and an optional claim_reviews_from on the artefact-level schema_org block — all additive, all backward-compatible with v1.0.0 instances.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "package_id",
+    "stakeholder",
+    "look_and_feel",
+    "delivery",
+    "artefacts",
+    "aim_test",
+    "every_voices_meta"
+  ],
+  "additionalProperties": false,
+
+  "properties": {
+
+    "$schema": {
+      "description": "Optional pointer to this JSON Schema for editor tooling (VS Code, JetBrains, etc.). Ignored by the renderer.",
+      "type": "string"
+    },
+
+    "schema_version": {
+      "description": "Semantic version of THIS schema the package conforms to. Renderer dispatches on major.minor; patch is informational. Bump major when removing/renaming fields, minor when adding optional fields, patch for clarifications.",
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+
+    "package_id": {
+      "description": "Stable, machine-safe package identifier. Convention: '{stakeholder_id}_v{major}' (e.g. 'citizen_v1'). Used as directory name, URL slug root, and provenance key. NEVER renamed once published — supersede with a new id and a deprecation pointer.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{2,40}_v[0-9]+$"
+    },
+
+    "supersedes": {
+      "description": "Optional package_id this package replaces. The Every Voices platform issues 301 redirects from the old slug to the new.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{2,40}_v[0-9]+$"
+    },
+
+    "stakeholder": {
+      "description": "Who this package is FOR and what they're trying to DO. The aim_i18n is the single most important field in the schema — every artefact below must serve it.",
+      "type": "object",
+      "required": ["id", "label_i18n", "aim_i18n", "reading_grade_target"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Stable stakeholder identifier (citizen, federal_councillor, policy_advisor, media, entrepreneur, interest_group, ...). Open vocabulary; new ids do not require schema changes.",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{2,40}$"
+        },
+        "label_i18n": { "$ref": "#/$defs/i18n_string" },
+        "aim_i18n": {
+          "description": "What the stakeholder must be able to DO after consuming the package. Single sentence, action verb first, time-bounded if applicable. This is the success criterion the aim_test below measures.",
+          "$ref": "#/$defs/i18n_string"
+        },
+        "reading_grade_target": {
+          "description": "Target Flesch-Kincaid grade (or equivalent) for prose artefacts in this package. Renderers and editorial pass clamp to this +- 1.",
+          "type": "integer",
+          "minimum": 4,
+          "maximum": 18
+        },
+        "demographic_hints": {
+          "description": "Non-PII shaping hints for tone, examples, and visual references. Never used for personalisation that depends on individual identity — only for population-level register selection.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "age_band": { "type": "string", "enum": ["18-29", "30-49", "50-69", "70+", "mixed"] },
+            "civic_engagement": { "type": "string", "enum": ["low", "medium", "high"] },
+            "expertise_in_topic": { "type": "string", "enum": ["lay", "informed", "expert"] },
+            "decision_authority": { "type": "string", "enum": ["self", "household", "team", "organisation", "constituency", "executive"] },
+            "time_budget_seconds": { "type": "integer", "minimum": 30, "maximum": 3600 }
+          }
+        },
+        "primary_language": { "$ref": "#/$defs/language_code" },
+        "available_languages": {
+          "description": "Languages the package MUST be rendered in. Renderer fails the package if any artefact cannot be produced for a listed language. Default for Swiss federal context is FR + DE + IT (RM optional, EN by request).",
+          "type": "array",
+          "items": { "$ref": "#/$defs/language_code" },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+
+    "look_and_feel": {
+      "description": "Visual + tonal contract shared by every artefact in the package. Per-artefact overrides are allowed but discouraged — variance hurts brand recognition across the Every Voices platform.",
+      "type": "object",
+      "required": ["template_ref", "color_palette", "typography", "tone"],
+      "additionalProperties": false,
+      "properties": {
+        "template_ref": {
+          "description": "Reference to a registered template family in src/ptt_rendering/templates/. Resolves to the actual HTML/CSS/PDF chrome used. Not a file path — a logical id.",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{2,60}$"
+        },
+        "color_palette": {
+          "description": "Named palette from src/ptt_ui/config.py token set. Renderer rejects any inline hex. Adding a new palette = adding a token, not editing this enum.",
+          "type": "string",
+          "enum": [
+            "ptt_navy_gold",
+            "ptt_civic_warm",
+            "ptt_executive_dark",
+            "ptt_press_neutral",
+            "ptt_market_signal",
+            "ptt_constituency_earth",
+            "ptt_high_contrast"
+          ]
+        },
+        "typography": {
+          "type": "object",
+          "required": ["heading_family", "body_family", "scale"],
+          "additionalProperties": false,
+          "properties": {
+            "heading_family": { "type": "string", "enum": ["Inter", "Source Serif 4", "Frutiger", "Atkinson Hyperlegible"] },
+            "body_family": { "type": "string", "enum": ["Inter", "Source Serif 4", "Frutiger", "Atkinson Hyperlegible"] },
+            "scale": { "type": "string", "enum": ["compact", "comfortable", "large", "large_print"] },
+            "numerals": { "type": "string", "enum": ["lining", "old_style", "tabular"] }
+          }
+        },
+        "tone": {
+          "type": "object",
+          "required": ["register", "stance"],
+          "additionalProperties": false,
+          "properties": {
+            "register": {
+              "description": "Editorial register. 'plain' = FALC-adjacent, 'standard' = Swiss federal neutral, 'explanatory' = informed-but-friendly (federation newsletters, citizen FAQs), 'formal' = parliamentary, 'incisive' = press-quotable, 'analytic' = peer-reader.",
+              "type": "string",
+              "enum": ["plain", "standard", "explanatory", "formal", "incisive", "analytic"]
+            },
+            "stance": {
+              "description": "Persuasive posture. 'neutral_balanced' is the federal default (mandatory for votation packages). 'persuasive' permitted only for civic-engagement nudges (citizen package final CTA). 'advocacy' permitted ONLY for interest_group packages and must be flagged in artefact metadata.",
+              "type": "string",
+              "enum": ["neutral_balanced", "explanatory", "persuasive", "advocacy"]
+            },
+            "anti_patterns": {
+              "description": "Editorial pass blocks these phrases / behaviours. Free-form list; checked by ptt_stakeholder_adapter.lang_check.",
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "delivery": {
+      "description": "Where and how this package is delivered. Renderer reads channels[] to decide which artefacts to emit per channel; an artefact only ships on a channel if BOTH the package and the artefact list it.",
+      "type": "object",
+      "required": ["channels", "embargo_aware", "watermark_policy", "share_policy"],
+      "additionalProperties": false,
+      "properties": {
+        "channels": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/channel" },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "embargo_aware": {
+          "description": "If true, renderer adds embargo banner to applicable artefacts and the Every Voices CMS gates publication on the embargo timestamp.",
+          "type": "boolean"
+        },
+        "watermark_policy": {
+          "type": "string",
+          "enum": ["none", "draft", "embargoed", "preview", "personalised"],
+          "description": "'personalised' adds a per-recipient watermark — only for federal_councillor / interest_group leak-trace packages."
+        },
+        "share_policy": {
+          "type": "object",
+          "required": ["redistributable", "license"],
+          "additionalProperties": false,
+          "properties": {
+            "redistributable": { "type": "boolean" },
+            "license": { "type": "string", "enum": ["CC-BY-4.0", "CC-BY-SA-4.0", "CC-BY-ND-4.0", "all_rights_reserved", "embargoed_press"] },
+            "attribution_string_i18n": { "$ref": "#/$defs/i18n_string" }
+          }
+        },
+        "bundle_layout": {
+          "description": "How the directory-bundle adapter (today's PDF/DOCX flow) names and groups files. Ignored by web channels.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "directory_template": { "type": "string", "description": "e.g. '{topic_slug}/{package_id}/{language}/' — placeholders resolved at render time." },
+            "filename_template": { "type": "string", "description": "e.g. '{artefact_id}.{ext}' — placeholders: artefact_id, ext, language, channel, version." },
+            "include_index_html": { "type": "boolean", "default": true },
+            "include_provenance_json": { "type": "boolean", "default": true }
+          }
+        }
+      }
+    },
+
+    "artefacts": {
+      "description": "The actual deliverables. Order in this array is the canonical reading / consumption order — the web platform shows them in this order, the PDF bundle TOC follows it. Number of artefacts is bounded so we don't create cookie-cutter packages.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "items": { "$ref": "#/$defs/artefact" }
+    },
+
+    "aim_test": {
+      "description": "The QA gate that supersedes the technical-only gates (non_empty, min_length, coherent). A package PASSES if and only if a typical stakeholder reading ONLY this package can complete the stated aim within the time budget.",
+      "type": "object",
+      "required": ["type", "prompt_i18n", "rubric", "min_score"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "description": "How the test is administered. 'llm_judge' uses a pinned model + prompt; 'human_panel' is for major releases; 'hybrid' runs LLM gate then samples for human review.",
+          "type": "string",
+          "enum": ["llm_judge", "human_panel", "hybrid"]
+        },
+        "prompt_i18n": {
+          "description": "The exact question put to the judge (or panellist). Single sentence, mirrors stakeholder.aim_i18n.",
+          "$ref": "#/$defs/i18n_string"
+        },
+        "rubric": {
+          "description": "Ordered evaluation criteria. Each criterion contributes equally to the score unless 'weight' is set.",
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "required": ["criterion_id", "label_i18n", "pass_signal_i18n"],
+            "additionalProperties": false,
+            "properties": {
+              "criterion_id": { "type": "string", "pattern": "^[a-z][a-z0-9_]{2,40}$" },
+              "label_i18n": { "$ref": "#/$defs/i18n_string" },
+              "pass_signal_i18n": {
+                "description": "Concrete evidence the criterion is met (e.g. 'Reader can name the vote date and the headline impact figure without re-reading').",
+                "$ref": "#/$defs/i18n_string"
+              },
+              "weight": { "type": "number", "minimum": 0.5, "maximum": 3.0, "default": 1.0 }
+            }
+          }
+        },
+        "min_score": {
+          "description": "Minimum weighted-rubric score (0-1) for the package to ship.",
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 1.0
+        },
+        "judge_model": {
+          "description": "Pinned LLM for llm_judge / hybrid. Required for reproducibility.",
+          "type": "string",
+          "examples": ["claude-opus-4-7@1m", "claude-sonnet-4-5"]
+        }
+      }
+    },
+
+    "every_voices_meta": {
+      "description": "Forward-portability block for the post-launch Every Voices web platform. Today's adapter MAY ignore most of these; tomorrow's platform reads every one. Adding the right fields TODAY makes adoption a config change, not a refactor.",
+      "type": "object",
+      "required": ["url_slug_template", "schema_org_type", "rss_eligible", "subscription_topic"],
+      "additionalProperties": false,
+      "properties": {
+        "url_slug_template": {
+          "description": "Template for the public URL. Placeholders: {language}, {topic_slug}, {package_id}, {report_id}, {iso_date}.",
+          "type": "string",
+          "examples": ["/{language}/votations/{topic_slug}/{package_id}", "/{language}/press/{iso_date}/{topic_slug}"]
+        },
+        "og_image_artefact_ref": {
+          "description": "Which artefact_id (must exist in artefacts[]) provides the OpenGraph / Twitter share image. Renderer auto-generates a 1200x630 export.",
+          "type": "string"
+        },
+        "schema_org_type": {
+          "description": "JSON-LD @type emitted on the canonical web page. ClaimReview triggers Google Fact Check Tools indexing.",
+          "type": "string",
+          "enum": ["Article", "NewsArticle", "Report", "ClaimReview", "Dataset", "FAQPage", "GovernmentService", "Event"]
+        },
+        "rss_eligible": { "type": "boolean" },
+        "subscription_topic": {
+          "description": "Topic key for the Every Voices subscription engine. Stakeholders subscribe to topics, not packages — this is how a journalist following 'AHV reform' gets the new media_v1 the moment it ships.",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{2,60}$"
+        },
+        "oembed_endpoint": {
+          "description": "If set, the platform exposes an oEmbed JSON for the package at this path (third parties can embed the citizen card on their blog).",
+          "type": "string"
+        },
+        "tts_eligible": {
+          "description": "Whether the package can be auto-narrated for the audio summary channel (audio_summary_90s).",
+          "type": "boolean"
+        },
+        "falc_eligible": {
+          "description": "Whether a FALC / leichte-Sprache simplified variant should be generated. Mandatory for citizen packages targeting public-info channels.",
+          "type": "boolean"
+        },
+        "large_print_eligible": {
+          "description": "Whether a large_print_a4 variant should be generated for accessibility.",
+          "type": "boolean"
+        },
+        "personalisation_keys": {
+          "description": "OPT-IN personalisation dimensions the platform may use to re-rank artefacts within the package (canton, sector, age-band). NEVER user-identifying. Empty list = no personalisation.",
+          "type": "array",
+          "items": { "type": "string", "enum": ["canton", "language", "sector_noga", "age_band", "expertise"] },
+          "uniqueItems": true
+        },
+        "indexable": {
+          "description": "Whether search engines may index the canonical page. False for embargoed press-only packages.",
+          "type": "boolean",
+          "default": true
+        },
+
+        "web": {
+          "description": "Multi-language URL siblings (hreflang). Detail block consumed by the Astro-based Every Voices web layer to emit <link rel='alternate' hreflang='...'> tags and the canonical pointer. Optional in v1.1.0 — when omitted, the renderer falls back to url_slug_template + the package's available_languages.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["alternates", "canonical_language"],
+          "properties": {
+            "alternates": {
+              "description": "One entry per language sibling. Each carries the language code and a path template (placeholders mirror url_slug_template: {language}, {topic_slug}, {package_id}, {report_id}, {iso_date}). Mark languages the platform may publish without (e.g. RM) as 'optional': true so the discovery worker does not 404 when the artefact set isn't translated.",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["language", "href_template"],
+                "properties": {
+                  "language": { "$ref": "#/$defs/language_code" },
+                  "href_template": { "type": "string", "minLength": 1 },
+                  "optional": { "type": "boolean", "default": false, "description": "If true, the platform tolerates a missing translation without breaking sitemap generation." }
+                }
+              }
+            },
+            "canonical_language": {
+              "description": "Pointer to the alternate that owns rel=canonical. Full canonical URL is composed at publish time from this language plus the package's host configuration.",
+              "$ref": "#/$defs/language_code"
+            }
+          }
+        },
+
+        "tts": {
+          "description": "Text-to-speech detail. Read by the audio renderer (audio.tts_swiss_voices_v1) and the Every Voices audio worker (Azure Speech Switzerland North) when tts_eligible is true. Optional in v1.1.0 — packages without tts_eligible may omit this entirely.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["voice_per_language", "duration_target_sec", "script_artefact_ref"],
+          "properties": {
+            "voice_per_language": {
+              "description": "Mapping {language_code: neural_voice_id_or_null}. Voices that do not exist for a given language MUST be set to null so the renderer skips that language rather than picking a wrong-locale fallback. Voice ids follow the Azure Cognitive Services naming convention (xx-XX-NameNeural).",
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "fr": { "type": ["string", "null"], "minLength": 1 },
+                "de": { "type": ["string", "null"], "minLength": 1 },
+                "it": { "type": ["string", "null"], "minLength": 1 },
+                "rm": { "type": ["string", "null"], "minLength": 1 },
+                "en": { "type": ["string", "null"], "minLength": 1 }
+              }
+            },
+            "duration_target_sec": {
+              "description": "Target spoken length. The TTS renderer compresses or pads the script (within editorial limits) to land within +- 10%.",
+              "type": "integer",
+              "minimum": 15,
+              "maximum": 600
+            },
+            "script_artefact_ref": {
+              "description": "id of the artefact whose rendered text serves as the TTS-ready script. MUST match an artefact.id in this package.",
+              "type": "string"
+            },
+            "intro_outro_jingle": {
+              "description": "If true, the renderer prepends/appends a 2-second neutral jingle. Off by default — federal-grade audio rarely uses jingles.",
+              "type": "boolean",
+              "default": false
+            },
+            "embed_in_artefacts": {
+              "description": "Artefact ids that get an inline mp3/m4a alongside their HTML. Empty array = the audio is its own standalone artefact only.",
+              "type": "array",
+              "items": { "type": "string" },
+              "uniqueItems": true
+            },
+            "transcription_required": {
+              "description": "Whether the audio MUST ship with a synchronised transcript. Mandatory baseline for WCAG AA — keep at true unless the audio itself is the transcript of an existing text.",
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
+
+        "plain_language": {
+          "description": "Plain-language / FALC / leichte-Sprache detail. Read by the FALC renderer (falc_simplified channel) and by the editorial pass when generating the simplified twin of an artefact. Optional in v1.1.0 — packages without falc_eligible may omit.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["cefr_level_target", "falc_variant_artefact_ref"],
+          "properties": {
+            "cefr_level_target": {
+              "description": "CEFR level for the simplified variant. B1 is the Swiss federal default for general public-information FALC; A2 only for accessibility-first packages.",
+              "type": "string",
+              "enum": ["A1", "A2", "B1", "B2"]
+            },
+            "falc_variant_artefact_ref": {
+              "description": "id of the base artefact that gets a FALC twin shipped alongside it. The twin reuses the renderer's prose path through the simplification pipeline.",
+              "type": "string"
+            },
+            "max_sentence_length": {
+              "description": "Maximum words per sentence enforced by the simplification editor.",
+              "type": "integer",
+              "minimum": 6,
+              "maximum": 30
+            },
+            "max_word_syllables": {
+              "description": "Words above this syllable count trigger a substitute lookup (vocabulary list per language). Hard limit — the editor refuses to pass a draft that violates it.",
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 6
+            },
+            "pictograms_allowed": {
+              "description": "If true, the FALC renderer may insert ARASAAC / Sclera pictograms next to key terms. Off for press / executive packages.",
+              "type": "boolean",
+              "default": true
+            },
+            "checker_tools": {
+              "description": "Names of post-render lint tools the editor must clear before publication. Open vocabulary; the pipeline maps each id to a callable in src/ptt_stakeholder_adapter/lang_check/.",
+              "type": "array",
+              "items": { "type": "string" },
+              "uniqueItems": true
+            }
+          }
+        },
+
+        "analytics": {
+          "description": "Cookie-less analytics tagging consumed by the self-hosted Plausible instance. Each artefact view emits a Plausible custom event with the props composed from this block + the runtime language. Optional in v1.1.0 — packages with no public surface (federal_councillor, policy_advisor) may omit.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["stakeholder_cohort", "events_to_track"],
+          "properties": {
+            "stakeholder_cohort": {
+              "description": "Coarse cohort id used as a Plausible custom property. Mirrors stakeholder.id but kept separate so analytics taxonomy can evolve without renaming the stakeholder.",
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{2,40}$"
+            },
+            "topic_cohorts": {
+              "description": "Topic-level tags (e.g. 'votations', 'social_policy'). Stored as a multi-value Plausible property so a single page contributes to several cohort dashboards.",
+              "type": "array",
+              "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]{2,40}$" },
+              "uniqueItems": true
+            },
+            "language_cohort_field": {
+              "description": "Name of the runtime field the platform fills with the served language ('fr' / 'de' / ...). Defaults to 'language'. Kept configurable so a host platform with a different prop convention can rename without forking the schema.",
+              "type": "string",
+              "default": "language"
+            },
+            "events_to_track": {
+              "description": "Closed enum of events the renderer must instrument. Adding a new event = adding a renderer hook AND extending this enum (semver minor).",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "package_view",
+                  "artefact_open",
+                  "share_clicked",
+                  "subscription_signup",
+                  "audio_played",
+                  "download_clicked",
+                  "embed_loaded",
+                  "push_opened",
+                  "audit_link_clicked"
+                ]
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+
+        "push": {
+          "description": "Push / notification delivery channel detail. Read by the Listmonk-fronted notification broker (web push, Telegram, WhatsApp Business). Optional in v1.1.0 — only packages that opt in to live alerting need this block.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["eligible_channels", "channel"],
+          "properties": {
+            "eligible_channels": {
+              "description": "Closed enum of push transports this package authorises. Adding a transport = adding a broker adapter (semver minor).",
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "enum": ["web_push", "telegram", "whatsapp_broadcast", "email_alert", "matrix"] },
+              "uniqueItems": true
+            },
+            "channel": {
+              "description": "Topic key on the broker. Subscribers subscribe to channels; the broker fan-outs across eligible_channels. Mirrors every_voices_meta.subscription_topic but kept separate because push channels often have a smaller, opted-in audience than the RSS subscription topic.",
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{2,60}$"
+            },
+            "priority": {
+              "description": "Broker priority hint. 'urgent' bypasses quiet hours and rate limits — reserve for embargo-lift moments and breaking referendum results.",
+              "type": "string",
+              "enum": ["normal", "high", "urgent"],
+              "default": "normal"
+            },
+            "rate_limit_per_subscriber_per_week": {
+              "description": "Hard cap on notifications per subscriber per ISO week. Broker drops messages above this ceiling. 3 is the federal-comms default — raise only with editorial sign-off.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 21
+            },
+            "headline_artefact_ref": {
+              "description": "id of the artefact whose title becomes the push headline. Body text is composed from purpose_i18n + url at publish time.",
+              "type": "string"
+            },
+            "embargo_aware": {
+              "description": "If true, the broker holds the queued push until delivery.embargo_aware lifts. Defaults to following the package-level delivery.embargo_aware.",
+              "type": "boolean"
+            }
+          }
+        },
+
+        "provenance": {
+          "description": "Top-level provenance audit URL block (the per-artefact provenance_hooks remain authoritative for claim/evidence/narrative wiring). Drives the audit footer in PDFs, the JSON-LD blob in HTML, and the audit-link analytics event. Optional in v1.1.0 but strongly recommended for any package with public surface.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["audit_url_template", "license_id"],
+          "properties": {
+            "report_id_field": {
+              "description": "Name of the runtime field the platform fills with the underlying ContentReport id. Defaults to 'report_id'. Kept configurable so a host platform with a different field convention can rename without forking the schema.",
+              "type": "string",
+              "default": "report_id"
+            },
+            "audit_url_template": {
+              "description": "Path template for the canonical audit page. Placeholders: {report_id}, {package_id}, {language}. The Every Voices platform serves this URL with the full claim -> evidence -> source -> query DAG, the EKB version, and the deterministic gate transcript.",
+              "type": "string",
+              "minLength": 1,
+              "examples": ["/audit/{report_id}", "/{language}/audit/{package_id}/{report_id}"]
+            },
+            "claim_review_jsonld_endpoint": {
+              "description": "Path template for the per-claim ClaimReview JSON-LD endpoint. Placeholder: {claim_id}. Pairs with the artefact-level schema_org.claim_reviews_from setting.",
+              "type": "string",
+              "examples": ["/api/v1/claim-review/{claim_id}"]
+            },
+            "license_id": {
+              "description": "License the published artefacts ship under. MUST match delivery.share_policy.license — kept duplicated here so the provenance footer can render without joining back to delivery. Validators SHOULD warn on mismatch.",
+              "type": "string",
+              "enum": ["CC-BY-4.0", "CC-BY-SA-4.0", "CC-BY-ND-4.0", "all_rights_reserved", "embargoed_press"]
+            },
+            "embedded_in_pdfs": {
+              "description": "If true, every PDF artefact in the package carries a footer 'Audit: <audit_url> | License: <license_id> | EKB v<x>' on each page.",
+              "type": "boolean",
+              "default": true
+            },
+            "embedded_in_html": {
+              "description": "If true, every HTML page emits a <script type='application/ld+json'> block linking to the audit url and (when applicable) the per-claim ClaimReview blocks.",
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
+
+        "extensions": {
+          "description": "Forward-compatible extensions to every_voices_meta. Use the {vendor}.{key} convention.",
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "extensions": {
+      "description": "Reserved namespace for forward-compatible additions. Any field not defined in this schema MUST live under extensions.{vendor_or_module} so we never collide. The schema validator does not enforce shape inside extensions — do that in module-specific validators.",
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+
+  "$defs": {
+
+    "language_code": {
+      "description": "ISO 639-1 lowercase. Swiss federal supported set: fr, de, it, rm. EN allowed for international press.",
+      "type": "string",
+      "enum": ["fr", "de", "it", "rm", "en"]
+    },
+
+    "i18n_string": {
+      "description": "Language-neutral storage of a user-visible string. At least one language MUST be the package's primary_language. de-CH MUST use 'ss' not 'ß'.",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "fr": { "type": "string", "minLength": 1 },
+        "de": { "type": "string", "minLength": 1 },
+        "it": { "type": "string", "minLength": 1 },
+        "rm": { "type": "string", "minLength": 1 },
+        "en": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "channel": {
+      "description": "Where an artefact can be published. Renderer registry binds each channel to a renderer adapter. Adding a new channel = adding a renderer, not editing this enum (so this list is intentionally complete for the v1 platform).",
+      "type": "string",
+      "enum": [
+        "web_inline",
+        "web_article",
+        "pdf_a4",
+        "pdf_a5",
+        "social_square_1080",
+        "social_landscape_1200x630",
+        "social_story_1080x1920",
+        "email_header",
+        "email_body",
+        "whatsapp_card",
+        "telegram_card",
+        "print_a4",
+        "pptx_slide_16_9",
+        "rss_item",
+        "oembed",
+        "audio_summary_90s",
+        "large_print_a4",
+        "falc_simplified",
+        "csv_data",
+        "xlsx_data",
+        "docx_briefing"
+      ]
+    },
+
+    "artefact": {
+      "type": "object",
+      "required": [
+        "id",
+        "title_i18n",
+        "format",
+        "renderer",
+        "channels",
+        "accessibility",
+        "provenance_hooks",
+        "schema_org"
+      ],
+      "additionalProperties": false,
+      "properties": {
+
+        "id": {
+          "description": "Stable artefact id, unique within the package. Used as filename stem and URL fragment.",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{2,40}$"
+        },
+
+        "title_i18n": { "$ref": "#/$defs/i18n_string" },
+
+        "purpose_i18n": {
+          "description": "One-sentence justification — why this artefact exists in this package. If you can't write this, drop the artefact.",
+          "$ref": "#/$defs/i18n_string"
+        },
+
+        "format": {
+          "description": "Logical content shape. Renderer chooses the concrete file extension per channel. Open enum — adding a format means adding a renderer.",
+          "type": "string",
+          "enum": [
+            "hero_infographic",
+            "kpi_card",
+            "persuasive_brief",
+            "explanatory_brief",
+            "executive_brief",
+            "parliamentary_brief",
+            "press_release",
+            "backgrounder",
+            "fact_card",
+            "claim_review",
+            "faq",
+            "qa_pack",
+            "side_by_side_comparison",
+            "lever_actor_horizon_matrix",
+            "sector_exposure_table",
+            "cost_calculator",
+            "chart_pack",
+            "single_chart",
+            "spider_chart",
+            "trajectory_chart",
+            "heatmap",
+            "quotable_lines_sheet",
+            "embargo_card",
+            "contact_card",
+            "broll_image_set",
+            "constituency_impact_note",
+            "newsletter_template",
+            "federation_quote",
+            "audio_summary",
+            "social_card",
+            "share_pack"
+          ]
+        },
+
+        "renderer": {
+          "description": "Logical renderer id resolved against the renderer registry (src/ptt_stakeholder_adapter/renderers/). Decoupled from format so one renderer can serve multiple formats and vice versa.",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.]{2,60}$"
+        },
+
+        "channels": {
+          "description": "Which channels this artefact ships on. MUST be a subset of delivery.channels.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/channel" },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+
+        "input": {
+          "description": "Which IR / EKB fields the renderer is allowed to read. Acts as a contract: if a field is not listed, the renderer MUST NOT use it (catches scope creep).",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ir_fields": { "type": "array", "items": { "type": "string" } },
+            "ekb_queries": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["entity", "filter"],
+                "additionalProperties": false,
+                "properties": {
+                  "entity": { "type": "string", "enum": ["claim", "evidence", "source", "narrative", "score", "trajectory"] },
+                  "filter": { "type": "object", "additionalProperties": true },
+                  "limit": { "type": "integer", "minimum": 1, "maximum": 200 }
+                }
+              }
+            },
+            "max_tokens_in": { "type": "integer", "minimum": 100, "maximum": 200000 }
+          }
+        },
+
+        "constraints": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "max_words": { "type": "integer", "minimum": 20, "maximum": 5000 },
+            "max_pages": { "type": "integer", "minimum": 1, "maximum": 40 },
+            "max_duration_seconds": { "type": "integer", "minimum": 15, "maximum": 600 },
+            "reading_time_seconds_target": { "type": "integer", "minimum": 30, "maximum": 1800 },
+            "must_fit_above_the_fold": { "type": "boolean" }
+          }
+        },
+
+        "accessibility": {
+          "description": "Per-artefact accessibility commitments. Renderer fails the artefact if any required commitment cannot be fulfilled — never silently downgraded.",
+          "type": "object",
+          "required": ["wcag_level", "alt_text_required"],
+          "additionalProperties": false,
+          "properties": {
+            "wcag_level": { "type": "string", "enum": ["A", "AA", "AAA"] },
+            "alt_text_required": { "type": "boolean" },
+            "audio_description_required": { "type": "boolean" },
+            "transcript_required": { "type": "boolean" },
+            "tagged_pdf_ua1": { "type": "boolean" },
+            "min_contrast_ratio": { "type": "number", "minimum": 3.0, "maximum": 21.0 },
+            "language_attribute_required": { "type": "boolean", "default": true },
+            "falc_variant": { "type": "boolean" },
+            "large_print_variant": { "type": "boolean" },
+            "screen_reader_outline_required": { "type": "boolean" }
+          }
+        },
+
+        "provenance_hooks": {
+          "description": "How to reconnect THIS artefact to the EKB audit chain (claim -> evidence -> source -> query). The orchestrator emits ADAPTER_RENDERED events using these hooks.",
+          "type": "object",
+          "required": ["claim_ids_from", "evidence_ids_from", "narrative_ids_from"],
+          "additionalProperties": false,
+          "properties": {
+            "claim_ids_from": {
+              "description": "How to derive the claim_id list referenced by the artefact. 'auto' = inferred from renderer output; 'explicit' = renderer must return them; 'none' = artefact references no claims (e.g. contact card).",
+              "type": "string",
+              "enum": ["auto", "explicit", "none"]
+            },
+            "evidence_ids_from": { "type": "string", "enum": ["auto", "explicit", "none"] },
+            "narrative_ids_from": { "type": "string", "enum": ["auto", "explicit", "none"] },
+            "emit_claim_review_jsonld": {
+              "description": "If true, the renderer attaches a schema.org/ClaimReview block per cited claim. Drives Google Fact Check Tools indexing.",
+              "type": "boolean"
+            },
+            "emit_provenance_sidecar_json": {
+              "description": "If true, a {artefact_id}.provenance.json sidecar is shipped next to the artefact in the PDF bundle and exposed at {url}/provenance on the web.",
+              "type": "boolean"
+            }
+          }
+        },
+
+        "schema_org": {
+          "description": "JSON-LD declarations emitted on the web page hosting the artefact. The package-level every_voices_meta.schema_org_type sets the page; this sets the embedded entity.",
+          "type": "object",
+          "required": ["type"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "type": "string", "enum": ["Article", "ClaimReview", "FactCheck", "Report", "Dataset", "Question", "Answer", "FAQPage", "ImageObject", "VideoObject", "AudioObject", "Table", "WebPageElement"] },
+            "headline_field": { "type": "string", "description": "Which artefact field maps to schema:headline." },
+            "datePublished_from": { "type": "string", "enum": ["render_time", "report_publication_date", "embargo_release"] },
+            "rating_scale": { "type": "string", "enum": ["claim_score_0_5", "verdict_6_levels", "none"], "description": "claim_score_0_5 maps directly to ClaimReview reviewRating.bestRating=5,worstRating=0." },
+            "claim_reviews_from": {
+              "description": "If set, the renderer attaches one schema.org/ClaimReview JSON-LD block per claim id derived via the named source. 'claim_ids' = use the artefact's claim_ids list (typically populated via provenance_hooks.claim_ids_from); 'explicit' = the renderer must enumerate them explicitly; 'none' = no per-claim ClaimReview blocks (use this for galleries / hero images / contact cards). Added in schema v1.1.0 — pairs with provenance_hooks.emit_claim_review_jsonld at the artefact level and provenance.claim_review_jsonld_endpoint at the package level.",
+              "type": "string",
+              "enum": ["claim_ids", "explicit", "none"]
+            }
+          }
+        },
+
+        "every_voices_meta": {
+          "description": "Per-artefact Every Voices behaviour. Overrides nothing at the package level — adds artefact-specific signals.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "card_priority": { "type": "integer", "minimum": 1, "maximum": 10, "description": "Display order on the package landing page (1 = top)." },
+            "share_optimised": { "type": "boolean", "description": "Renderer produces a 1080x1080 + 1200x630 + 1080x1920 set automatically." },
+            "show_in_feed": { "type": "boolean" },
+            "show_in_widget": { "type": "boolean", "description": "Eligible for the embeddable Every Voices widget." },
+            "anchor_id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,60}$" }
+          }
+        },
+
+        "qa_overrides": {
+          "description": "Per-artefact tweaks to the package-level aim_test rubric or to the deterministic gates. Use sparingly — packages should be coherent.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "skip_rubric_criteria": { "type": "array", "items": { "type": "string" } },
+            "extra_deterministic_gates": { "type": "array", "items": { "type": "string", "enum": ["claim_traceability", "no_inference_beyond_evidence", "contested_evidence_labeled", "counterintuitive_element", "actionable_nudge", "reading_grade_match", "not_mere_summary", "infographic_no_legend", "opening_hook"] } }
+          }
+        },
+
+        "extensions": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}

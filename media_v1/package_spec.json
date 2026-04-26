@@ -1,0 +1,407 @@
+{
+  "$schema": "../_schema/package_spec.schema.json",
+  "schema_version": "1.1.0",
+  "package_id": "media_v1",
+
+  "stakeholder": {
+    "id": "media",
+    "label_i18n": {
+      "fr": "Journaliste / Rédaction",
+      "de": "Journalistin / Redaktion",
+      "it": "Giornalista / Redazione",
+      "en": "Journalist / Newsroom"
+    },
+    "aim_i18n": {
+      "fr": "Boucler mon papier avant la deadline avec source, chiffre vérifié et illustration libre de droits.",
+      "de": "Meinen Artikel vor Deadline abschliessen — mit Quelle, geprüfter Zahl und rechtefreier Illustration.",
+      "it": "Chiudere il mio pezzo prima della deadline con fonte, cifra verificata e illustrazione libera.",
+      "en": "File my story before deadline with source, verified figure and rights-free illustration."
+    },
+    "reading_grade_target": 12,
+    "demographic_hints": {
+      "expertise_in_topic": "informed",
+      "decision_authority": "self",
+      "time_budget_seconds": 900
+    },
+    "primary_language": "de",
+    "available_languages": ["de", "fr", "it", "en"]
+  },
+
+  "look_and_feel": {
+    "template_ref": "press_neutral",
+    "color_palette": "ptt_press_neutral",
+    "typography": {
+      "heading_family": "Inter",
+      "body_family": "Inter",
+      "scale": "comfortable",
+      "numerals": "tabular"
+    },
+    "tone": {
+      "register": "incisive",
+      "stance": "neutral_balanced",
+      "anti_patterns": [
+        "promotional_language",
+        "uncited_figure",
+        "speculative_language",
+        "buried_lede"
+      ]
+    }
+  },
+
+  "delivery": {
+    "channels": ["pdf_a4", "docx_briefing", "web_article", "email_body", "csv_data"],
+    "embargo_aware": true,
+    "watermark_policy": "embargoed",
+    "share_policy": {
+      "redistributable": true,
+      "license": "CC-BY-4.0",
+      "attribution_string_i18n": {
+        "fr": "Source : PTT Platform / blab Switzerland — chiffres et visuels libres avec attribution.",
+        "de": "Quelle: PTT Platform / blab Switzerland — Zahlen und Visuals frei mit Quellenangabe.",
+        "it": "Fonte: PTT Platform / blab Switzerland — cifre e visuali liberi con attribuzione.",
+        "en": "Source: PTT Platform / blab Switzerland — figures and visuals free with attribution."
+      }
+    },
+    "bundle_layout": {
+      "directory_template": "{topic_slug}/{package_id}/{language}/",
+      "filename_template": "{artefact_id}.{ext}",
+      "include_index_html": true,
+      "include_provenance_json": true
+    }
+  },
+
+  "artefacts": [
+    {
+      "id": "press_release",
+      "title_i18n": {
+        "fr": "Communiqué de presse",
+        "de": "Medienmitteilung",
+        "it": "Comunicato stampa",
+        "en": "Press release"
+      },
+      "purpose_i18n": {
+        "fr": "Pyramide inversée : titre + chapeau + 5 paragraphes + contact en une page.",
+        "de": "Umgekehrte Pyramide: Titel + Lead + 5 Absätze + Kontakt auf einer Seite.",
+        "it": "Piramide invertita: titolo + sommario + 5 paragrafi + contatto in una pagina.",
+        "en": "Inverted pyramid: headline + lead + 5 paragraphs + contact on one page."
+      },
+      "format": "press_release",
+      "renderer": "press.release_v1",
+      "channels": ["pdf_a4", "docx_briefing", "web_article", "email_body"],
+      "input": {
+        "ir_fields": ["title", "headline_statistic", "key_claims", "vote_date", "swiss_legal_refs", "contact_card"],
+        "max_tokens_in": 6000
+      },
+      "constraints": { "max_pages": 1, "max_words": 600 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": true,
+        "min_contrast_ratio": 4.5,
+        "tagged_pdf_ua1": true,
+        "language_attribute_required": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "explicit",
+        "evidence_ids_from": "explicit",
+        "narrative_ids_from": "explicit",
+        "emit_claim_review_jsonld": true,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "Article", "headline_field": "title_i18n", "datePublished_from": "embargo_release", "claim_reviews_from": "claim_ids" },
+      "every_voices_meta": { "card_priority": 1, "anchor_id": "release" }
+    },
+    {
+      "id": "backgrounder",
+      "title_i18n": {
+        "fr": "Note de fond pour rédaction",
+        "de": "Hintergrundnotiz für Redaktion",
+        "it": "Nota di fondo per redazione",
+        "en": "Editorial backgrounder"
+      },
+      "purpose_i18n": {
+        "fr": "Contexte historique, comparaisons cantonales, pièges narratifs à éviter.",
+        "de": "Historischer Kontext, kantonale Vergleiche, narrative Fallstricke zum Vermeiden.",
+        "it": "Contesto storico, confronti cantonali, trappole narrative da evitare.",
+        "en": "Historical context, cantonal comparisons, narrative traps to avoid."
+      },
+      "format": "backgrounder",
+      "renderer": "brief.backgrounder_v1",
+      "channels": ["pdf_a4", "docx_briefing", "web_article"],
+      "input": {
+        "ir_fields": ["key_claims", "swiss_legal_refs", "stakeholder_signals", "scenarios", "factcheck_verdicts", "contested_claims"],
+        "max_tokens_in": 18000
+      },
+      "constraints": { "max_pages": 4, "max_words": 1800 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": true,
+        "min_contrast_ratio": 4.5,
+        "tagged_pdf_ua1": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "auto",
+        "evidence_ids_from": "auto",
+        "narrative_ids_from": "explicit",
+        "emit_claim_review_jsonld": true,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "Article", "datePublished_from": "embargo_release", "claim_reviews_from": "claim_ids" },
+      "every_voices_meta": { "card_priority": 2, "anchor_id": "background" },
+      "qa_overrides": { "extra_deterministic_gates": ["contested_evidence_labeled", "no_inference_beyond_evidence"] }
+    },
+    {
+      "id": "quotable_lines",
+      "title_i18n": {
+        "fr": "Phrases citables",
+        "de": "Zitierbare Sätze",
+        "it": "Frasi citabili",
+        "en": "Quotable lines"
+      },
+      "purpose_i18n": {
+        "fr": "Dix phrases prêtes à intégrer, chacune avec attribution exacte et numéro de claim.",
+        "de": "Zehn integrationsbereite Sätze, jeder mit exakter Attribution und Claim-Nummer.",
+        "it": "Dieci frasi pronte per integrazione, ciascuna con attribuzione esatta e numero di claim.",
+        "en": "Ten paste-ready lines, each with exact attribution and claim number."
+      },
+      "format": "quotable_lines_sheet",
+      "renderer": "press.quotables_v1",
+      "channels": ["pdf_a4", "docx_briefing", "web_article", "csv_data"],
+      "input": {
+        "ir_fields": ["key_claims", "narrative_quotables"],
+        "max_tokens_in": 6000
+      },
+      "constraints": { "max_pages": 2, "max_words": 600 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": false,
+        "min_contrast_ratio": 4.5,
+        "tagged_pdf_ua1": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "explicit",
+        "evidence_ids_from": "explicit",
+        "narrative_ids_from": "explicit",
+        "emit_claim_review_jsonld": true,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "ClaimReview", "rating_scale": "claim_score_0_5", "claim_reviews_from": "claim_ids" },
+      "every_voices_meta": { "card_priority": 3, "anchor_id": "quotables" }
+    },
+    {
+      "id": "chart_pack",
+      "title_i18n": {
+        "fr": "Pack graphique (transparent PNG + SVG)",
+        "de": "Grafikpaket (transparent PNG + SVG)",
+        "it": "Pacco grafici (transparent PNG + SVG)",
+        "en": "Chart pack (transparent PNG + SVG)"
+      },
+      "purpose_i18n": {
+        "fr": "5 visuels prêts à imprimer, fond transparent, alt-text fourni en 3 langues.",
+        "de": "5 druckfertige Visuals, transparenter Hintergrund, Alt-Text in 3 Sprachen mitgeliefert.",
+        "it": "5 visuali pronte per la stampa, sfondo trasparente, alt-text fornito in 3 lingue.",
+        "en": "5 print-ready visuals, transparent background, alt-text in 3 languages included."
+      },
+      "format": "chart_pack",
+      "renderer": "chart.press_pack_v1",
+      "channels": ["web_article", "email_body"],
+      "input": {
+        "ir_fields": ["prosper_scores", "trajectory_summary", "headline_statistic", "scenarios"],
+        "max_tokens_in": 4000
+      },
+      "constraints": { "max_pages": 5 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": true,
+        "min_contrast_ratio": 4.5
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "none",
+        "evidence_ids_from": "explicit",
+        "narrative_ids_from": "none",
+        "emit_claim_review_jsonld": false,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "ImageObject" },
+      "every_voices_meta": { "card_priority": 4, "anchor_id": "charts" }
+    },
+    {
+      "id": "embargo_card",
+      "title_i18n": {
+        "fr": "Fiche embargo",
+        "de": "Sperrfrist-Karte",
+        "it": "Scheda embargo",
+        "en": "Embargo card"
+      },
+      "purpose_i18n": {
+        "fr": "Date, heure, conditions, contact référent — la rédaction sait quand publier.",
+        "de": "Datum, Zeit, Bedingungen, Ansprechperson — die Redaktion weiss, wann zu publizieren ist.",
+        "it": "Data, ora, condizioni, contatto — la redazione sa quando pubblicare.",
+        "en": "Date, time, conditions, contact — newsroom knows when to publish."
+      },
+      "format": "embargo_card",
+      "renderer": "press.embargo_v1",
+      "channels": ["pdf_a4", "email_header", "email_body"],
+      "input": {
+        "ir_fields": ["embargo_metadata", "contact_card"],
+        "max_tokens_in": 1000
+      },
+      "constraints": { "max_pages": 1, "max_words": 120 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": false,
+        "min_contrast_ratio": 7.0,
+        "tagged_pdf_ua1": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "none",
+        "evidence_ids_from": "none",
+        "narrative_ids_from": "none",
+        "emit_claim_review_jsonld": false,
+        "emit_provenance_sidecar_json": false
+      },
+      "schema_org": { "type": "Article" },
+      "every_voices_meta": { "card_priority": 5, "anchor_id": "embargo" }
+    },
+    {
+      "id": "contact_card",
+      "title_i18n": {
+        "fr": "Contact rédaction",
+        "de": "Redaktionskontakt",
+        "it": "Contatto redazione",
+        "en": "Editorial contact"
+      },
+      "purpose_i18n": {
+        "fr": "Joindre l'auteur référent en moins de 30 secondes (téléphone, email, fenêtre).",
+        "de": "Verantwortliche Person in unter 30 Sekunden erreichen (Telefon, E-Mail, Zeitfenster).",
+        "it": "Raggiungere il referente in meno di 30 secondi (telefono, email, fascia oraria).",
+        "en": "Reach the responsible author in under 30 seconds (phone, email, window)."
+      },
+      "format": "contact_card",
+      "renderer": "press.contact_v1",
+      "channels": ["pdf_a4", "email_body", "web_article"],
+      "input": {
+        "ir_fields": ["contact_card"],
+        "max_tokens_in": 500
+      },
+      "constraints": { "max_pages": 1, "max_words": 80 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": false,
+        "min_contrast_ratio": 7.0,
+        "tagged_pdf_ua1": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "none",
+        "evidence_ids_from": "none",
+        "narrative_ids_from": "none",
+        "emit_claim_review_jsonld": false,
+        "emit_provenance_sidecar_json": false
+      },
+      "schema_org": { "type": "Article" },
+      "every_voices_meta": { "card_priority": 6, "anchor_id": "contact" }
+    }
+  ],
+
+  "aim_test": {
+    "type": "hybrid",
+    "prompt_i18n": {
+      "fr": "Avec ce package seul, peux-tu (a) écrire une dépêche en 30 minutes, (b) inclure trois citations vérifiées, (c) joindre une illustration libre de droits et l'attribuer correctement ?",
+      "de": "Kannst du mit diesem Paket allein (a) eine Meldung in 30 Minuten schreiben, (b) drei verifizierte Zitate einbauen, (c) eine rechtefreie Illustration beifügen und korrekt zuschreiben?",
+      "it": "Con questo solo pacchetto, puoi (a) scrivere un dispaccio in 30 minuti, (b) inserire tre citazioni verificate, (c) allegare un'illustrazione libera e attribuirla correttamente?",
+      "en": "With only this package, can you (a) write a wire story in 30 minutes, (b) include three verified quotes, (c) attach a rights-free illustration and attribute it correctly?"
+    },
+    "rubric": [
+      {
+        "criterion_id": "lede_extractable",
+        "label_i18n": { "fr": "Lede extractible", "de": "Lead extrahierbar", "it": "Lede estraibile", "en": "Lede extractable" },
+        "pass_signal_i18n": { "fr": "Première phrase du communiqué peut servir de lead sans modification.", "de": "Erster Satz der Mitteilung dient ohne Änderung als Lead.", "it": "Prima frase del comunicato serve da lead senza modifica.", "en": "First sentence of release works as lead unchanged." },
+        "weight": 1.5
+      },
+      {
+        "criterion_id": "three_quotes_traceable",
+        "label_i18n": { "fr": "Trois citations traçables", "de": "Drei rückverfolgbare Zitate", "it": "Tre citazioni tracciabili", "en": "Three traceable quotes" },
+        "pass_signal_i18n": { "fr": "Chaque citation pointe vers un claim_id et une source.", "de": "Jedes Zitat verweist auf claim_id und Quelle.", "it": "Ogni citazione punta a claim_id e fonte.", "en": "Each quote points to claim_id and source." },
+        "weight": 1.5
+      },
+      {
+        "criterion_id": "chart_publication_ready",
+        "label_i18n": { "fr": "Graphique publiable", "de": "Grafik publikationsbereit", "it": "Grafico pubblicabile", "en": "Chart publication-ready" },
+        "pass_signal_i18n": { "fr": "Au moins un visuel SVG/PNG transparent + alt-text dans la langue cible.", "de": "Mindestens ein transparentes SVG/PNG + Alt-Text in Zielsprache.", "it": "Almeno un visuale SVG/PNG trasparente + alt-text nella lingua target.", "en": "At least one transparent SVG/PNG + alt-text in target language." }
+      },
+      {
+        "criterion_id": "embargo_clear",
+        "label_i18n": { "fr": "Embargo limpide", "de": "Sperrfrist eindeutig", "it": "Embargo chiaro", "en": "Embargo unambiguous" },
+        "pass_signal_i18n": { "fr": "Date + heure + fuseau cités sans ambiguïté.", "de": "Datum + Zeit + Zeitzone eindeutig genannt.", "it": "Data + ora + fuso citati senza ambiguità.", "en": "Date + time + timezone unambiguously stated." }
+      },
+      {
+        "criterion_id": "contact_reachable",
+        "label_i18n": { "fr": "Contact joignable en 30 s", "de": "Kontakt in 30 s erreichbar", "it": "Contatto raggiungibile in 30 s", "en": "Contact reachable in 30 s" },
+        "pass_signal_i18n": { "fr": "Téléphone + email + créneau horaire cités.", "de": "Telefon + E-Mail + Zeitfenster genannt.", "it": "Telefono + email + fascia oraria indicati.", "en": "Phone + email + time window stated." }
+      },
+      {
+        "criterion_id": "no_promotional_drift",
+        "label_i18n": { "fr": "Pas de dérive promotionnelle", "de": "Keine promotionale Abweichung", "it": "Nessuna deriva promozionale", "en": "No promotional drift" },
+        "pass_signal_i18n": { "fr": "Aucune phrase ne ressemble à du marketing.", "de": "Kein Satz wirkt wie Marketing.", "it": "Nessuna frase suona come marketing.", "en": "No sentence reads as marketing." }
+      }
+    ],
+    "min_score": 0.85,
+    "judge_model": "claude-opus-4-7@1m"
+  },
+
+  "every_voices_meta": {
+    "url_slug_template": "/{language}/press/{iso_date}/{topic_slug}",
+    "og_image_artefact_ref": "chart_pack",
+    "schema_org_type": "NewsArticle",
+    "rss_eligible": true,
+    "subscription_topic": "press_releases_federal",
+    "oembed_endpoint": "/oembed/media_v1",
+    "tts_eligible": false,
+    "falc_eligible": false,
+    "large_print_eligible": false,
+    "personalisation_keys": ["language"],
+    "indexable": true,
+
+    "web": {
+      "alternates": [
+        { "language": "de", "href_template": "/de/presse/{iso_date}/{topic_slug}" },
+        { "language": "fr", "href_template": "/fr/presse/{iso_date}/{topic_slug}" },
+        { "language": "it", "href_template": "/it/stampa/{iso_date}/{topic_slug}" },
+        { "language": "en", "href_template": "/en/press/{iso_date}/{topic_slug}", "optional": true }
+      ],
+      "canonical_language": "de"
+    },
+
+    "analytics": {
+      "stakeholder_cohort": "media",
+      "topic_cohorts": ["press_releases", "newsroom"],
+      "language_cohort_field": "language",
+      "events_to_track": [
+        "package_view",
+        "artefact_open",
+        "share_clicked",
+        "download_clicked",
+        "embed_loaded",
+        "push_opened",
+        "audit_link_clicked"
+      ]
+    },
+
+    "push": {
+      "eligible_channels": ["email_alert", "web_push", "telegram"],
+      "channel": "press_releases_federal",
+      "priority": "urgent",
+      "rate_limit_per_subscriber_per_week": 14,
+      "headline_artefact_ref": "press_release",
+      "embargo_aware": true
+    },
+
+    "provenance": {
+      "report_id_field": "report_id",
+      "audit_url_template": "/{language}/press/{iso_date}/{topic_slug}/audit/{report_id}",
+      "claim_review_jsonld_endpoint": "/api/v1/claim-review/{claim_id}",
+      "license_id": "CC-BY-4.0",
+      "embedded_in_pdfs": true,
+      "embedded_in_html": true
+    }
+  }
+}

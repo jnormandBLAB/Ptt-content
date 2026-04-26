@@ -1,0 +1,96 @@
+/* ============================================================================
+   editorial_press_v1 — print_a4.css
+   Press release print format. A4 portrait, 18mm margins, 11pt body.
+   Embargo banner remains visible at the top of every page.
+   ============================================================================ */
+
+@page {
+  size: A4 portrait;
+  margin: 22mm 18mm 18mm 18mm;
+  @top-left {
+    content: "PTT Platform — Pressedienst";
+    font-family: "Inter", sans-serif; font-size: 8pt; color: #6B7280;
+  }
+  @top-right {
+    content: var(--embargo-meta, "");
+    font-family: "Inter", sans-serif; font-size: 8pt; color: #B91C1C;
+    font-weight: 700;
+  }
+  @bottom-left {
+    content: var(--audit-url, "—");
+    font-family: "Inter", sans-serif; font-size: 8pt; color: #6B7280;
+  }
+  @bottom-right {
+    content: "p. " counter(page) " / " counter(pages);
+    font-family: "Inter", sans-serif; font-size: 8pt; color: #6B7280;
+  }
+}
+
+@media print {
+  html, body {
+    background: #FFFFFF !important;
+    color: #0E1320 !important;
+    font-size: 11pt;
+    line-height: 1.45;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  main { max-width: none; padding: 0; }
+
+  .headline   { font-size: 28pt; line-height: 1.10; }
+  .lede       { font-size: 13pt; line-height: 1.30; margin-bottom: 12pt; }
+  h2          { font-size: 14pt; }
+  h3          { font-size: 11pt; }
+
+  p, li { orphans: 3; widows: 3; }
+
+  /* Embargo banner — keep on every page top */
+  .embargo-banner {
+    background: #B91C1C !important;
+    color: #FFFFFF !important;
+    padding: 4pt 8pt;
+    margin-bottom: 8pt;
+    page-break-after: avoid;
+  }
+
+  /* Pull-quote retains gold bar */
+  .pull-quote {
+    border-left: 3pt solid #C9A84C !important;
+    page-break-inside: avoid;
+  }
+
+  /* Quotables — never split a quote across pages */
+  .quotables__item { page-break-inside: avoid; }
+
+  /* Chart pack — one chart per page where practical */
+  .chart-row { page-break-inside: avoid; }
+  .chart-row + .chart-row { page-break-before: always; }
+
+  /* Backgrounder pull-out */
+  .backgrounder {
+    background: #F8F7F4 !important;
+    border-left: 2pt solid #1B2A4A !important;
+    page-break-inside: avoid;
+  }
+
+  /* Optional embargo watermark */
+  .watermarked::before {
+    content: "EMBARGOED";
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-family: "Inter", sans-serif;
+    font-size: 140pt;
+    color: rgba(185, 28, 28, 0.10);
+    z-index: -1;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    pointer-events: none;
+  }
+
+  .skip-link, .no-print { display: none !important; }
+
+  a[href]::after { content: " [" attr(href) "]"; font-size: 7pt; color: #6B7280; }
+  a[href^="#"]::after { content: ""; }
+}

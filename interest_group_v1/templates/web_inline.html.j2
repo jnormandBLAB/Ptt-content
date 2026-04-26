@@ -1,0 +1,48 @@
+{# federation_flexible_v1 — web_inline.html.j2
+   Web echo of the federation newsletter. Palette swap via data-palette.
+   Context: { lang, palette ('base'|'usp'|'sgb'|'pro_senectute'),
+              federation, topic, date, body_html,
+              audit_url, license, attribution } #}
+<!DOCTYPE html>
+<html lang="{{ lang|default('de') }}" data-palette="{{ palette|default('base')|e }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex,nofollow">
+  <title>{{ topic|e }} — {{ federation.name|e }}</title>
+  <link rel="stylesheet" href="kit.css">
+  <style>
+    :root {
+      --audit-url: "{{ audit_url }}";
+      --fed-name: "{{ federation.name|e }}";
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">{{ ui.skip_to_content|default('Zum Inhalt') }}</a>
+
+  <main id="main">
+
+    <header class="fed-masthead">
+      <div class="fed-masthead__logo" aria-label="{{ federation.name|e }} Logo">
+        {{ federation.short_code|default(federation.name[:3]|upper)|e }}
+      </div>
+      <div>
+        <p class="fed-masthead__title">{{ federation.name|e }} &middot; {{ ui.member_newsletter|default('Mitglieder-Newsletter') }}</p>
+        <p class="fed-masthead__subtitle">{{ topic|e }}</p>
+      </div>
+      <span class="fed-masthead__date">{{ date|e }}</span>
+    </header>
+
+    {{ body_html|safe if body_html else '' }}
+
+    <footer class="audit-footer">
+      <span>Audit: <a href="{{ audit_url }}">{{ audit_url }}</a></span>
+      <span>{{ ui.license|default('Lizenz') }}: {{ license|default('CC-BY-ND-4.0') }}</span>
+      <span>{{ attribution|e }}</span>
+    </footer>
+
+  </main>
+</body>
+</html>

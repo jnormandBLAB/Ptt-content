@@ -1,0 +1,335 @@
+/* ============================================================================
+   business_sober_v1  —  global CSS for entrepreneur_v1.
+   McKinsey 2-pager + KKR board-pack conventions. Inter heading + body,
+   Inter Mono for figures. NOGA-coded sector rows, CHF-formatted figures.
+   ============================================================================ */
+
+:root {
+  --ptt-navy: #1B2A4A;
+  --ptt-gold: #C9A84C;
+  --ptt-white: #FFFFFF;
+
+  --biz-ink:           #111827;
+  --biz-ink-secondary: #374151;
+  --biz-ink-muted:     #6B7280;
+  --biz-paper:         #FFFFFF;
+  --biz-panel:         #F3F4F6;
+  --biz-panel-alt:     #E5E7EB;
+  --biz-rule-strong:   #111827;
+  --biz-rule-med:      #9CA3AF;
+  --biz-rule-hair:     #D1D5DB;
+  --biz-accent-gold:   #C9A84C;
+  --biz-lever-left:    #1B2A4A;
+
+  --impact-lt-100k: #F0FDF4;
+  --impact-100k-1m: #FEF9C3;
+  --impact-1m-10m:  #FED7AA;
+  --impact-gt-10m:  #FECACA;
+
+  --ff-heading: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --ff-body:    "Inter", system-ui, sans-serif;
+  --ff-numeric: "Inter", "JetBrains Mono", ui-monospace, monospace;
+
+  --fs-h1:        20pt;
+  --fs-h2:        14pt;
+  --fs-h3:        11pt;
+  --fs-body:      15px;
+  --fs-table:     13px;
+  --fs-footnote:  12px;
+  --fs-kpi-value: 28pt;
+
+  --lh-tight:  1.10;
+  --lh-snug:   1.30;
+  --lh-normal: 1.45;
+  --lh-loose:  1.60;
+
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  --sp-1: 2pt; --sp-2: 4pt; --sp-3: 6pt; --sp-4: 8pt;
+  --sp-5: 12pt; --sp-6: 16pt; --sp-7: 20pt; --sp-8: 28pt;
+
+  --w-content: 780px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  color: var(--biz-ink);
+  background: var(--biz-paper);
+  font-feature-settings: "kern" 1, "liga" 1, "tnum" 1, "lnum" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+main { max-width: var(--w-content); margin: 0 auto; padding: var(--sp-7) var(--sp-6); }
+
+/* ----- Memo header ----- */
+.memo-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--sp-5);
+  border-bottom: 1pt solid var(--biz-rule-strong);
+  padding-bottom: var(--sp-3);
+  margin-bottom: var(--sp-6);
+}
+.memo-header__brand {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-bold);
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--ptt-navy);
+}
+.memo-header__title {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-semibold);
+  color: var(--biz-ink);
+  margin: 4pt 0 0 0;
+  letter-spacing: -0.01em;
+}
+.memo-header__meta {
+  font-family: var(--ff-body);
+  font-size: 11px;
+  color: var(--biz-ink-muted);
+  text-align: right;
+  line-height: 1.45;
+}
+.memo-header__classification {
+  display: inline-block;
+  background: var(--ptt-navy);
+  color: var(--ptt-white);
+  padding: 1pt 6pt;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: var(--fw-bold);
+  margin-bottom: 4pt;
+}
+
+/* ----- Headings ----- */
+h1, h2, h3 {
+  font-family: var(--ff-heading);
+  color: var(--biz-ink);
+  margin: 0 0 var(--sp-3) 0;
+  line-height: var(--lh-snug);
+  font-weight: var(--fw-semibold);
+}
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); margin-top: var(--sp-6); border-bottom: 0.5pt solid var(--biz-rule-med); padding-bottom: 2pt; text-transform: uppercase; letter-spacing: 0.04em; }
+h3 { font-size: var(--fs-h3); margin-top: var(--sp-5); color: var(--ptt-navy); }
+
+p { margin: 0 0 var(--sp-4) 0; }
+
+/* ----- Situation block ----- */
+.situation {
+  background: var(--biz-panel);
+  border-left: 2pt solid var(--ptt-navy);
+  padding: var(--sp-4) var(--sp-5);
+  margin: 0 0 var(--sp-6) 0;
+}
+
+/* ----- Risk register ----- */
+.risk-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-5);
+  margin: var(--sp-5) 0;
+}
+.risk-card {
+  border: 0.5pt solid var(--biz-rule-med);
+  padding: var(--sp-4);
+  background: var(--biz-paper);
+  border-top: 3pt solid var(--ptt-navy);
+}
+.risk-card__id {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-bold);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--biz-ink-muted);
+}
+.risk-card__title {
+  font-family: var(--ff-heading);
+  font-size: 13px;
+  font-weight: var(--fw-semibold);
+  color: var(--biz-ink);
+  margin: 4pt 0;
+}
+.risk-card__chf {
+  font-family: var(--ff-numeric);
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  font-size: 18pt;
+  font-weight: var(--fw-bold);
+  color: var(--ptt-navy);
+  margin: 4pt 0 2pt 0;
+  letter-spacing: -0.02em;
+}
+.risk-card__band {
+  display: inline-block;
+  font-family: var(--ff-heading);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 1pt 6pt;
+  margin-top: 4pt;
+}
+.risk-card__band--lt-100k { background: var(--impact-lt-100k); color: var(--biz-ink); }
+.risk-card__band--100k-1m { background: var(--impact-100k-1m); color: var(--biz-ink); }
+.risk-card__band--1m-10m  { background: var(--impact-1m-10m);  color: var(--biz-ink); }
+.risk-card__band--gt-10m  { background: var(--impact-gt-10m);  color: var(--biz-ink); }
+.risk-card__sector {
+  font-family: var(--ff-body);
+  font-size: 11px;
+  color: var(--biz-ink-secondary);
+  margin-top: var(--sp-3);
+}
+
+/* ----- Lever cards (mitigation) ----- */
+.lever-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-5);
+  margin: var(--sp-5) 0;
+}
+.lever-card {
+  border-left: 3pt solid var(--biz-lever-left);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--biz-panel);
+}
+.lever-card__id {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-bold);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--biz-ink-muted);
+}
+.lever-card__title {
+  font-family: var(--ff-heading);
+  font-size: 12px;
+  font-weight: var(--fw-semibold);
+  color: var(--biz-ink);
+  margin: 2pt 0 4pt 0;
+}
+.lever-card__meta {
+  font-family: var(--ff-numeric);
+  font-feature-settings: "tnum" 1;
+  font-size: 11px;
+  color: var(--biz-ink-secondary);
+}
+
+/* ----- Recommendation band ----- */
+.recommendation {
+  background: var(--biz-accent-gold);
+  color: var(--ptt-navy);
+  border-left: 4pt solid var(--ptt-navy);
+  padding: var(--sp-4) var(--sp-5);
+  margin: var(--sp-6) 0 0 0;
+  font-weight: var(--fw-semibold);
+  font-family: var(--ff-heading);
+  font-size: 13px;
+}
+.recommendation__label {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 10px;
+  margin-bottom: 4pt;
+  font-weight: var(--fw-bold);
+}
+
+/* ----- Sector exposure table (NOGA-coded) ----- */
+table.sector-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-table);
+  margin: var(--sp-5) 0;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+.sector-table thead th {
+  background: var(--biz-rule-strong);
+  color: var(--ptt-white);
+  font-family: var(--ff-heading);
+  text-align: left;
+  font-weight: var(--fw-semibold);
+  padding: 6pt 8pt;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 11px;
+}
+.sector-table tbody td {
+  padding: 5pt 8pt;
+  border-bottom: 0.25pt solid var(--biz-rule-hair);
+  vertical-align: top;
+}
+.sector-table tbody td.num {
+  font-family: var(--ff-numeric);
+  text-align: right;
+  white-space: nowrap;
+}
+.sector-table .noga-cell {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-bold);
+  text-align: center;
+  width: 32px;
+}
+/* Per-NOGA row tints */
+.sector-table tr.noga-A td { background: #E8F0E5; }
+.sector-table tr.noga-B td { background: #EFE5DD; }
+.sector-table tr.noga-C td { background: #E2E8EE; }
+.sector-table tr.noga-D td { background: #F0EAD9; }
+.sector-table tr.noga-E td { background: #E1ECEC; }
+.sector-table tr.noga-F td { background: #EAE3E0; }
+.sector-table tr.noga-G td { background: #E6E6F0; }
+.sector-table tr.noga-H td { background: #E0E8EE; }
+.sector-table tr.noga-I td { background: #F0E5E0; }
+.sector-table tr.noga-J td { background: #E0E8E5; }
+.sector-table tr.noga-K td { background: #EBE5E5; }
+.sector-table tr.noga-L td { background: #EAE7E0; }
+.sector-table tr.noga-M td { background: #E5EAEE; }
+.sector-table tr.noga-N td { background: #EBE6E0; }
+.sector-table tr.noga-O td { background: #E2E5EE; }
+.sector-table tr.noga-P td { background: #E8E5EE; }
+.sector-table tr.noga-Q td { background: #E5EEE5; }
+.sector-table tr.noga-R td { background: #EEE5E5; }
+.sector-table tr.noga-S td { background: #E5EEEC; }
+.sector-table tr.noga-T td { background: #EEE9E2; }
+.sector-table tr.noga-U td { background: #E2EAEE; }
+
+/* ----- Audit footer ----- */
+.audit-footer {
+  margin-top: var(--sp-7);
+  padding-top: var(--sp-3);
+  border-top: 0.5pt solid var(--biz-rule-med);
+  font-size: var(--fs-footnote);
+  color: var(--biz-ink-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+}
+
+/* ----- Skip link ----- */
+.skip-link {
+  position: absolute; top: -40px; left: 8px;
+  background: var(--ptt-navy); color: var(--ptt-white);
+  padding: 4pt 6pt; z-index: 100;
+}
+.skip-link:focus { top: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@media (forced-colors: active) {
+  .risk-card, .lever-card, .recommendation { border-color: CanvasText; }
+}

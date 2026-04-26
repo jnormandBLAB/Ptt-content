@@ -1,0 +1,315 @@
+{
+  "$schema": "../_schema/package_spec.schema.json",
+  "schema_version": "1.1.0",
+  "package_id": "policy_advisor_v1",
+
+  "stakeholder": {
+    "id": "policy_advisor",
+    "label_i18n": {
+      "fr": "Conseillère / Conseiller politique",
+      "de": "Politikberaterin / Politikberater",
+      "it": "Consulente politica / politico",
+      "en": "Policy advisor"
+    },
+    "aim_i18n": {
+      "fr": "Briefer la ministre, rédiger le Q&A et identifier les leviers actionnables.",
+      "de": "Die Ministerin briefen, das Q&A entwerfen und actionable Hebel identifizieren.",
+      "it": "Briefare la ministra, redigere il Q&A e identificare le leve azionabili.",
+      "en": "Brief the minister, draft the Q&A and identify actionable levers."
+    },
+    "reading_grade_target": 14,
+    "demographic_hints": {
+      "expertise_in_topic": "expert",
+      "decision_authority": "team",
+      "time_budget_seconds": 1800
+    },
+    "primary_language": "de",
+    "available_languages": ["de", "fr", "it"]
+  },
+
+  "look_and_feel": {
+    "template_ref": "parliamentary_classic",
+    "color_palette": "ptt_navy_gold",
+    "typography": {
+      "heading_family": "Source Serif 4",
+      "body_family": "Source Serif 4",
+      "scale": "comfortable",
+      "numerals": "tabular"
+    },
+    "tone": {
+      "register": "analytic",
+      "stance": "neutral_balanced",
+      "anti_patterns": [
+        "marketing_language",
+        "uncited_figure",
+        "speculative_language"
+      ]
+    }
+  },
+
+  "delivery": {
+    "channels": ["pdf_a4", "docx_briefing", "csv_data", "xlsx_data", "web_article"],
+    "embargo_aware": true,
+    "watermark_policy": "draft",
+    "share_policy": {
+      "redistributable": false,
+      "license": "all_rights_reserved",
+      "attribution_string_i18n": {
+        "fr": "Document de travail — usage interne, ne pas diffuser.",
+        "de": "Arbeitsdokument — interner Gebrauch, nicht weiterverbreiten.",
+        "it": "Documento di lavoro — uso interno, non diffondere.",
+        "en": "Working document — internal use, do not redistribute."
+      }
+    },
+    "bundle_layout": {
+      "directory_template": "{topic_slug}/{package_id}/{language}/",
+      "filename_template": "{artefact_id}_{language}.{ext}",
+      "include_index_html": true,
+      "include_provenance_json": true
+    }
+  },
+
+  "artefacts": [
+    {
+      "id": "parliamentary_brief",
+      "title_i18n": {
+        "fr": "Note parlementaire (4 pages)",
+        "de": "Parlamentarische Notiz (4 Seiten)",
+        "it": "Nota parlamentare (4 pagine)",
+        "en": "Parliamentary brief (4 pages)"
+      },
+      "purpose_i18n": {
+        "fr": "Document de travail densément cité, lisible en 15 minutes, exploitable pour audition.",
+        "de": "Dicht zitiertes Arbeitsdokument, in 15 Minuten lesbar, für Anhörung verwertbar.",
+        "it": "Documento di lavoro densamente citato, leggibile in 15 minuti, utile per audizione.",
+        "en": "Densely cited working document, 15-minute read, hearing-ready."
+      },
+      "format": "parliamentary_brief",
+      "renderer": "brief.parliamentary_v1",
+      "channels": ["pdf_a4", "docx_briefing", "web_article"],
+      "input": {
+        "ir_fields": ["title", "key_claims", "swiss_legal_refs", "prosper_scores", "trajectory_summary", "stakeholder_signals.policy", "scenarios", "contested_claims", "factcheck_verdicts"],
+        "max_tokens_in": 30000
+      },
+      "constraints": { "max_pages": 4, "max_words": 1800, "reading_time_seconds_target": 900 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": true,
+        "min_contrast_ratio": 7.0,
+        "tagged_pdf_ua1": true,
+        "language_attribute_required": true,
+        "screen_reader_outline_required": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "explicit",
+        "evidence_ids_from": "explicit",
+        "narrative_ids_from": "explicit",
+        "emit_claim_review_jsonld": true,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "Report", "headline_field": "title_i18n", "datePublished_from": "render_time", "claim_reviews_from": "claim_ids" },
+      "every_voices_meta": { "card_priority": 1, "anchor_id": "brief" },
+      "qa_overrides": { "extra_deterministic_gates": ["claim_traceability", "no_inference_beyond_evidence", "contested_evidence_labeled"] }
+    },
+    {
+      "id": "lever_actor_horizon_matrix",
+      "title_i18n": {
+        "fr": "Matrice levier × acteur × horizon",
+        "de": "Matrix Hebel × Akteur × Horizont",
+        "it": "Matrice leva × attore × orizzonte",
+        "en": "Lever × actor × horizon matrix"
+      },
+      "purpose_i18n": {
+        "fr": "Identifier en un coup d'œil quel levier appartient à quel acteur et à quel horizon.",
+        "de": "Auf einen Blick erkennen, welcher Hebel zu welchem Akteur und Horizont gehört.",
+        "it": "Identificare a colpo d'occhio quale leva appartiene a quale attore e orizzonte.",
+        "en": "See at a glance which lever belongs to which actor and horizon."
+      },
+      "format": "lever_actor_horizon_matrix",
+      "renderer": "table.lah_matrix_v1",
+      "channels": ["csv_data", "xlsx_data", "pdf_a4", "web_article"],
+      "input": {
+        "ir_fields": ["key_claims[policy_lever]", "stakeholder_signals", "trajectory_summary"],
+        "max_tokens_in": 8000
+      },
+      "constraints": { "max_pages": 2 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": true,
+        "min_contrast_ratio": 7.0,
+        "tagged_pdf_ua1": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "explicit",
+        "evidence_ids_from": "explicit",
+        "narrative_ids_from": "none",
+        "emit_claim_review_jsonld": false,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "Dataset" },
+      "every_voices_meta": { "card_priority": 2, "anchor_id": "matrix" }
+    },
+    {
+      "id": "qa_pack_15",
+      "title_i18n": {
+        "fr": "Q&A : 15 questions probables",
+        "de": "Q&A: 15 wahrscheinliche Fragen",
+        "it": "Q&A: 15 domande probabili",
+        "en": "Q&A: 15 likely questions"
+      },
+      "purpose_i18n": {
+        "fr": "Munir la ministre des réponses aux questions parlementaires et médias les plus probables.",
+        "de": "Die Ministerin mit Antworten auf die wahrscheinlichsten Parlaments- und Medienfragen ausstatten.",
+        "it": "Fornire alla ministra le risposte alle domande parlamentari e mediatiche più probabili.",
+        "en": "Equip the minister with answers to the most likely parliamentary and media questions."
+      },
+      "format": "qa_pack",
+      "renderer": "qa_pack.policy_v1",
+      "channels": ["pdf_a4", "docx_briefing"],
+      "input": {
+        "ir_fields": ["key_claims", "factcheck_verdicts", "swiss_legal_refs", "stakeholder_signals", "contested_claims"],
+        "max_tokens_in": 16000
+      },
+      "constraints": { "max_pages": 6, "max_words": 2400 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": false,
+        "min_contrast_ratio": 7.0,
+        "tagged_pdf_ua1": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "auto",
+        "evidence_ids_from": "auto",
+        "narrative_ids_from": "explicit",
+        "emit_claim_review_jsonld": true,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "FAQPage", "claim_reviews_from": "claim_ids" },
+      "every_voices_meta": { "card_priority": 3, "anchor_id": "qa" }
+    },
+    {
+      "id": "legal_side_by_side",
+      "title_i18n": {
+        "fr": "Comparaison côte à côte : texte actuel vs. texte proposé",
+        "de": "Side-by-Side: aktueller vs. vorgeschlagener Text",
+        "it": "Confronto fianco a fianco: testo attuale vs. proposto",
+        "en": "Side-by-side: current vs. proposed legal text"
+      },
+      "purpose_i18n": {
+        "fr": "Visualiser instantanément les ajouts, suppressions et modifications, avec annotations PROSPER.",
+        "de": "Ergänzungen, Streichungen und Änderungen sofort sichtbar machen, mit PROSPER-Annotationen.",
+        "it": "Visualizzare istantaneamente aggiunte, soppressioni e modifiche, con annotazioni PROSPER.",
+        "en": "Instantly see additions, deletions and edits, with PROSPER annotations."
+      },
+      "format": "side_by_side_comparison",
+      "renderer": "comparison.legal_diff_v1",
+      "channels": ["pdf_a4", "web_article"],
+      "input": {
+        "ir_fields": ["swiss_legal_refs", "scenarios", "key_claims[policy_lever]"],
+        "max_tokens_in": 20000
+      },
+      "constraints": { "max_pages": 8 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": true,
+        "min_contrast_ratio": 7.0,
+        "tagged_pdf_ua1": true,
+        "screen_reader_outline_required": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "explicit",
+        "evidence_ids_from": "explicit",
+        "narrative_ids_from": "none",
+        "emit_claim_review_jsonld": false,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "Article", "datePublished_from": "render_time" },
+      "every_voices_meta": { "card_priority": 4, "anchor_id": "legal" }
+    }
+  ],
+
+  "aim_test": {
+    "type": "human_panel",
+    "prompt_i18n": {
+      "fr": "Avec ce package seul, peux-tu (a) briefer la ministre en 10 minutes, (b) répondre aux 5 questions les plus dures, (c) lister 3 leviers actionnables avec leur acteur responsable et horizon ?",
+      "de": "Kannst du allein mit diesem Paket (a) die Ministerin in 10 Minuten briefen, (b) die fünf härtesten Fragen beantworten, (c) drei actionable Hebel mit zuständigem Akteur und Horizont auflisten?",
+      "it": "Con questo solo pacchetto, puoi (a) briefare la ministra in 10 minuti, (b) rispondere alle 5 domande più difficili, (c) elencare 3 leve azionabili con attore responsabile e orizzonte?",
+      "en": "With only this package, can you (a) brief the minister in 10 minutes, (b) answer the 5 hardest questions, (c) list 3 actionable levers with responsible actor and horizon?"
+    },
+    "rubric": [
+      {
+        "criterion_id": "minister_briefing_completeness",
+        "label_i18n": { "fr": "Briefing complet en 10 minutes", "de": "Vollständiges Briefing in 10 Minuten", "it": "Briefing completo in 10 minuti", "en": "Complete 10-minute briefing" },
+        "pass_signal_i18n": { "fr": "Couvre composite, 3 KPI, position juridique, principaux risques.", "de": "Deckt Composite, 3 KPI, Rechtslage, Hauptrisiken ab.", "it": "Copre composito, 3 KPI, posizione giuridica, rischi principali.", "en": "Covers composite, 3 KPIs, legal position, top risks." },
+        "weight": 1.5
+      },
+      {
+        "criterion_id": "hardest_questions_answerable",
+        "label_i18n": { "fr": "Réponses solides aux 5 questions dures", "de": "Solide Antworten auf 5 harte Fragen", "it": "Risposte solide alle 5 domande difficili", "en": "Solid answers to 5 hard questions" },
+        "pass_signal_i18n": { "fr": "Chaque réponse cite source + chiffre + nuance.", "de": "Jede Antwort zitiert Quelle + Zahl + Nuance.", "it": "Ogni risposta cita fonte + cifra + sfumatura.", "en": "Each answer cites source + figure + nuance." },
+        "weight": 1.5
+      },
+      {
+        "criterion_id": "three_actionable_levers",
+        "label_i18n": { "fr": "Trois leviers actionnables identifiés", "de": "Drei actionable Hebel identifiziert", "it": "Tre leve azionabili identificate", "en": "Three actionable levers identified" },
+        "pass_signal_i18n": { "fr": "Pour chaque levier : acteur compétent + horizon temporel + base légale.", "de": "Pro Hebel: zuständiger Akteur + Zeithorizont + Rechtsgrundlage.", "it": "Per ogni leva: attore competente + orizzonte + base giuridica.", "en": "Per lever: responsible actor + horizon + legal basis." },
+        "weight": 1.5
+      },
+      {
+        "criterion_id": "contested_evidence_flagged",
+        "label_i18n": { "fr": "Évidence contestée signalée", "de": "Umstrittene Evidenz markiert", "it": "Evidenza contestata segnalata", "en": "Contested evidence flagged" },
+        "pass_signal_i18n": { "fr": "Aucun chiffre faible ou contesté présenté comme certitude.", "de": "Keine schwache oder umstrittene Zahl als Gewissheit präsentiert.", "it": "Nessuna cifra debole o contestata presentata come certezza.", "en": "No weak or contested figure presented as certainty." }
+      },
+      {
+        "criterion_id": "legal_traceability",
+        "label_i18n": { "fr": "Traçabilité juridique", "de": "Rechtliche Nachvollziehbarkeit", "it": "Tracciabilità giuridica", "en": "Legal traceability" },
+        "pass_signal_i18n": { "fr": "Chaque proposition cite l'article du droit fédéral applicable.", "de": "Jede Aussage zitiert den anwendbaren Bundesrechts-Artikel.", "it": "Ogni proposizione cita l'articolo di diritto federale applicabile.", "en": "Every claim cites the applicable federal law article." }
+      }
+    ],
+    "min_score": 0.85,
+    "judge_model": "claude-opus-4-7@1m"
+  },
+
+  "every_voices_meta": {
+    "url_slug_template": "/internal/{language}/policy/{topic_slug}/{package_id}",
+    "og_image_artefact_ref": "lever_actor_horizon_matrix",
+    "schema_org_type": "Report",
+    "rss_eligible": false,
+    "subscription_topic": "policy_advisor_briefings",
+    "tts_eligible": false,
+    "falc_eligible": false,
+    "large_print_eligible": false,
+    "personalisation_keys": [],
+    "indexable": false,
+
+    "web": {
+      "alternates": [
+        { "language": "de", "href_template": "/internal/de/policy/{topic_slug}/{package_id}" },
+        { "language": "fr", "href_template": "/internal/fr/policy/{topic_slug}/{package_id}" },
+        { "language": "it", "href_template": "/internal/it/policy/{topic_slug}/{package_id}" }
+      ],
+      "canonical_language": "de"
+    },
+
+    "analytics": {
+      "stakeholder_cohort": "policy_advisor",
+      "topic_cohorts": ["policy_briefings", "parliamentary"],
+      "language_cohort_field": "language",
+      "events_to_track": [
+        "package_view",
+        "artefact_open",
+        "download_clicked",
+        "audit_link_clicked"
+      ]
+    },
+
+    "provenance": {
+      "report_id_field": "report_id",
+      "audit_url_template": "/internal/audit/{package_id}/{report_id}",
+      "claim_review_jsonld_endpoint": "/internal/api/v1/claim-review/{claim_id}",
+      "license_id": "all_rights_reserved",
+      "embedded_in_pdfs": true,
+      "embedded_in_html": true
+    }
+  }
+}

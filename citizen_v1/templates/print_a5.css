@@ -1,0 +1,92 @@
+/* ============================================================================
+   citizen_civic_warm  —  print_a5.css
+   A5 portrait, 12mm margins, 11pt body. Designed for letterbox-drop
+   distribution and library counters; pairs with the warm-white surface
+   already declared in kit.css.
+   ============================================================================ */
+
+@page {
+  size: A5 portrait;
+  margin: 12mm 12mm 16mm 12mm;
+  marks: none;
+  bleed: 0;
+}
+
+@page :first {
+  margin-top: 8mm;
+}
+
+@media print {
+  :root {
+    /* Print-only overrides: cream surface stays warm but loses ink-heavy depth */
+    --civic-warm-white: #FFFFFF;
+    --civic-cream:      #FAF3DD;
+  }
+
+  html, body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    font-size: 11pt;
+    line-height: 1.45;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  main {
+    max-width: none;
+    padding: 0;
+  }
+
+  /* Avoid orphan headings */
+  h1, h2, h3 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+  h1 { font-size: 22pt; line-height: 1.20; }
+  h2 { font-size: 14pt; line-height: 1.25; }
+  h3 { font-size: 12pt; line-height: 1.30; }
+
+  p, li { orphans: 3; widows: 3; }
+
+  /* Hero: keep the shock-stat dominant but tame for ink */
+  .hero {
+    background: #FAF3DD !important;
+    box-shadow: none !important;
+    padding: 6mm;
+    page-break-inside: avoid;
+  }
+  .hero__stat { font-size: 48pt; }
+  .hero__caption { font-size: 13pt; }
+
+  /* Cards: drop shadows entirely on paper */
+  .card { box-shadow: none !important; border: 0.5pt solid #888888; }
+
+  /* Links: keep underline but render URL after */
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    color: #444444;
+    word-break: break-all;
+  }
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after { content: ""; }
+
+  /* Audit footer becomes a running footer on every page */
+  @page {
+    @bottom-center {
+      content: "PTT Platform — Audit: " counter(page) " / " counter(pages);
+      font-family: "Inter", sans-serif;
+      font-size: 8pt;
+      color: #666666;
+    }
+  }
+
+  /* No-print helpers */
+  .no-print, .skip-link, .embargo:empty { display: none !important; }
+
+  /* Page breaks */
+  .page-break { page-break-before: always; break-before: page; }
+
+  /* Ensure tables don't split rows mid-cell */
+  tr { page-break-inside: avoid; }
+}

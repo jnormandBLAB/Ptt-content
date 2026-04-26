@@ -1,0 +1,36 @@
+{# business_sober_v1 — sector_exposure_table.html.j2
+   NOGA division x CHF impact band table. Reusable include partial.
+   Context: { sector_table.rows[] } where each row is:
+     { noga_division ('A'..'U'), label, employees_in_band,
+       chf_value_text, chf_band ('lt_100k'|'100k_1m'|'1m_10m'|'gt_10m'),
+       chf_band_label } #}
+
+<table class="sector-table" aria-describedby="sector-table-desc">
+  <caption id="sector-table-desc" style="text-align:left;font-size:11px;color:#374151;padding-bottom:6pt;">
+    {{ ui.sector_table_caption|default('Exposition par division NOGA — bandes CHF (<100k / 100k–1M / 1M–10M / >10M).') }}
+  </caption>
+  <thead>
+    <tr>
+      <th scope="col" class="noga-cell">{{ ui.noga|default('NOGA') }}</th>
+      <th scope="col">{{ ui.sector_label|default('Division') }}</th>
+      <th scope="col" class="num">{{ ui.employees|default('Beschäftigte (Band)') }}</th>
+      <th scope="col" class="num">{{ ui.chf_impact|default('Auswirkung CHF') }}</th>
+      <th scope="col">{{ ui.band|default('Band') }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in sector_table.rows %}
+    <tr class="noga-{{ r.noga_division|e }}">
+      <td class="noga-cell">{{ r.noga_division|e }}</td>
+      <td>{{ r.label|e }}</td>
+      <td class="num">{{ r.employees_in_band|e }}</td>
+      <td class="num">{{ r.chf_value_text|e }}</td>
+      <td>
+        <span class="risk-card__band risk-card__band--{{ r.chf_band|default('100k_1m')|replace('_','-')|e }}">
+          {{ r.chf_band_label|e }}
+        </span>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

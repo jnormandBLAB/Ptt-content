@@ -1,0 +1,57 @@
+{# editorial_press_v1 — web_inline.html.j2
+   Web echo of the press kit. Default base template. Press release, quotables,
+   chart pack and backgrounder all extend this base via {% block main %}.
+   Context: { lang, topic, embargo, dateline, headline, lede, body_html,
+              audit_url, license, attribution, indexable } #}
+<!DOCTYPE html>
+<html lang="{{ lang|default('de') }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  {% if indexable and not embargo %}
+  <meta name="robots" content="index,follow">
+  {% else %}
+  <meta name="robots" content="noindex,nofollow">
+  {% endif %}
+  <title>{{ headline|e }}{% if topic %} — {{ topic|e }}{% endif %}</title>
+  <link rel="stylesheet" href="kit.css">
+  <style>:root { --audit-url: "{{ audit_url }}"; }</style>
+  {% if oembed_endpoint %}
+  <link rel="alternate" type="application/json+oembed"
+        href="{{ oembed_endpoint }}?url={{ canonical_url|urlencode }}"
+        title="{{ headline|e }}">
+  {% endif %}
+</head>
+<body class="{{ 'watermarked' if embargo else '' }}">
+  <a href="#main" class="skip-link">{{ ui.skip_to_content|default('Zum Inhalt') }}</a>
+
+  {% if embargo %}
+  <div class="embargo-banner" role="note">
+    {{ ui.embargo|default('SPERRFRIST') }}
+    <span class="embargo-banner__time">{{ embargo.release_at|e }} ({{ embargo.tz|default('CET') }})</span>
+  </div>
+  {% endif %}
+
+  <main id="main" class="{{ main_class|default('') }}">
+
+    <header class="masthead">
+      <span class="masthead__brand">PTT Platform · Pressedienst</span>
+      <span class="masthead__date">{{ dateline.date|e }}</span>
+    </header>
+
+    {% block main %}
+      <p class="dateline">{{ dateline.city|e }}, {{ dateline.date|e }} —</p>
+      <h1 class="headline">{{ headline|e }}</h1>
+      {% if lede %}<p class="lede">{{ lede|e }}</p>{% endif %}
+      {{ body_html|safe if body_html else '' }}
+    {% endblock %}
+
+    <footer class="audit-footer">
+      <span>Audit: <a href="{{ audit_url }}">{{ audit_url }}</a></span>
+      <span>{{ ui.license|default('Lizenz') }}: {{ license|default('CC-BY-4.0') }}</span>
+      <span>{{ attribution|e }}</span>
+    </footer>
+  </main>
+</body>
+</html>

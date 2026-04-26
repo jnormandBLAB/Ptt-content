@@ -1,0 +1,58 @@
+/* ============================================================================
+   federation_flexible_v1 — print_a4.css
+   Newsletter print. A4 portrait, 20mm margins, 11pt body.
+   Palette swap respected via [data-palette] on root.
+   ============================================================================ */
+
+@page {
+  size: A4 portrait;
+  margin: 22mm 20mm 20mm 20mm;
+  @top-left {
+    content: "PTT — Verbands-Newsletter";
+    font-family: "Inter", sans-serif; font-size: 8pt; color: #4B5563;
+  }
+  @top-right {
+    content: var(--fed-name, "Verband");
+    font-family: "Inter", sans-serif; font-size: 8pt; color: #4B5563;
+  }
+  @bottom-left {
+    content: var(--audit-url, "—");
+    font-family: "Inter", sans-serif; font-size: 8pt; color: #4B5563;
+  }
+  @bottom-right {
+    content: "p. " counter(page) " / " counter(pages);
+    font-family: "Inter", sans-serif; font-size: 8pt; color: #4B5563;
+  }
+}
+
+@media print {
+  html, body {
+    background: #FAFAF7 !important;
+    color: #1F2937 !important;
+    font-size: 11pt;
+    line-height: 1.55;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  main { max-width: none; padding: 0; }
+
+  h1 { font-size: 20pt; }
+  h2 { font-size: 14pt; }
+  h3 { font-size: 12pt; }
+
+  p, li { orphans: 3; widows: 3; }
+
+  .fed-hero { page-break-inside: avoid; }
+  .member-impact, .fed-cta, .fed-quote { page-break-inside: avoid; }
+
+  /* Palette-aware print */
+  [data-palette="usp"] body { background: #F4EFE6 !important; color: #2A2418 !important; }
+  [data-palette="sgb"] body { background: #FFFFFF !important; color: #0A0A0A !important; }
+  [data-palette="pro_senectute"] body { background: #FEFAEE !important; color: #111827 !important; font-size: 12pt; }
+
+  .skip-link, .no-print { display: none !important; }
+
+  a[href]::after { content: " [" attr(href) "]"; font-size: 7pt; color: #6B7280; }
+  a[href^="#"]::after { content: ""; }
+}

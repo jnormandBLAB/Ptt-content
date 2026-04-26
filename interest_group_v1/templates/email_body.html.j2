@@ -1,0 +1,73 @@
+{# federation_flexible_v1 — email_body.html.j2
+   Federation member email. Outlook-safe. Per-palette accent on the bar.
+   Context: { lang, palette, federation, topic, date,
+              hero_finding, cta, audit_url, license, attribution } #}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ lang|default('de') }}">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>{{ federation.name|e }} — {{ topic|e }}</title>
+</head>
+{# Resolve per-palette colours inline (Outlook ignores CSS variables). #}
+{% set palette_colors = {
+  'base': {'accent': '#1B2A4A', 'accent_soft': '#E5E7EB', 'paper': '#FAFAF7', 'ink': '#1F2937', 'cta_bg': '#7A6A24', 'cta_fg': '#FFFFFF'},
+  'usp':  {'accent': '#3F6B2A', 'accent_soft': '#E1ECDA', 'paper': '#F4EFE6', 'ink': '#2A2418', 'cta_bg': '#7B4A1F', 'cta_fg': '#FFFFFF'},
+  'sgb':  {'accent': '#B91C1C', 'accent_soft': '#FEE2E2', 'paper': '#FFFFFF', 'ink': '#0A0A0A', 'cta_bg': '#0A0A0A', 'cta_fg': '#FFFFFF'},
+  'pro_senectute': {'accent': '#0E7490', 'accent_soft': '#CFFAFE', 'paper': '#FEFAEE', 'ink': '#111827', 'cta_bg': '#0E7490', 'cta_fg': '#FFFFFF'}
+} %}
+{% set p = palette_colors.get(palette|default('base'), palette_colors.base) %}
+<body style="margin:0;padding:0;background:{{ p.paper }};font-family:Georgia,'Source Serif 4',serif;color:{{ p.ink }};font-size:17px;line-height:1.55;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+        <table role="presentation" width="640" cellspacing="0" cellpadding="0" border="0"
+               style="max-width:640px;background:#FFFFFF;border-top:4pt solid {{ p.accent }};">
+
+          {# --- Masthead --- #}
+          <tr>
+            <td style="padding:18px 24px 12px 24px;border-bottom:1pt solid {{ p.accent }};font-family:Arial,Helvetica,sans-serif;">
+              <span style="font-size:14px;font-weight:700;color:{{ p.accent }};letter-spacing:0.04em;text-transform:uppercase;">{{ federation.name|e }}</span>
+              &nbsp;&middot;&nbsp;
+              <span style="font-size:13px;color:#4B5563;font-style:italic;">{{ ui.member_newsletter|default('Mitglieder-Newsletter') }}</span>
+              <br>
+              <span style="font-size:13px;color:#6B7280;">{{ topic|e }} &middot; {{ date|e }}</span>
+            </td>
+          </tr>
+
+          {# --- Hero finding --- #}
+          {% if hero_finding %}
+          <tr>
+            <td style="padding:24px;background:{{ p.accent_soft }};border-left:4pt solid {{ p.accent }};">
+              <p style="margin:0 0 6px 0;font-size:13px;font-weight:700;color:{{ p.accent }};letter-spacing:0.06em;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;">
+                {{ hero_finding.label|default(ui.sector_finding|default('Schlüsselbefund — Sektor-Sicht'))|e }}
+              </p>
+              <p style="margin:0 0 8px 0;font-size:36px;font-weight:700;color:{{ p.accent }};line-height:1.05;font-family:Arial,Helvetica,sans-serif;">{{ hero_finding.stat|e }}</p>
+              <p style="margin:0;font-size:16px;color:{{ p.ink }};line-height:1.40;">{{ hero_finding.claim|e }}</p>
+            </td>
+          </tr>
+          {% endif %}
+
+          {# --- CTA --- #}
+          {% if cta %}
+          <tr>
+            <td style="padding:20px 24px;background:{{ p.cta_bg }};color:{{ p.cta_fg }};font-family:Arial,Helvetica,sans-serif;">
+              <p style="margin:0 0 4px 0;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;opacity:0.85;">{{ ui.what_for_members|default('Was bedeutet das für unsere Mitglieder') }}</p>
+              <p style="margin:0;font-size:16px;line-height:1.40;font-weight:500;">{{ cta.text|e }}</p>
+            </td>
+          </tr>
+          {% endif %}
+
+          {# --- Audit footer --- #}
+          <tr>
+            <td style="padding:14px 24px;border-top:0.5pt solid #D1D5DB;font-size:11px;color:#4B5563;font-family:Arial,Helvetica,sans-serif;">
+              Audit&nbsp;: <a href="{{ audit_url }}" style="color:{{ p.accent }};">{{ audit_url }}</a><br>
+              {{ ui.license|default('Lizenz') }}&nbsp;: {{ license|default('CC-BY-ND-4.0') }} &middot; {{ attribution|e }}
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

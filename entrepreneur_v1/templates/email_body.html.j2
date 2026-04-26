@@ -1,0 +1,81 @@
+{# business_sober_v1 — email_body.html.j2
+   Corporate email accompanying the PDF risk memo. Outlook-safe.
+   Context: { lang, topic, prepared_for, prepared_by, date,
+              headline, top_risks[3], pdf_attachment, audit_url } #}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ lang|default('de') }}">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>{{ topic|e }} — Risiko-Memo</title>
+</head>
+<body style="margin:0;padding:0;background:#FFFFFF;font-family:Arial,Helvetica,sans-serif;color:#111827;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+        <table role="presentation" width="640" cellspacing="0" cellpadding="0" border="0"
+               style="max-width:640px;background:#FFFFFF;border:0.5pt solid #D1D5DB;">
+
+          {# --- Header --- #}
+          <tr>
+            <td style="padding:18px 24px 12px 24px;border-bottom:1pt solid #111827;">
+              <span style="display:inline-block;background:#1B2A4A;color:#FFFFFF;padding:1pt 6pt;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;">BOARD-RESTRICTED</span>
+              <p style="margin:6px 0 2px 0;font-size:18px;font-weight:600;color:#111827;line-height:1.20;">{{ topic|e }}</p>
+              <p style="margin:0;font-size:12px;color:#6B7280;">{{ ui.risk_memo|default('Risiko-Memo') }} &middot; {{ date|e }}</p>
+            </td>
+          </tr>
+
+          {# --- Headline --- #}
+          <tr>
+            <td style="padding:20px 24px 8px 24px;">
+              <p style="margin:0 0 4px 0;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:#6B7280;">{{ ui.executive_summary|default('Executive Summary') }}</p>
+              <p style="margin:0;font-size:15px;line-height:1.45;color:#111827;">{{ headline|e }}</p>
+            </td>
+          </tr>
+
+          {# --- Top 3 risks --- #}
+          {% if top_risks %}
+          <tr>
+            <td style="padding:8px 24px;">
+              <p style="margin:0 0 6px 0;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:#6B7280;">{{ ui.top_risks|default('Top-3 Risiken') }}</p>
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="font-size:13px;">
+                {% for r in top_risks[:3] %}
+                <tr>
+                  <td style="padding:6px 0;border-bottom:0.25pt solid #D1D5DB;vertical-align:top;border-left:3pt solid #1B2A4A;padding-left:8pt;">
+                    <span style="font-weight:600;color:#111827;">R{{ '%02d' % loop.index }} &middot; {{ r.title|e }}</span><br>
+                    <span style="font-family:'Courier New',monospace;color:#1B2A4A;font-weight:700;font-size:14px;">{{ r.chf_value_text|e }}</span>
+                    <span style="color:#374151;font-size:12px;"> &middot; {{ r.sector|e }}</span>
+                  </td>
+                </tr>
+                {% endfor %}
+              </table>
+            </td>
+          </tr>
+          {% endif %}
+
+          {# --- PDF attachment notice --- #}
+          {% if pdf_attachment %}
+          <tr>
+            <td style="padding:14px 24px;background:#F3F4F6;border-left:3pt solid #C9A84C;">
+              <p style="margin:0;font-size:13px;color:#111827;">
+                <strong>{{ ui.full_memo_attached|default('Vollständiges Memo im Anhang') }}&nbsp;:</strong>
+                {{ pdf_attachment.label|e }}
+                <span style="color:#6B7280;font-size:12px;">({{ pdf_attachment.format|e }} &middot; {{ pdf_attachment.size_kb|e }}&nbsp;KB &middot; 2&nbsp;Seiten)</span>
+              </p>
+            </td>
+          </tr>
+          {% endif %}
+
+          {# --- Audit footer --- #}
+          <tr>
+            <td style="padding:12px 24px;border-top:0.5pt solid #D1D5DB;font-size:10px;color:#6B7280;">
+              {{ ui.prepared_for|default('Adressat') }}&nbsp;: {{ prepared_for|e }} &middot; {{ ui.prepared_by|default('Autor') }}&nbsp;: {{ prepared_by|e }}<br>
+              Audit&nbsp;: <a href="{{ audit_url }}" style="color:#1B2A4A;">{{ audit_url }}</a> &middot; Lizenz: all_rights_reserved &middot; Verbreitung auf Verwaltungsrat beschränkt.
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

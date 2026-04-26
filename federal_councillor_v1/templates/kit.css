@@ -1,0 +1,221 @@
+/* ============================================================================
+   executive_dark_compact  —  global CSS for federal_councillor_v1.
+   Cream-paper surface, navy ink, serif body, no shadows, AAA contrast.
+   ============================================================================ */
+
+:root {
+  /* Brand canonical */
+  --ptt-navy:  #1B2A4A;
+  --ptt-gold:  #C9A84C;
+  --ptt-white: #FFFFFF;
+
+  /* Executive extensions */
+  --exec-ink:        #0F1A30;
+  --exec-ink-muted:  #3D4257;
+  --exec-cream:      #F2EBDA;
+  --exec-rule:       #1B2A4A;
+  --exec-hairline:   #C7C0AC;
+  --exec-highlight:  #FFF6CC;
+
+  /* Data viz */
+  --d-act-now:    #1D9E75;
+  --d-delay:      #854F0B;
+  --d-inaction:   #A32D2D;
+
+  /* Typography */
+  --ff-heading: "Inter", -apple-system, sans-serif;
+  --ff-body:    "Source Serif 4", Charter, Georgia, serif;
+  --ff-numeric: "Source Serif 4", ui-monospace, monospace;
+
+  --fs-display: 28pt;
+  --fs-h1:      16pt;
+  --fs-h2:      13pt;
+  --fs-h3:      11pt;
+  --fs-body:    16px;     /* web echo */
+  --fs-caption: 9pt;
+
+  --lh-tight:  1.10;
+  --lh-snug:   1.25;
+  --lh-normal: 1.40;
+
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  --sp-1: 2pt; --sp-2: 4pt; --sp-3: 6pt; --sp-4: 8pt;
+  --sp-5: 12pt; --sp-6: 16pt; --sp-7: 24pt; --sp-8: 32pt;
+
+  --r-sm: 2px; --r-md: 4px;
+  --w-content: 780px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  color: var(--exec-ink);
+  background: var(--exec-cream);
+  font-feature-settings: "kern" 1, "liga" 1, "tnum" 1, "lnum" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  max-width: var(--w-content);
+  margin: 0 auto;
+  padding: var(--sp-7) var(--sp-6);
+}
+
+/* ----- Headings (Inter sans, navy) ----- */
+h1, h2, h3 {
+  font-family: var(--ff-heading);
+  color: var(--ptt-navy);
+  margin: 0 0 var(--sp-3) 0;
+  letter-spacing: -0.01em;
+  line-height: var(--lh-snug);
+  font-weight: var(--fw-semibold);
+}
+h1 { font-size: 22px; margin-top: var(--sp-7); border-bottom: 1pt solid var(--exec-rule); padding-bottom: var(--sp-2); }
+h2 { font-size: 17px; margin-top: var(--sp-6); }
+h3 { font-size: 14px; margin-top: var(--sp-5); text-transform: uppercase; letter-spacing: 0.05em; color: var(--exec-ink-muted); }
+
+p { margin: 0 0 var(--sp-5) 0; }
+
+/* ----- Page header ----- */
+.exec-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: end;
+  gap: var(--sp-5);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1pt solid var(--exec-rule);
+}
+.exec-header__brand {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-bold);
+  color: var(--ptt-navy);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.exec-header__topic { font-style: italic; color: var(--exec-ink-muted); }
+.exec-header__date  { font-family: var(--ff-numeric); color: var(--exec-ink-muted); font-size: 12px; }
+
+/* ----- Hero composite block ----- */
+.composite {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: var(--sp-6);
+  padding: var(--sp-6);
+  background: var(--ptt-white);
+  border: 0.5pt solid var(--exec-hairline);
+  margin: var(--sp-6) 0;
+}
+.composite__score {
+  font-family: var(--ff-numeric);
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  font-size: 64px;
+  line-height: 0.95;
+  font-weight: var(--fw-bold);
+  color: var(--ptt-navy);
+  letter-spacing: -0.03em;
+}
+.composite__interval {
+  font-family: var(--ff-numeric);
+  font-size: 12px;
+  color: var(--exec-ink-muted);
+  margin-top: var(--sp-2);
+}
+.composite__label {
+  font-family: var(--ff-heading);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--exec-ink-muted);
+}
+
+/* ----- KPI row ----- */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+  margin: var(--sp-5) 0;
+}
+.kpi {
+  border-left: 2pt solid var(--ptt-gold);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--ptt-white);
+}
+.kpi__label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--exec-ink-muted); }
+.kpi__value { font-family: var(--ff-numeric); font-size: 22px; font-weight: var(--fw-bold); color: var(--ptt-navy); margin-top: var(--sp-1); }
+.kpi__delta { font-family: var(--ff-numeric); font-size: 11px; color: var(--exec-ink-muted); }
+
+/* ----- Recommendation line ----- */
+.recommendation {
+  background: var(--exec-highlight);
+  padding: var(--sp-4) var(--sp-5);
+  border-left: 3pt solid var(--ptt-gold);
+  font-weight: var(--fw-semibold);
+  color: var(--exec-ink);
+  margin: var(--sp-6) 0;
+}
+
+/* ----- Q&A pairs (backgrounder) ----- */
+.qa-pair {
+  border-bottom: 0.25pt solid var(--exec-hairline);
+  padding: var(--sp-4) 0;
+  page-break-inside: avoid;
+}
+.qa-pair__q { font-family: var(--ff-heading); font-weight: var(--fw-semibold); color: var(--ptt-navy); margin-bottom: var(--sp-2); }
+.qa-pair__a { color: var(--exec-ink); margin-bottom: var(--sp-2); }
+.qa-pair__src { font-family: var(--ff-numeric); font-size: 9px; color: var(--exec-ink-muted); }
+
+/* ----- Audit footer ----- */
+.audit-footer {
+  margin-top: var(--sp-7);
+  padding-top: var(--sp-3);
+  border-top: 0.5pt solid var(--exec-hairline);
+  font-family: var(--ff-numeric);
+  font-size: 9pt;
+  color: var(--exec-ink-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+}
+.audit-footer code { color: var(--ptt-navy); }
+
+/* ----- Watermark (personalised) ----- */
+.watermark {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    -30deg,
+    transparent 0 80px,
+    rgba(27,42,74,0.06) 80px 88px
+  );
+  z-index: -1;
+}
+.watermark__text {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-family: var(--ff-heading);
+  font-size: 64px;
+  color: rgba(27,42,74,0.08);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

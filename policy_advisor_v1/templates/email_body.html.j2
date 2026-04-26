@@ -1,0 +1,98 @@
+{# parliamentary_classic — email_body.html.j2
+   Briefing email for parliamentary policy advisors. Outlook-safe table layout.
+   Federal serif throughout. Carries the committee headline + 3 lever previews
+   + Q&A teaser + audit link. The full brief is attached as PDF/DOCX.
+   Context: { lang, topic, prepared_for, prepared_by, date,
+              committee, headline, levers, qa_count,
+              attachments[], audit_url, license } #}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ lang|default('de') }}">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>{{ topic|e }} — {{ ui.parliamentary_brief|default('Parlamentarische Notiz') }}</title>
+</head>
+<body style="margin:0;padding:0;background:#FDFCF7;font-family:Georgia,'Source Serif 4',serif;color:#10182B;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+        <table role="presentation" width="640" cellspacing="0" cellpadding="0" border="0"
+               style="max-width:640px;background:#FFFFFF;border:0.5pt solid #D8D5C9;">
+
+          {# --- Header --- #}
+          <tr>
+            <td style="padding:18px 24px 12px 24px;border-bottom:1pt solid #1B2A4A;">
+              <span style="display:inline-block;background:#C9A84C;color:#1B2A4A;padding:1pt 6pt;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;">{{ ui.draft|default('DRAFT') }}</span>
+              <p style="margin:6px 0 2px 0;font-size:18px;font-weight:600;color:#1B2A4A;line-height:1.20;">{{ topic|e }}</p>
+              <p style="margin:0;font-size:12px;font-style:italic;color:#46505F;">{{ committee|e }} &middot; {{ date|e }}</p>
+            </td>
+          </tr>
+
+          {# --- Headline analysis --- #}
+          <tr>
+            <td style="padding:20px 24px 8px 24px;">
+              <p style="margin:0 0 4px 0;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:#46505F;">{{ ui.brief|default('Analyse') }}</p>
+              <p style="margin:0;font-size:14px;line-height:1.45;color:#10182B;">{{ headline|e }}</p>
+            </td>
+          </tr>
+
+          {# --- Top 3 levers --- #}
+          {% if levers %}
+          <tr>
+            <td style="padding:8px 24px 4px 24px;">
+              <p style="margin:0 0 6px 0;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:#46505F;">{{ ui.lever_preview|default('Hebel — Vorschau') }}</p>
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="font-size:13px;">
+                {% for lever in levers[:3] %}
+                <tr>
+                  <td style="padding:6px 0;border-bottom:0.25pt solid #D8D5C9;vertical-align:top;">
+                    <span style="font-weight:600;color:#1B2A4A;">{{ lever.title|e }}</span>
+                    {% if lever.legal_ref %}<span style="color:#46505F;font-style:italic;"> &laquo;&nbsp;{{ lever.legal_ref|e }}&nbsp;&raquo;</span>{% endif %}
+                    <br>
+                    <span style="color:#46505F;font-size:12px;">{{ lever.actor|e }} &middot; {{ lever.horizon|e }} &middot; {{ lever.cost_chf|e }}&nbsp;Mio.&nbsp;CHF</span>
+                  </td>
+                </tr>
+                {% endfor %}
+              </table>
+            </td>
+          </tr>
+          {% endif %}
+
+          {# --- Q&A pack teaser --- #}
+          {% if qa_count %}
+          <tr>
+            <td style="padding:12px 24px;background:#EAEEF7;border-left:2pt solid #1B2A4A;">
+              <p style="margin:0;font-size:13px;color:#10182B;">
+                <strong>Q&amp;A&nbsp;:</strong> {{ qa_count }}&nbsp;{{ ui.questions_prepared|default('vorbereitete Fragen mit Quellenangabe') }}.
+              </p>
+            </td>
+          </tr>
+          {% endif %}
+
+          {# --- Attachments --- #}
+          {% if attachments %}
+          <tr>
+            <td style="padding:14px 24px 10px 24px;">
+              <p style="margin:0 0 6px 0;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:#46505F;">{{ ui.attachments|default('Beilagen') }}</p>
+              <ul style="margin:0;padding-left:18px;font-size:13px;color:#10182B;">
+                {% for a in attachments %}
+                <li style="margin-bottom:2pt;">{{ a.label|e }} <span style="color:#46505F;">({{ a.format|e }} &middot; {{ a.size_kb|e }}&nbsp;KB)</span></li>
+                {% endfor %}
+              </ul>
+            </td>
+          </tr>
+          {% endif %}
+
+          {# --- Audit footer --- #}
+          <tr>
+            <td style="padding:12px 24px;border-top:0.5pt solid #D8D5C9;font-size:10px;color:#46505F;font-family:Georgia,serif;">
+              {{ ui.prepared_for|default('Adressat') }}&nbsp;: {{ prepared_for|e }} &middot; {{ ui.prepared_by|default('Autor') }}&nbsp;: {{ prepared_by|e }}<br>
+              Audit&nbsp;: <a href="{{ audit_url }}" style="color:#1B2A4A;">{{ audit_url }}</a> &middot; {{ ui.license|default('Lizenz') }}&nbsp;: {{ license|default('all_rights_reserved') }}<br>
+              <span style="font-style:italic;">{{ ui.internal_use|default('Arbeitsdokument — ausschliesslich interner Gebrauch.') }}</span>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

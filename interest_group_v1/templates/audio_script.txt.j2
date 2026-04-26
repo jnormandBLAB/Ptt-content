@@ -1,0 +1,71 @@
+{# federation_flexible_v1 — audio_script.txt.j2
+   TTS-ready 90-second script template. ~150 words FR / ~180 DE / ~165 IT.
+   Plain prose. NO inline markup. NO emojis. NO acronyms unless expanded
+   the first time. Punctuation is read by the engine, so use periods and
+   commas — not dashes — to control pacing.
+   Context: { lang, federation, topic, hero_finding, three_takeaways[],
+              member_impact_one_line, cta_one_line, audit_url } #}
+{# ---- DE template (~180 words target) ---- #}
+{%- if lang == 'de' or lang is undefined -%}
+Liebe Mitglieder von {{ federation.name }}.
+
+Heute, kurz zum Thema {{ topic }}.
+
+Eine Zahl zuerst. {{ hero_finding.stat }}. {{ hero_finding.claim }}
+
+Was bedeutet das konkret für Sie als {{ federation.sector_label }}?
+
+{% for t in three_takeaways[:3] -%}
+{{ loop.index }}. {{ t }}
+{% endfor %}
+Kurz gesagt: {{ member_impact_one_line }}
+
+Unser Vorschlag an die Mitgliederschaft. {{ cta_one_line }}
+
+Die vollständige Analyse mit allen Quellen finden Sie auf unserer Website unter dem heutigen Datum. Die Audit-Spur ist jederzeit nachvollziehbar.
+
+Vielen Dank fürs Zuhören.
+
+{%- elif lang == 'fr' -%}
+
+Chères membres, chers membres de {{ federation.name }}.
+
+Aujourd'hui, brièvement, sur le sujet {{ topic }}.
+
+Un chiffre d'abord. {{ hero_finding.stat }}. {{ hero_finding.claim }}
+
+Concrètement, qu'est-ce que cela signifie pour vous, qui êtes {{ federation.sector_label }}?
+
+{% for t in three_takeaways[:3] -%}
+{{ loop.index }}. {{ t }}
+{% endfor %}
+En résumé: {{ member_impact_one_line }}
+
+Notre proposition aux membres. {{ cta_one_line }}
+
+L'analyse complète, avec toutes les sources, est sur notre site, à la date d'aujourd'hui. La piste d'audit reste accessible à tout moment.
+
+Merci de votre écoute.
+
+{%- elif lang == 'it' -%}
+
+Care socie, cari soci di {{ federation.name }}.
+
+Oggi, brevemente, sul tema {{ topic }}.
+
+Una cifra anzitutto. {{ hero_finding.stat }}. {{ hero_finding.claim }}
+
+Concretamente, cosa significa per voi, che siete {{ federation.sector_label }}?
+
+{% for t in three_takeaways[:3] -%}
+{{ loop.index }}. {{ t }}
+{% endfor %}
+In sintesi: {{ member_impact_one_line }}
+
+La nostra proposta alle socie e ai soci. {{ cta_one_line }}
+
+L'analisi completa, con tutte le fonti, è disponibile sul nostro sito, alla data di oggi. La traccia d'audit resta accessibile in qualsiasi momento.
+
+Grazie per l'ascolto.
+
+{%- endif %}

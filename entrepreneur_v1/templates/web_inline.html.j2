@@ -1,0 +1,43 @@
+{# business_sober_v1 — web_inline.html.j2
+   Web echo of the board memo. noindex.
+   Context: { lang, topic, prepared_for, prepared_by, date,
+              classification, body_html, audit_url, license, attribution } #}
+<!DOCTYPE html>
+<html lang="{{ lang|default('de') }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex,nofollow">
+  <title>{{ topic|e }} — Board Memo</title>
+  <link rel="stylesheet" href="kit.css">
+  <style>:root { --audit-url: "{{ audit_url }}"; }</style>
+</head>
+<body>
+  <a href="#main" class="skip-link">{{ ui.skip_to_content|default('Zum Inhalt') }}</a>
+
+  <main id="main">
+
+    <header class="memo-header">
+      <div>
+        <span class="memo-header__classification">{{ classification|default('BOARD-RESTRICTED') }}</span>
+        <p class="memo-header__brand">PTT Platform &middot; Board Memo</p>
+        <h1 class="memo-header__title">{{ topic|e }}</h1>
+      </div>
+      <div class="memo-header__meta">
+        {{ ui.prepared_for|default('Adressat') }}: {{ prepared_for|e }}<br>
+        {{ ui.prepared_by|default('Autor') }}: {{ prepared_by|e }}<br>
+        {{ ui.date|default('Datum') }}: {{ date|e }}
+      </div>
+    </header>
+
+    {{ body_html|safe if body_html else '' }}
+
+    <footer class="audit-footer">
+      <span>Audit: <a href="{{ audit_url }}">{{ audit_url }}</a></span>
+      <span>{{ ui.license|default('Lizenz') }}: {{ license|default('all_rights_reserved') }}</span>
+      <span>{{ attribution|e }}</span>
+    </footer>
+  </main>
+</body>
+</html>

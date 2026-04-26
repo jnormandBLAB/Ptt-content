@@ -1,0 +1,326 @@
+{
+  "$schema": "../_schema/package_spec.schema.json",
+  "schema_version": "1.1.0",
+  "package_id": "entrepreneur_v1",
+
+  "stakeholder": {
+    "id": "entrepreneur",
+    "label_i18n": {
+      "fr": "Cheffe / Chef d'entreprise",
+      "de": "Unternehmerin / Unternehmer",
+      "it": "Imprenditrice / Imprenditore",
+      "en": "Entrepreneur / Business owner"
+    },
+    "aim_i18n": {
+      "fr": "Briefer mon conseil d'administration en dix minutes et chiffrer l'impact en CHF.",
+      "de": "Meinen Verwaltungsrat in zehn Minuten briefen und die Auswirkungen in CHF beziffern.",
+      "it": "Briefare il mio consiglio d'amministrazione in dieci minuti e quantificare l'impatto in CHF.",
+      "en": "Brief my board in ten minutes and price the impact in CHF."
+    },
+    "reading_grade_target": 11,
+    "demographic_hints": {
+      "expertise_in_topic": "informed",
+      "decision_authority": "organisation",
+      "time_budget_seconds": 600
+    },
+    "primary_language": "de",
+    "available_languages": ["de", "fr", "it", "en"]
+  },
+
+  "look_and_feel": {
+    "template_ref": "market_signal_compact",
+    "color_palette": "ptt_market_signal",
+    "typography": {
+      "heading_family": "Inter",
+      "body_family": "Inter",
+      "scale": "comfortable",
+      "numerals": "tabular"
+    },
+    "tone": {
+      "register": "incisive",
+      "stance": "explanatory",
+      "anti_patterns": [
+        "vague_language",
+        "uncited_figure",
+        "buried_lede",
+        "academic_qualifier"
+      ]
+    }
+  },
+
+  "delivery": {
+    "channels": ["pdf_a4", "pptx_slide_16_9", "xlsx_data", "csv_data", "web_article", "email_body"],
+    "embargo_aware": false,
+    "watermark_policy": "none",
+    "share_policy": {
+      "redistributable": false,
+      "license": "all_rights_reserved",
+      "attribution_string_i18n": {
+        "fr": "Analyse PTT Platform — distribution restreinte au conseil d'administration.",
+        "de": "PTT Platform Analyse — Verbreitung auf Verwaltungsrat beschränkt.",
+        "it": "Analisi PTT Platform — distribuzione riservata al consiglio d'amministrazione.",
+        "en": "PTT Platform analysis — board-restricted distribution."
+      }
+    },
+    "bundle_layout": {
+      "directory_template": "{topic_slug}/{package_id}/{language}/",
+      "filename_template": "{artefact_id}.{ext}",
+      "include_index_html": true,
+      "include_provenance_json": true
+    }
+  },
+
+  "artefacts": [
+    {
+      "id": "risk_memo_2pp",
+      "title_i18n": {
+        "fr": "Note de risque (2 pages)",
+        "de": "Risiko-Memo (2 Seiten)",
+        "it": "Memo di rischio (2 pagine)",
+        "en": "Risk memo (2 pages)"
+      },
+      "purpose_i18n": {
+        "fr": "Page 1 : exposition + chiffrage CHF + horizon. Page 2 : trois leviers d'atténuation.",
+        "de": "Seite 1: Exposition + CHF-Bezifferung + Horizont. Seite 2: drei Mitigationshebel.",
+        "it": "Pagina 1: esposizione + quantificazione CHF + orizzonte. Pagina 2: tre leve di mitigazione.",
+        "en": "Page 1: exposure + CHF figure + horizon. Page 2: three mitigation levers."
+      },
+      "format": "executive_brief",
+      "renderer": "brief.risk_memo_v1",
+      "channels": ["pdf_a4", "web_article", "email_body"],
+      "input": {
+        "ir_fields": ["key_claims[business_relevance]", "headline_statistic", "stakeholder_signals.entrepreneur", "trajectory_summary", "scenarios"],
+        "max_tokens_in": 8000
+      },
+      "constraints": { "max_pages": 2, "max_words": 800, "reading_time_seconds_target": 360 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": true,
+        "min_contrast_ratio": 4.5,
+        "tagged_pdf_ua1": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "explicit",
+        "evidence_ids_from": "explicit",
+        "narrative_ids_from": "explicit",
+        "emit_claim_review_jsonld": false,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "Report", "datePublished_from": "render_time", "claim_reviews_from": "claim_ids" },
+      "every_voices_meta": { "card_priority": 1, "anchor_id": "memo" },
+      "qa_overrides": { "extra_deterministic_gates": ["claim_traceability", "no_inference_beyond_evidence"] }
+    },
+    {
+      "id": "sector_exposure_table",
+      "title_i18n": {
+        "fr": "Exposition sectorielle (NOGA × CHF)",
+        "de": "Sektor-Exposition (NOGA × CHF)",
+        "it": "Esposizione settoriale (NOGA × CHF)",
+        "en": "Sector exposure table (NOGA × CHF)"
+      },
+      "purpose_i18n": {
+        "fr": "Identifier en un coup d'œil les sous-sections NOGA exposées et chiffrer en CHF par horizon.",
+        "de": "Auf einen Blick exponierte NOGA-Unterabschnitte erkennen und in CHF pro Horizont beziffern.",
+        "it": "Identificare a colpo d'occhio i sotto-settori NOGA esposti e quantificare in CHF per orizzonte.",
+        "en": "Spot exposed NOGA sub-sections at a glance and price in CHF per horizon."
+      },
+      "format": "sector_exposure_table",
+      "renderer": "table.noga_exposure_v1",
+      "channels": ["xlsx_data", "csv_data", "pdf_a4", "web_article"],
+      "input": {
+        "ir_fields": ["sector_exposure", "trajectory_summary", "scenarios"],
+        "max_tokens_in": 6000
+      },
+      "constraints": { "max_pages": 2 },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": true,
+        "min_contrast_ratio": 4.5,
+        "tagged_pdf_ua1": true,
+        "screen_reader_outline_required": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "explicit",
+        "evidence_ids_from": "explicit",
+        "narrative_ids_from": "none",
+        "emit_claim_review_jsonld": false,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "Dataset" },
+      "every_voices_meta": { "card_priority": 2, "anchor_id": "exposure" }
+    },
+    {
+      "id": "board_slide",
+      "title_i18n": {
+        "fr": "Slide CA (16:9)",
+        "de": "VR-Folie (16:9)",
+        "it": "Slide CdA (16:9)",
+        "en": "Board slide (16:9)"
+      },
+      "purpose_i18n": {
+        "fr": "Une seule slide, projetable, contenant la décision recommandée et son support chiffré.",
+        "de": "Eine einzelne projizierbare Folie mit empfohlener Entscheidung und Bezifferung.",
+        "it": "Una sola slide, proiettabile, con la decisione raccomandata e la quantificazione.",
+        "en": "Single projectable slide with recommended decision and supporting figure."
+      },
+      "format": "kpi_card",
+      "renderer": "slide.board_kpi_v1",
+      "channels": ["pptx_slide_16_9", "pdf_a4", "web_inline"],
+      "input": {
+        "ir_fields": ["headline_statistic", "key_claims[business_relevance]", "key_recommendation"],
+        "max_tokens_in": 2000
+      },
+      "constraints": { "max_pages": 1, "max_words": 80, "must_fit_above_the_fold": true },
+      "accessibility": {
+        "wcag_level": "AA",
+        "alt_text_required": true,
+        "min_contrast_ratio": 7.0,
+        "tagged_pdf_ua1": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "explicit",
+        "evidence_ids_from": "explicit",
+        "narrative_ids_from": "none",
+        "emit_claim_review_jsonld": false,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "ImageObject" },
+      "every_voices_meta": { "card_priority": 3, "anchor_id": "slide" }
+    },
+    {
+      "id": "cost_calculator",
+      "title_i18n": {
+        "fr": "Calculateur Excel : impact coût par scénario",
+        "de": "Excel-Rechner: Kostenwirkung pro Szenario",
+        "it": "Calcolatore Excel: impatto costo per scenario",
+        "en": "Excel cost calculator per scenario"
+      },
+      "purpose_i18n": {
+        "fr": "Tableur paramétrable (effectif, CA, marge) pour chiffrer en interne sans relancer le PTT.",
+        "de": "Parametrisierbares Tabellenblatt (Personal, Umsatz, Marge) zur internen Bezifferung ohne PTT-Neulauf.",
+        "it": "Foglio parametrizzabile (organico, fatturato, margine) per quantificare internamente senza rilanciare PTT.",
+        "en": "Parametric spreadsheet (headcount, revenue, margin) to price internally without re-running PTT."
+      },
+      "format": "cost_calculator",
+      "renderer": "spreadsheet.cost_calculator_v1",
+      "channels": ["xlsx_data"],
+      "input": {
+        "ir_fields": ["headline_statistic", "scenarios", "trajectory_summary", "sector_exposure"],
+        "max_tokens_in": 5000
+      },
+      "constraints": { "max_pages": 5 },
+      "accessibility": {
+        "wcag_level": "A",
+        "alt_text_required": false,
+        "min_contrast_ratio": 4.5,
+        "language_attribute_required": true
+      },
+      "provenance_hooks": {
+        "claim_ids_from": "explicit",
+        "evidence_ids_from": "explicit",
+        "narrative_ids_from": "none",
+        "emit_claim_review_jsonld": false,
+        "emit_provenance_sidecar_json": true
+      },
+      "schema_org": { "type": "Dataset" },
+      "every_voices_meta": { "card_priority": 4, "anchor_id": "calculator" }
+    }
+  ],
+
+  "aim_test": {
+    "type": "llm_judge",
+    "prompt_i18n": {
+      "fr": "Avec ce package seul, peux-tu (a) ouvrir une réunion de CA en 5 minutes, (b) annoncer un chiffre d'exposition CHF avec son intervalle, (c) proposer trois leviers d'atténuation hiérarchisés ?",
+      "de": "Kannst du mit diesem Paket allein (a) eine VR-Sitzung in 5 Minuten eröffnen, (b) eine CHF-Expositionsgrösse mit Intervall ankündigen, (c) drei priorisierte Mitigationshebel vorschlagen?",
+      "it": "Con questo solo pacchetto, puoi (a) aprire una riunione di CdA in 5 minuti, (b) annunciare una cifra di esposizione CHF con intervallo, (c) proporre tre leve di mitigazione gerarchizzate?",
+      "en": "With only this package, can you (a) open a board meeting in 5 minutes, (b) state a CHF exposure figure with interval, (c) propose three prioritised mitigation levers?"
+    },
+    "rubric": [
+      {
+        "criterion_id": "chf_exposure_quantified",
+        "label_i18n": { "fr": "Exposition CHF chiffrée avec intervalle", "de": "CHF-Exposition mit Intervall beziffert", "it": "Esposizione CHF quantificata con intervallo", "en": "CHF exposure quantified with interval" },
+        "pass_signal_i18n": { "fr": "Chiffre central + borne basse + borne haute + horizon.", "de": "Zentralwert + Untergrenze + Obergrenze + Horizont.", "it": "Valore centrale + bordo basso + bordo alto + orizzonte.", "en": "Central figure + low bound + high bound + horizon." },
+        "weight": 1.5
+      },
+      {
+        "criterion_id": "noga_sub_sections_named",
+        "label_i18n": { "fr": "Sous-sections NOGA nommées", "de": "NOGA-Unterabschnitte genannt", "it": "Sotto-sezioni NOGA nominate", "en": "NOGA sub-sections named" },
+        "pass_signal_i18n": { "fr": "Au moins deux sous-sections NOGA pertinentes citées par code.", "de": "Mindestens zwei relevante NOGA-Unterabschnitte mit Code zitiert.", "it": "Almeno due sotto-sezioni NOGA pertinenti citate per codice.", "en": "At least two relevant NOGA sub-sections cited by code." }
+      },
+      {
+        "criterion_id": "three_levers_prioritised",
+        "label_i18n": { "fr": "Trois leviers hiérarchisés", "de": "Drei priorisierte Hebel", "it": "Tre leve gerarchizzate", "en": "Three prioritised levers" },
+        "pass_signal_i18n": { "fr": "Chaque levier a un coût estimé et un délai d'exécution.", "de": "Jeder Hebel hat geschätzte Kosten und Umsetzungsfrist.", "it": "Ogni leva ha costo stimato e tempo di esecuzione.", "en": "Each lever has estimated cost and execution timeline." },
+        "weight": 1.5
+      },
+      {
+        "criterion_id": "calculator_runnable",
+        "label_i18n": { "fr": "Calculateur exécutable sans aide", "de": "Rechner ohne Hilfe ausführbar", "it": "Calcolatore eseguibile senza aiuto", "en": "Calculator runnable without help" },
+        "pass_signal_i18n": { "fr": "Trois cellules d'entrée nommées + résultat conditionnel.", "de": "Drei benannte Eingabezellen + bedingtes Ergebnis.", "it": "Tre celle di input nominate + risultato condizionale.", "en": "Three named input cells + conditional output." }
+      },
+      {
+        "criterion_id": "no_academic_hedging",
+        "label_i18n": { "fr": "Pas de prudence académique excessive", "de": "Keine übertriebene akademische Vorsicht", "it": "Nessuna prudenza accademica eccessiva", "en": "No excessive academic hedging" },
+        "pass_signal_i18n": { "fr": "Le memo prend une position chiffrée, pas un éventail.", "de": "Memo bezieht eine bezifferte Position, keine Bandbreite.", "it": "Il memo prende una posizione quantificata, non un ventaglio.", "en": "Memo takes a numeric position, not a range." }
+      }
+    ],
+    "min_score": 0.8,
+    "judge_model": "claude-opus-4-7@1m"
+  },
+
+  "every_voices_meta": {
+    "url_slug_template": "/{language}/business/{topic_slug}/{package_id}",
+    "og_image_artefact_ref": "board_slide",
+    "schema_org_type": "Report",
+    "rss_eligible": true,
+    "subscription_topic": "business_impact_briefings",
+    "tts_eligible": false,
+    "falc_eligible": false,
+    "large_print_eligible": false,
+    "personalisation_keys": ["sector_noga", "language"],
+    "indexable": true,
+
+    "web": {
+      "alternates": [
+        { "language": "de", "href_template": "/de/wirtschaft/{topic_slug}/{package_id}" },
+        { "language": "fr", "href_template": "/fr/economie/{topic_slug}/{package_id}" },
+        { "language": "it", "href_template": "/it/economia/{topic_slug}/{package_id}" },
+        { "language": "en", "href_template": "/en/business/{topic_slug}/{package_id}", "optional": true }
+      ],
+      "canonical_language": "de"
+    },
+
+    "analytics": {
+      "stakeholder_cohort": "entrepreneur",
+      "topic_cohorts": ["business_impact", "sector_exposure"],
+      "language_cohort_field": "language",
+      "events_to_track": [
+        "package_view",
+        "artefact_open",
+        "share_clicked",
+        "subscription_signup",
+        "download_clicked",
+        "push_opened",
+        "audit_link_clicked"
+      ]
+    },
+
+    "push": {
+      "eligible_channels": ["email_alert", "web_push", "telegram"],
+      "channel": "business_impact_briefings",
+      "priority": "high",
+      "rate_limit_per_subscriber_per_week": 5,
+      "headline_artefact_ref": "risk_memo_2pp",
+      "embargo_aware": false
+    },
+
+    "provenance": {
+      "report_id_field": "report_id",
+      "audit_url_template": "/{language}/business/{topic_slug}/{package_id}/audit/{report_id}",
+      "claim_review_jsonld_endpoint": "/api/v1/claim-review/{claim_id}",
+      "license_id": "all_rights_reserved",
+      "embedded_in_pdfs": true,
+      "embedded_in_html": true
+    }
+  }
+}

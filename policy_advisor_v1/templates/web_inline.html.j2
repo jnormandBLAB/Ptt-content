@@ -1,0 +1,121 @@
+{# parliamentary_classic — web_inline.html.j2
+   Web echo of the 4-page parliamentary brief. Federal serif throughout.
+   Context: { lang, topic, draft_label, prepared_for, prepared_by, date,
+              brief_html, levers, qa[], legal_diff, footnotes[],
+              audit_url, license, attribution } #}
+<!DOCTYPE html>
+<html lang="{{ lang|default('de') }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex,nofollow">
+  <title>{{ topic|e }} — Politikberatung</title>
+  <link rel="stylesheet" href="kit.css">
+  <style>:root { --audit-url: "{{ audit_url }}"; }</style>
+</head>
+<body>
+  <a href="#main" class="skip-link">{{ ui.skip_to_content|default('Zum Inhalt') }}</a>
+
+  <main id="main">
+
+    <header class="parl-header">
+      <div>
+        <span class="parl-header__draft">{{ draft_label|default('DRAFT') }}</span>
+        <h1 class="parl-header__title">{{ topic|e }}</h1>
+        <p class="parl-header__sub">{{ ui.parliamentary_brief|default('Parlamentarische Notiz — Arbeitsdokument') }}</p>
+      </div>
+      <div class="parl-header__meta">
+        {{ ui.prepared_for|default('Adressat') }}: {{ prepared_for|e }}<br>
+        {{ ui.prepared_by|default('Autor') }}: {{ prepared_by|e }}<br>
+        {{ ui.date|default('Datum') }}: {{ date|e }}
+      </div>
+    </header>
+
+    {# --- Brief (PROSPER pillar narrative) --- #}
+    <section aria-labelledby="brief-h">
+      <h2 id="brief-h">{{ ui.brief|default('Analyse') }}</h2>
+      {{ brief_html|safe if brief_html else '' }}
+    </section>
+
+    {# --- Lever × Actor × Horizon matrix --- #}
+    {% if levers %}
+    <section aria-labelledby="lah-h">
+      <h2 id="lah-h">{{ ui.lever_actor_horizon|default('Hebel × Akteur × Horizont') }}</h2>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">{{ ui.lever|default('Hebel') }}</th>
+            <th scope="col">{{ ui.actor|default('Akteur') }}</th>
+            <th scope="col">{{ ui.horizon|default('Horizont') }}</th>
+            <th scope="col">{{ ui.legal_basis|default('Rechtsgrundlage') }}</th>
+            <th scope="col" class="num">{{ ui.cost_chf|default('Kosten (Mio CHF)') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for lever in levers %}
+          <tr>
+            <td>{{ lever.title|e }}{% if lever.pillar %} <span class="prosper-badge">{{ lever.pillar|e }}</span>{% endif %}</td>
+            <td>{{ lever.actor|e }}</td>
+            <td>{{ lever.horizon|e }}</td>
+            <td>{% if lever.legal_ref %}<span class="legal-cite">{{ lever.legal_ref|e }}</span>{% endif %}</td>
+            <td class="num">{{ lever.cost_chf|e }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+    {% endif %}
+
+    {# --- Q&A pack --- #}
+    {% if qa %}
+    <section aria-labelledby="qa-h">
+      <h2 id="qa-h">{{ ui.qa_pack|default('Q&A — 15 wahrscheinliche Fragen') }}</h2>
+      {% for item in qa %}
+      <article class="qa-pair">
+        <p class="qa-pair__num">F{{ '%02d' % loop.index }}</p>
+        <p class="qa-pair__q">{{ item.question|e }}</p>
+        <p class="qa-pair__a">{{ item.answer|e }}</p>
+        <p class="qa-pair__src">claim: {{ item.claim_id|e }} · {{ item.source|e }}</p>
+      </article>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    {# --- Side-by-side legal comparison --- #}
+    {% if legal_diff %}
+    <section aria-labelledby="diff-h">
+      <h2 id="diff-h">{{ ui.legal_diff|default('Vergleich: aktueller vs. vorgeschlagener Text') }}</h2>
+      <div class="diff-grid">
+        <div class="diff-col">
+          <p class="diff-col__head">{{ ui.current_text|default('Aktueller Text') }}</p>
+          {{ legal_diff.current_html|safe }}
+        </div>
+        <div class="diff-col">
+          <p class="diff-col__head">{{ ui.proposed_text|default('Vorgeschlagener Text') }}</p>
+          {{ legal_diff.proposed_html|safe }}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    {# --- Footnotes --- #}
+    {% if footnotes %}
+    <section class="footnotes" aria-labelledby="fn-h">
+      <h2 id="fn-h" style="font-size:13px;">{{ ui.footnotes|default('Fussnoten') }}</h2>
+      <ol>
+        {% for fn in footnotes %}
+        <li id="fn{{ loop.index }}">{{ fn|e }}</li>
+        {% endfor %}
+      </ol>
+    </section>
+    {% endif %}
+
+    <footer class="audit-footer">
+      <span>Audit: <a href="{{ audit_url }}">{{ audit_url }}</a></span>
+      <span>Lizenz: {{ license|default('all_rights_reserved') }}</span>
+      <span>{{ attribution|e }}</span>
+    </footer>
+  </main>
+</body>
+</html>

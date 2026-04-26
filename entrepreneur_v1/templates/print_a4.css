@@ -1,0 +1,74 @@
+/* ============================================================================
+   business_sober_v1 — print_a4.css
+   2-page board memo. A4 portrait, 16mm margins, 10pt body, no watermark.
+   ============================================================================ */
+
+@page {
+  size: A4 portrait;
+  margin: 18mm 16mm 16mm 16mm;
+  @top-left {
+    content: "PTT — Board Memo";
+    font-family: "Inter", sans-serif; font-size: 8pt; color: #6B7280;
+  }
+  @top-right {
+    content: "BOARD-RESTRICTED";
+    font-family: "Inter", sans-serif; font-size: 8pt; color: #1B2A4A;
+    font-weight: 700; letter-spacing: 0.08em;
+  }
+  @bottom-left {
+    content: var(--audit-url, "—");
+    font-family: "Inter", sans-serif; font-size: 8pt; color: #6B7280;
+  }
+  @bottom-right {
+    content: "p. " counter(page) " / " counter(pages);
+    font-family: "Inter", sans-serif; font-size: 8pt; color: #6B7280;
+  }
+}
+
+@media print {
+  html, body {
+    background: #FFFFFF !important;
+    color: #111827 !important;
+    font-size: 10pt;
+    line-height: 1.40;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  main { max-width: none; padding: 0; }
+
+  h1 { font-size: 18pt; }
+  h2 { font-size: 12pt; border-bottom: 0.5pt solid #9CA3AF; padding-bottom: 2pt; }
+  h3 { font-size: 10pt; }
+
+  p, li { orphans: 3; widows: 3; }
+
+  /* Risk grid stays 3-up in print */
+  .risk-grid, .lever-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 4mm !important;
+  }
+  .risk-card, .lever-card { page-break-inside: avoid; }
+
+  /* Sector table retains hairlines */
+  .sector-table thead th {
+    background: #111827 !important; color: #FFFFFF !important;
+  }
+
+  /* Recommendation band on yellow stays printed */
+  .recommendation {
+    background: #C9A84C !important;
+    color: #1B2A4A !important;
+    border-left: 4pt solid #1B2A4A !important;
+    page-break-inside: avoid;
+  }
+
+  /* Force page break between memo body and sector annex */
+  .page-break { page-break-before: always; }
+
+  .skip-link, .no-print { display: none !important; }
+
+  a[href]::after { content: " [" attr(href) "]"; font-size: 7pt; color: #6B7280; }
+  a[href^="#"]::after { content: ""; }
+}

@@ -1,0 +1,80 @@
+{
+  "$description": "PPTX master spec for executive_dark_compact. Single-slide hero card (16:9, 13.333\" x 7.5\"). Cream background, navy ink, Inter heading + Source Serif 4 body, Composite + 3 KPI + Recommendation. EMU = English Metric Units; 914400 EMU = 1 inch.",
+  "$kit": "executive_dark_compact",
+  "version": "1.0.0",
+  "slide_size": {
+    "width_in":  13.333,
+    "height_in": 7.5,
+    "width_emu":  12192000,
+    "height_emu": 6858000
+  },
+  "theme": {
+    "name": "PTT Executive Dark Compact",
+    "colors": {
+      "bg_paper":   "F2EBDA",
+      "navy":       "1B2A4A",
+      "navy_deep":  "0F1A30",
+      "gold":       "C9A84C",
+      "ink":        "0F1A30",
+      "ink_muted":  "3D4257",
+      "white":      "FFFFFF",
+      "rule":       "1B2A4A",
+      "hairline":   "C7C0AC",
+      "highlight":  "FFF6CC"
+    },
+    "fonts": {
+      "heading":  "Inter",
+      "body":     "Source Serif 4",
+      "fallback_heading": "Calibri",
+      "fallback_body":    "Cambria"
+    }
+  },
+  "layouts": {
+    "hero_card": {
+      "$description": "Single-slide hero. Composite top-left, 3 KPI band middle, recommendation bottom band.",
+      "background": "F2EBDA",
+      "regions": {
+        "header_brand":   { "x_in": 0.5, "y_in": 0.4, "w_in": 4.0, "h_in": 0.4, "font": "heading", "size_pt": 14, "weight": "bold", "color": "navy", "tracking": 0.04, "case": "upper" },
+        "header_topic":   { "x_in": 4.6, "y_in": 0.4, "w_in": 6.0, "h_in": 0.4, "font": "body",    "size_pt": 14, "weight": "italic", "color": "ink_muted" },
+        "header_date":    { "x_in": 10.6, "y_in": 0.4, "w_in": 2.3, "h_in": 0.4, "font": "body",    "size_pt": 12, "color": "ink_muted", "align": "right" },
+        "rule_under_header": { "x_in": 0.5, "y_in": 0.95, "w_in": 12.4, "h_in": 0.02, "fill": "rule" },
+        "composite_label":   { "x_in": 0.5, "y_in": 1.20, "w_in": 4.0, "h_in": 0.3, "font": "heading", "size_pt": 11, "color": "ink_muted", "case": "upper", "tracking": 0.06 },
+        "composite_value":   { "x_in": 0.5, "y_in": 1.55, "w_in": 4.5, "h_in": 1.7, "font": "body",    "size_pt": 88, "weight": "bold", "color": "navy", "feature_settings": "tnum,lnum" },
+        "composite_interval":{ "x_in": 0.5, "y_in": 3.30, "w_in": 4.0, "h_in": 0.3, "font": "body",    "size_pt": 12, "color": "ink_muted" },
+        "headline":          { "x_in": 5.5, "y_in": 1.20, "w_in": 7.4, "h_in": 2.4, "font": "body",    "size_pt": 18, "color": "ink", "leading": 1.30 },
+        "kpi_band": {
+          "y_in": 4.0,
+          "h_in": 1.7,
+          "tile_count": 3,
+          "tile_w_in": 4.0,
+          "tile_gap_in": 0.2,
+          "x_first_in": 0.5,
+          "border_left": { "color": "gold", "width_pt": 2 },
+          "label":  { "font": "heading", "size_pt": 10, "color": "ink_muted", "case": "upper", "tracking": 0.04 },
+          "value":  { "font": "body", "size_pt": 28, "weight": "bold", "color": "navy", "feature_settings": "tnum" },
+          "delta":  { "font": "body", "size_pt": 11, "color": "ink_muted" }
+        },
+        "recommendation_band": {
+          "x_in": 0.5, "y_in": 5.95, "w_in": 12.4, "h_in": 0.7,
+          "fill": "highlight",
+          "border_left": { "color": "gold", "width_pt": 3 },
+          "font": "body", "size_pt": 13, "weight": "semibold", "color": "ink"
+        },
+        "audit_footer": {
+          "x_in": 0.5, "y_in": 6.95, "w_in": 12.4, "h_in": 0.4,
+          "font": "body", "size_pt": 9, "color": "ink_muted",
+          "format": "Audit: {audit_url}  |  Lizenz: {license}  |  EKB v{ekb_version}"
+        },
+        "watermark": {
+          "$description": "Optional personalised watermark — diagonal repeating text, 8% opacity navy.",
+          "rotation_deg": -30,
+          "font": "heading",
+          "size_pt": 64,
+          "color_rgb_alpha": "1B2A4A14",
+          "tile_x_in": 5.0,
+          "tile_y_in": 3.0
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,346 @@
+/* ============================================================================
+   editorial_press_v1  —  global CSS for media_v1.
+   Editorial register: Inter heading + Source Serif 4 body, transparent-bg
+   chart variants, pull-quotes with gold left bar, embargo banner styling.
+   Reference style: FT Visual Stories, Reuters/AP press kits.
+   ============================================================================ */
+
+:root {
+  --ptt-navy: #1B2A4A;
+  --ptt-gold: #C9A84C;
+  --ptt-white: #FFFFFF;
+
+  --press-ink:           #0E1320;
+  --press-ink-secondary: #3F4A5C;
+  --press-ink-muted:     #6B7280;
+  --press-paper:         #FFFFFF;
+  --press-paper-alt:     #F8F7F4;
+  --press-rule-strong:   #0E1320;
+  --press-rule-med:      #C2C7D0;
+  --press-rule-hair:     #E5E7EB;
+  --press-pullquote-bar: #C9A84C;
+  --press-embargo-red:        #B91C1C;
+  --press-embargo-red-soft:   #FEE2E2;
+
+  --ff-heading: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --ff-body:    "Source Serif 4", Charter, Georgia, serif;
+  --ff-numeric: "Inter", ui-monospace, monospace;
+  --ff-byline:  "Inter", sans-serif;
+
+  --fs-headline:    40px;
+  --fs-h2:          22px;
+  --fs-h3:          17px;
+  --fs-body:        16px;
+  --fs-lede:        18px;
+  --fs-pullquote:   24px;
+  --fs-caption:     13px;
+  --fs-footnote:    12px;
+  --fs-byline:      13px;
+  --fs-embargo:     14px;
+
+  --lh-tight:  1.10;
+  --lh-snug:   1.30;
+  --lh-normal: 1.55;
+  --lh-loose:  1.65;
+
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  --sp-1: 2pt; --sp-2: 4pt; --sp-3: 6pt; --sp-4: 8pt;
+  --sp-5: 12pt; --sp-6: 16pt; --sp-7: 24pt; --sp-8: 32pt;
+
+  --w-content:        780px;
+  --w-press-release:  680px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  color: var(--press-ink);
+  background: var(--press-paper);
+  font-feature-settings: "kern" 1, "liga" 1, "tnum" 1, "lnum" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+main { max-width: var(--w-content); margin: 0 auto; padding: var(--sp-7) var(--sp-6); }
+main.press-release { max-width: var(--w-press-release); }
+
+/* ----- Embargo banner (mandatory at top of release/quotables/chart pack) ----- */
+.embargo-banner {
+  background: var(--press-embargo-red);
+  color: var(--ptt-white);
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-embargo);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: var(--sp-4) var(--sp-6);
+  text-align: center;
+  border-bottom: 2pt solid var(--press-embargo-red);
+}
+.embargo-banner__time { font-weight: var(--fw-regular); margin-left: var(--sp-3); text-transform: none; }
+.embargo-banner--soft { background: var(--press-embargo-red-soft); color: var(--press-embargo-red); }
+
+/* ----- Masthead ----- */
+.masthead {
+  border-bottom: 1pt solid var(--press-rule-strong);
+  padding-bottom: var(--sp-3);
+  margin-bottom: var(--sp-6);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-5);
+}
+.masthead__brand {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-bold);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ptt-navy);
+}
+.masthead__date {
+  font-family: var(--ff-byline);
+  font-size: var(--fs-byline);
+  color: var(--press-ink-muted);
+}
+
+/* ----- Dateline ----- */
+.dateline {
+  font-family: var(--ff-byline);
+  font-size: var(--fs-byline);
+  color: var(--press-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 var(--sp-3) 0;
+}
+
+/* ----- Headline ----- */
+.headline {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-headline);
+  line-height: var(--lh-tight);
+  color: var(--press-ink);
+  margin: 0 0 var(--sp-5) 0;
+  letter-spacing: -0.01em;
+}
+
+/* ----- Lede ----- */
+.lede {
+  font-family: var(--ff-body);
+  font-size: var(--fs-lede);
+  line-height: var(--lh-snug);
+  font-weight: var(--fw-medium);
+  color: var(--press-ink);
+  margin: 0 0 var(--sp-6) 0;
+}
+
+/* ----- Headings ----- */
+h1, h2, h3 {
+  font-family: var(--ff-heading);
+  color: var(--press-ink);
+  margin: var(--sp-6) 0 var(--sp-3) 0;
+  line-height: var(--lh-snug);
+  font-weight: var(--fw-semibold);
+}
+h1 { font-size: var(--fs-headline); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+
+p { margin: 0 0 var(--sp-4) 0; }
+
+/* ----- Pull-quote (signature FT/Reuters element) ----- */
+.pull-quote {
+  border-left: 3pt solid var(--press-pullquote-bar);
+  padding: var(--sp-3) var(--sp-6);
+  margin: var(--sp-6) 0;
+  font-family: var(--ff-body);
+  font-size: var(--fs-pullquote);
+  line-height: var(--lh-snug);
+  color: var(--press-ink);
+  font-style: italic;
+}
+.pull-quote__attribution {
+  display: block;
+  font-style: normal;
+  font-family: var(--ff-byline);
+  font-size: var(--fs-caption);
+  color: var(--press-ink-secondary);
+  margin-top: var(--sp-3);
+  letter-spacing: 0.02em;
+}
+.pull-quote__attribution::before { content: "— "; }
+
+/* ----- Quotable lines sheet ----- */
+.quotables { list-style: none; padding: 0; margin: 0; }
+.quotables__item {
+  border-top: 0.5pt solid var(--press-rule-med);
+  padding: var(--sp-5) 0;
+}
+.quotables__item:last-child { border-bottom: 0.5pt solid var(--press-rule-med); }
+.quotables__num {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-bold);
+  color: var(--ptt-navy);
+  font-size: var(--fs-caption);
+  letter-spacing: 0.06em;
+}
+.quotables__line {
+  font-family: var(--ff-body);
+  font-size: var(--fs-pullquote);
+  line-height: var(--lh-snug);
+  color: var(--press-ink);
+  margin: var(--sp-2) 0;
+}
+.quotables__meta {
+  font-family: var(--ff-byline);
+  font-size: var(--fs-caption);
+  color: var(--press-ink-secondary);
+}
+
+/* ----- Confidence label badge ----- */
+.confidence-badge {
+  display: inline-block;
+  font-family: var(--ff-heading);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 1pt 6pt;
+  background: var(--ptt-navy);
+  color: var(--ptt-white);
+  margin-left: var(--sp-3);
+  vertical-align: 2px;
+  border-radius: 2px;
+}
+.confidence-badge--high     { background: #1B5E20; }
+.confidence-badge--medium   { background: #F9A825; color: var(--press-ink); }
+.confidence-badge--low      { background: #6B7280; }
+.confidence-badge--contested{ background: var(--press-embargo-red); }
+
+/* ----- Backgrounder pull-out box ----- */
+.backgrounder {
+  background: var(--press-paper-alt);
+  padding: var(--sp-6);
+  margin: var(--sp-6) 0;
+  border-left: 2pt solid var(--ptt-navy);
+}
+.backgrounder__h {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h3);
+  color: var(--ptt-navy);
+  margin: 0 0 var(--sp-3) 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ----- Chart pack row ----- */
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-5);
+  margin: var(--sp-6) 0;
+  padding: var(--sp-5) 0;
+  border-top: 0.5pt solid var(--press-rule-med);
+}
+.chart-row__figure {
+  min-height: 320px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chart-row__caption {
+  font-family: var(--ff-byline);
+  font-size: var(--fs-caption);
+  color: var(--press-ink-secondary);
+  line-height: var(--lh-snug);
+}
+.chart-row__caption strong { color: var(--press-ink); font-weight: var(--fw-semibold); }
+.chart-row__source {
+  display: block;
+  font-style: italic;
+  margin-top: var(--sp-2);
+  color: var(--press-ink-muted);
+}
+.chart-row__source a { color: var(--press-ink-muted); text-decoration: underline; }
+
+/* ----- Contact card ----- */
+.contact-card {
+  border-top: 1pt solid var(--press-rule-strong);
+  margin-top: var(--sp-7);
+  padding-top: var(--sp-5);
+  font-family: var(--ff-byline);
+  font-size: var(--fs-caption);
+  color: var(--press-ink-secondary);
+  line-height: var(--lh-snug);
+}
+.contact-card__name {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-body);
+  color: var(--press-ink);
+  margin: 0 0 var(--sp-2) 0;
+}
+.contact-card__row { margin: 2pt 0; }
+.contact-card__label {
+  display: inline-block;
+  width: 80px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 11px;
+  color: var(--press-ink-muted);
+}
+
+/* ----- Watermark (clean and watermarked variants) ----- */
+.watermarked::before {
+  content: "EMBARGOED";
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-family: var(--ff-heading);
+  font-size: 140pt;
+  color: var(--press-embargo-red);
+  opacity: 0.12;
+  z-index: 0;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
+
+/* ----- Audit footer ----- */
+.audit-footer {
+  margin-top: var(--sp-7);
+  padding-top: var(--sp-3);
+  border-top: 0.5pt solid var(--press-rule-med);
+  font-size: var(--fs-footnote);
+  color: var(--press-ink-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+}
+
+/* ----- Skip link ----- */
+.skip-link {
+  position: absolute; top: -40px; left: 8px;
+  background: var(--ptt-navy); color: var(--ptt-white);
+  padding: 4pt 6pt; z-index: 100;
+}
+.skip-link:focus { top: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@media (forced-colors: active) {
+  .embargo-banner, .pull-quote, .backgrounder { border-color: CanvasText; }
+}
