@@ -418,6 +418,30 @@
           }
         },
 
+        "falc": {
+          "description": "Sprint G+3 FALC runtime extension. Read by the Every Voices Astro app's FalcCard component (citizen-route inject) and by falcWorker.simplifyPackage(). Distinct from plain_language (which describes editorial constraints): falc declares the runtime locales the simplifier targets and which artefact carries the FALC twin in the rendered page. Optional in v1.1.0 — when absent, the worker defaults to ['fr'] and the citizen route falls back to the first web artefact for the inject anchor.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "target_languages": {
+              "description": "Locales the FALC simplifier produces. FR is the only language wired to Anthropic Haiku today; DE / IT / RM render an explicit 'version simplifiée non disponible' notice on the citizen route until rule-based simplifiers ship (license-sensitive Goethe / PLIDA wordlists).",
+              "type": "array",
+              "items": { "type": "string", "enum": ["fr", "de", "it", "rm"] },
+              "uniqueItems": true,
+              "minItems": 1
+            },
+            "script_artefact_ref": {
+              "description": "Artefact id whose web rendering carries the FalcCard inject. When omitted, the citizen route attaches the card to the first web artefact in the spec. Should typically match plain_language.falc_variant_artefact_ref so the FALC twin renders adjacent to its source.",
+              "type": "string"
+            },
+            "cefr_level_target": {
+              "description": "CEFR level the simplifier targets at runtime. Mirrors plain_language.cefr_level_target but re-declared so the runtime extension is self-contained.",
+              "type": "string",
+              "enum": ["A1", "A2", "B1", "B2"]
+            }
+          }
+        },
+
         "analytics": {
           "description": "Cookie-less analytics tagging consumed by the self-hosted Plausible instance. Each artefact view emits a Plausible custom event with the props composed from this block + the runtime language. Optional in v1.1.0 — packages with no public surface (federal_councillor, policy_advisor) may omit.",
           "type": "object",
