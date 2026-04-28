@@ -1,0 +1,22 @@
+name: validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    name: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate package_spec.json files against schema
+        run: |
+          npx -p ajv-cli@5 -p ajv-formats@3 ajv validate \
+            -s _schema/package_spec.schema.json \
+            -d "*_v*/package_spec.json" \
+            --spec=draft2020 -c ajv-formats --strict=false

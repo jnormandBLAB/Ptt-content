@@ -1,0 +1,8 @@
+﻿{
+  "json.schemas": [
+    {
+      "fileMatch": ["**/package_spec.json"],
+      "url": "./_schema/package_spec.schema.json"
+    }
+  ]
+}

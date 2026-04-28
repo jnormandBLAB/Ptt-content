@@ -1,0 +1,104 @@
+name: dispatch-on-merge
+
+# Fans out HMAC-signed dispatch notifications to FALC, TTS, and push
+# every-voices.staging.blab.ch endpoints when a package_spec.json changes
+# on main. This is analytics-grade: receiver failures MUST NOT fail the
+# workflow (each curl is wrapped with `|| true`). The receiver-side Astro
+# app is the source of truth for retry semantics.
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  dispatch:
+    name: dispatch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect changed package_spec.json files
+        id: detect
+        run: |
+          # List package_spec.json files changed vs the previous commit on main.
+          # Restrict to <stakeholder>_v*/package_spec.json shape.
+          changed=$(git diff --name-only HEAD~1 HEAD -- '*_v*/package_spec.json' || true)
+          {
+            echo 'files<<EOF'
+            echo "$changed"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Fan out HMAC-signed dispatch
+        if: steps.detect.outputs.files != ''
+        env:
+          FALC_SECRET: ${{ secrets.FALC_DISPATCH_HMAC_SECRET }}
+          TTS_SECRET: ${{ secrets.TTS_DISPATCH_HMAC_SECRET }}
+          PUSH_SECRET: ${{ secrets.PUSH_DISPATCH_HMAC_SECRET }}
+          CONTENT_SHA: ${{ github.sha }}
+        run: |
+          set -u
+          KID="2026-04"
+          BASE="https://every-voices.staging.blab.ch"
+
+          # sign $1=secret  $2=body-bytes-on-stdin  -> prints hex digest
+          sign() {
+            python3 -c '
+          import sys, hmac, hashlib, os
+          secret = os.environ["S"].encode()
+          body = sys.stdin.buffer.read()
+          print(hmac.new(secret, body, hashlib.sha256).hexdigest())
+          '
+          }
+
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            [ ! -f "$file" ] && continue
+
+            # package_id = directory name (e.g. "citizen_v1")
+            pkg_id=$(dirname "$file")
+
+            # sha256 of the file as it sits at this commit
+            spec_sha=$(sha256sum "$file" | awk '{print $1}')
+
+            body=$(jq -n -c \
+              --arg pkg "$pkg_id" \
+              --arg csha "$CONTENT_SHA" \
+              --arg ssha "$spec_sha" \
+              --arg kid "$KID" \
+              '{
+                package_id: $pkg,
+                content_repo_sha: $csha,
+                package_spec_sha256: $ssha,
+                bundle: { topic_slug: "pending", report_id: "pending" },
+                kid: $kid
+              }')
+
+            for target in falc tts push; do
+              case "$target" in
+                falc) S="$FALC_SECRET" ;;
+                tts)  S="$TTS_SECRET"  ;;
+                push) S="$PUSH_SECRET" ;;
+              esac
+
+              if [ -z "${S:-}" ]; then
+                echo "::warning::Secret for $target not set; skipping"
+                continue
+              fi
+
+              sig=$(printf '%s' "$body" | S="$S" sign)
+
+              # Receiver failures MUST NOT fail this workflow
+              # (analytics-grade fan-out, see header comment)
+              curl -sS -X POST \
+                -H "Content-Type: application/json" \
+                -H "X-PTT-Kid: $KID" \
+                -H "X-PTT-Signature: sha256=$sig" \
+                --max-time 10 \
+                --data "$body" \
+                "$BASE/api/v1/$target/dispatch" \
+                || echo "::warning::dispatch to $target failed for $pkg_id (non-fatal)"
+            done
+          done <<< "${{ steps.detect.outputs.files }}"

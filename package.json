@@ -1,0 +1,20 @@
+{
+  "name": "@ptt/content",
+  "version": "1.0.0",
+  "description": "PTT Platform stakeholder content contracts",
+  "license": "UNLICENSED",
+  "private": false,
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "files": [
+    "_schema/",
+    "citizen_v1/",
+    "entrepreneur_v1/",
+    "federal_councillor_v1/",
+    "interest_group_v1/",
+    "media_v1/",
+    "policy_advisor_v1/",
+    "README.md"
+  ]
+}

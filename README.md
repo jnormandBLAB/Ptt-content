@@ -227,3 +227,57 @@ entrepreneur briefs are sector-tactical rather than mass-public.
 - `src/ptt_rendering/templates/` — registered template families (resolved
   via `look_and_feel.template_ref`)
 - `src/ptt_ui/config.py` — color and typography tokens
+
+---
+
+## SemVer bump policy (this repo)
+
+This repo is published as the npm package `@ptt/content` to the GitHub
+Packages registry. Versioning follows SemVer:
+
+- **MAJOR** — breaking change to `_schema/package_spec.schema.json` that
+  existing consumers cannot ignore (removed required field, narrowed
+  enum, renamed top-level key). Coordinated with a Claude_ptt-side PR.
+- **MINOR** — new optional field, new enum value, new package directory,
+  schema additions that are forward-compatible.
+- **PATCH** — content fixes (typos, wording, FALC tweaks), CI / docs /
+  workflow changes that don't alter the contract.
+
+Baseline is `1.0.0`. Tag a release with `git tag v1.2.3 && git push --tags`;
+the `publish` workflow does the npm publish.
+
+---
+
+## Repo bootstrap checklist for admins
+
+These steps must be executed manually by a repo admin **before** the
+first content-team PR. The agent that bootstrapped this repo cannot do
+them (they require team creation, branch-protection write, secret
+provisioning).
+
+1. **Create the `@jnormandBLAB/content-stewards` GitHub team** and assign
+   at least 2 members. The `CODEOWNERS` file points at this team; PRs
+   will sit unreviewable until the team exists.
+2. **Branch protection on `main`**:
+   - Require pull request before merging
+   - **Require 2 reviewers from CODEOWNERS**
+   - **Require signed commits**
+   - Disallow force-push
+   - Disallow admin bypass
+   - Require linear history
+   - Required status checks: `validate`
+3. **Add three repo secrets** (Settings -> Secrets and variables ->
+   Actions). Copy the values from the matching secrets in the
+   `Claude_ptt` repo settings (these are the same HMAC keys the
+   receiver-side Astro app validates against — they MUST match):
+   - `FALC_DISPATCH_HMAC_SECRET`
+   - `TTS_DISPATCH_HMAC_SECRET`
+   - `PUSH_DISPATCH_HMAC_SECRET`
+4. **Tag `v1.0.0`** to trigger the first npm publish:
+   ```
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+   Verify the `publish` workflow succeeds and the package shows up under
+   GitHub Packages on the org.
+
