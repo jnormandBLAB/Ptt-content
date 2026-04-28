@@ -382,6 +382,12 @@
       "checker_tools": ["language_tool_python", "capito_score"]
     },
 
+    "falc": {
+      "target_languages": ["fr"],
+      "script_artefact_ref": "impact_faq",
+      "cefr_level_target": "B1"
+    },
+
     "analytics": {
       "stakeholder_cohort": "citizen",
       "topic_cohorts": ["votations", "social_policy"],
