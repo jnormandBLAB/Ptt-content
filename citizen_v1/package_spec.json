@@ -376,7 +376,7 @@
     "plain_language": {
       "cefr_level_target": "B1",
       "falc_variant_artefact_ref": "impact_faq",
-      "max_sentence_length": 18,
+      "max_sentence_length": 17,
       "max_word_syllables": 4,
       "pictograms_allowed": true,
       "checker_tools": ["language_tool_python", "capito_score"]
