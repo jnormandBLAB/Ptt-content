@@ -5,6 +5,13 @@ name: dispatch-on-merge
 # on main. This is analytics-grade: receiver failures MUST NOT fail the
 # workflow (each curl is wrapped with `|| true`). The receiver-side Astro
 # app is the source of truth for retry semantics.
+#
+# Signature scheme (must match Claude_ptt's
+# apps/every_voices/src/lib/dispatchAuth.ts):
+#   payload = `${unix_seconds}.${json_body}`
+#   sig     = HMAC-SHA256(secret, payload)
+#   headers = X-PTT-Kid, X-PTT-Signature: sha256=<hex>, X-PTT-Timestamp: <unix_sec>
+# Receiver enforces |now - ts| <= 300s and replay-guard on (kid, sig).
 
 on:
   push:
@@ -43,13 +50,15 @@ jobs:
           KID="2026-04"
           BASE="https://every-voices.staging.blab.ch"
 
-          # sign $1=secret  $2=body-bytes-on-stdin  -> prints hex digest
+          # HMAC-SHA256 over the dot-joined "<ts>.<body>" payload.
+          # Receiver (dispatchAuth.ts:175) computes the same shape; without
+          # the timestamp prefix the receiver returns 401 signature_mismatch.
           sign() {
             python3 -c '
           import sys, hmac, hashlib, os
           secret = os.environ["S"].encode()
-          body = sys.stdin.buffer.read()
-          print(hmac.new(secret, body, hashlib.sha256).hexdigest())
+          payload = sys.stdin.buffer.read()
+          print(hmac.new(secret, payload, hashlib.sha256).hexdigest())
           '
           }
 
@@ -57,10 +66,7 @@ jobs:
             [ -z "$file" ] && continue
             [ ! -f "$file" ] && continue
 
-            # package_id = directory name (e.g. "citizen_v1")
             pkg_id=$(dirname "$file")
-
-            # sha256 of the file as it sits at this commit
             spec_sha=$(sha256sum "$file" | awk '{print $1}')
 
             body=$(jq -n -c \
@@ -76,6 +82,10 @@ jobs:
                 kid: $kid
               }')
 
+            # Unix-seconds timestamp. Receiver enforces |now - ts| <= 300s.
+            ts=$(date -u +%s)
+            signed_payload="${ts}.${body}"
+
             for target in falc tts push; do
               case "$target" in
                 falc) S="$FALC_SECRET" ;;
@@ -88,14 +98,16 @@ jobs:
                 continue
               fi
 
-              sig=$(printf '%s' "$body" | S="$S" sign)
+              sig=$(printf '%s' "$signed_payload" | S="$S" sign)
 
-              # Receiver failures MUST NOT fail this workflow
-              # (analytics-grade fan-out, see header comment)
+              # Receiver failures MUST NOT fail this workflow (analytics-grade
+              # fan-out). All three headers are required; receiver returns 401
+              # on any missing one.
               curl -sS -X POST \
                 -H "Content-Type: application/json" \
                 -H "X-PTT-Kid: $KID" \
                 -H "X-PTT-Signature: sha256=$sig" \
+                -H "X-PTT-Timestamp: $ts" \
                 --max-time 10 \
                 --data "$body" \
                 "$BASE/api/v1/$target/dispatch" \
