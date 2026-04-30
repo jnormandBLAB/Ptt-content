@@ -270,15 +270,18 @@ first content-team PR. The agent that bootstrapped this repo cannot do
 them (they require team creation, branch-protection write, secret
 provisioning).
 
-1. **Create the `@jnormandBLAB/content-stewards` GitHub team** and assign
-   at least 2 members. The `CODEOWNERS` file points at this team; PRs
-   will sit unreviewable until the team exists.
-2. **Branch protection on `main`**:
+1. **Maintainer model.** This repo is currently single-maintainer
+   (`@jnormandBLAB`). The `CODEOWNERS` file lists that one account.
+   GitHub Teams require an Organization, which this user account is not;
+   converting to an org or creating a sibling org (e.g. `BLAB-Switzerland`)
+   is the upgrade path when the editorial pool grows past one. See the
+   `CODEOWNERS` file for the staged-promotion plan.
+2. **Branch protection on `main`** (already applied):
    - Require pull request before merging
-   - **Require 2 reviewers from CODEOWNERS**
+   - Required approvals: 0 (single-maintainer; bumps to 1 when 2nd editor joins)
    - **Require signed commits**
    - Disallow force-push
-   - Disallow admin bypass
+   - Disallow admin bypass (`enforce_admins=true`)
    - Require linear history
    - Required status checks: `validate`
 3. **Add three repo secrets** (Settings -> Secrets and variables ->
