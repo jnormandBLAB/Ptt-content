@@ -232,8 +232,23 @@ entrepreneur briefs are sector-tactical rather than mass-public.
 
 ## SemVer bump policy (this repo)
 
-This repo is published as the npm package `@ptt/content` to the GitHub
-Packages registry. Versioning follows SemVer:
+This repo is consumed by Claude_ptt as a **git-URL npm dependency**:
+
+```json
+"@ptt/content": "git+https://github.com/jnormandBLAB/Ptt-content.git#<sha>"
+```
+
+The dep is pinned to a specific commit SHA; Renovate auto-PRs the bump
+on the consumer side. We do NOT publish to the GitHub Packages npm
+registry: the `@ptt` scope cannot be published there because GH Packages
+requires the npm scope to match the org name (it would have to be
+`@jnormandblab/content`). Public visibility on this repo + git+https
+clone gives us cryptographic integrity (commit SHA), zero auth, and
+clean Renovate semantics.
+
+Tags follow SemVer and are still meaningful as human-readable anchors
+for Renovate's `automerge` rules and for the `dispatch-on-merge`
+provenance event:
 
 - **MAJOR** — breaking change to `_schema/package_spec.schema.json` that
   existing consumers cannot ignore (removed required field, narrowed
@@ -243,8 +258,8 @@ Packages registry. Versioning follows SemVer:
 - **PATCH** — content fixes (typos, wording, FALC tweaks), CI / docs /
   workflow changes that don't alter the contract.
 
-Baseline is `1.0.0`. Tag a release with `git tag v1.2.3 && git push --tags`;
-the `publish` workflow does the npm publish.
+Baseline is `1.0.0`. Tag a release with `git tag v1.2.3 && git push --tags`.
+No publish workflow runs; the tag is consumed via git refs by Renovate.
 
 ---
 
@@ -273,11 +288,7 @@ provisioning).
    - `FALC_DISPATCH_HMAC_SECRET`
    - `TTS_DISPATCH_HMAC_SECRET`
    - `PUSH_DISPATCH_HMAC_SECRET`
-4. **Tag `v1.0.0`** to trigger the first npm publish:
-   ```
-   git tag v1.0.0
-   git push origin v1.0.0
-   ```
-   Verify the `publish` workflow succeeds and the package shows up under
-   GitHub Packages on the org.
+4. **Tag `v1.0.0`** as the first SemVer anchor (already done via the
+   release UI). No publish workflow runs — Renovate consumes the tag
+   directly via git refs.
 
