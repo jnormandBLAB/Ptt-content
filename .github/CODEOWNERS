@@ -1,5 +1,14 @@
-# All content changes require sign-off from the content-stewards team.
-# This team must be created manually before the first content-team PR.
-# See README.md "Repo bootstrap checklist for admins".
+# Solo-maintainer baseline. The single account on this repo owns
+# all paths. Branch-protection reviewer-count is set to 0 (PRs
+# self-merge after the validate + signed-commit gates pass);
+# CODEOWNERS is informational here, listed for the day a second
+# editor joins:
+#
+#   1. Add the new editor as a collaborator + name them below
+#   2. Bump branch protection's required_approving_review_count to 1
+#   3. Re-enable require_code_owner_reviews
+#   4. (At a 3rd editor) consider transferring this repo to a real
+#      GitHub org so the team-syntax (`@org/content-stewards`) works
+#      and rotation is sustainable.
 
-* @jnormandBLAB/content-stewards
+* @jnormandBLAB
