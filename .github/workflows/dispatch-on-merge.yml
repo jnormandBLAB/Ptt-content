@@ -78,7 +78,7 @@ jobs:
                 package_id: $pkg,
                 content_repo_sha: $csha,
                 package_spec_sha256: $ssha,
-                bundle: { topic_slug: "pending", report_id: "pending" },
+                bundle: { topic_slug: "pending", canonical_url: ("https://every-voices.staging.blab.ch/fr/votations/pending/"), report_id: "pending" },
                 kid: $kid
               }')
 
